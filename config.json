@@ -1,0 +1,31 @@
+{
+  "ip": "192.168.44.44",
+  "memory": "1024",
+  "synced_folder": {
+    "host_path": "data/",
+    "guest_path": "/var/www",
+    "use_nfs": false
+  },
+  "mysql": {
+    "server_root_password": "root"
+  },
+  "sites": {
+    "drupal7": {
+      "account_name": "root",
+      "account_pass": "root",
+      "account_mail": "box@example.com",
+      "site_name": "Drupal 7",
+      "site_mail": "box@example.com"
+    },
+    "drupal8": {
+      "account_name": "root",
+      "account_pass": "root",
+      "account_mail": "box@example.com",
+      "site_name": "Drupal 8",
+      "site_mail": "box@example.com"
+    }
+  },
+  "custom_roles": [
+    "vdd_example"
+  ]
+}

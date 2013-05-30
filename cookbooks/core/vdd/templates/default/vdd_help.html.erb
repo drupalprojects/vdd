@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vagrant Drupal Development</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+      #overview {
+        padding: 20px 0;
+      }
+      ol.code {
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+
+    <header id="overview">
+      <div class="container">
+        <h1>Welcome to VDD!</h1>
+        <p class="lead">Hello, developer! On this page you can find links to your configured
+        sites and development tools. Also there is a list of frequantly asked
+        quistions.</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="span3">
+          <ul class="nav nav-list bs-docs-sidenav">
+            <li><a href="#sites"><i class="icon-chevron-right"></i>Configured Sites</a></li>
+            <li><a href="#dev"><i class="icon-chevron-right"></i>Development</a></li>
+            <li><a href="#faq"><i class="icon-chevron-right"></i>FAQ</a></li>
+          </ul>
+        </div>
+        <div class="span9">
+
+        <section id="sites">
+          <div class="page-header">
+            <h3>Configured Sites</h1>
+            <ul>
+              <% @sites.each do |index, site| %>
+              <li><a href="/<%= index %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)</li>
+              <% end %>
+            </ul>
+          </div>
+        </section>
+
+        <section id="dev">
+          <div class="page-header">
+            <h3>Development Tools</h1>
+            <ul>
+              <li><a href="/phpmyadmin">phpMyAdmin</a></li>
+              <li><a href="/phpinfo.php">phpinfo()</a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="faq">
+          <div class="page-header">
+            <h3>FAQ</h1>
+
+            <h4>Questions</h4>
+            <ul>
+              <li><a href="#q1">How to ssh into virtual machine?</a></li>
+              <li><a href="#q2">How to quickly install Drupal?</a></li>
+            </ul>
+
+            <h4>Answers</h4>
+
+            <h5 id="q1">How to ssh into virtual machine?</h5>
+            <p>Open you terminal application and enter directory with your VDD copy. Then
+              simply execute next command:</p>
+            <ol class="code">
+              <li>$ vagrant ssh</li>
+            </ol>
+
+            <h5 id="q2">How to quickly install Drupal?</h5>
+            <p>For this example we'll setup Drupal 7 on previously configured VDD site <em>test_site</em>.
+              Make sure that <em>test_site</em> is included in <em>sites</em> section in config.json.
+              Enter virtual machine by SSH. Open terminal and write next commands:</p>
+            <ol class="code">
+              <li>$ cd ~/sites && rm -rf <em>test_site</em></li>
+              <li>$ drush dl drupal-7 --drupal-project-rename="<em>test_site</em>"</li>
+              <li>$ drush @<em>test_site</em> si standard</li>
+            </ol>
+
+          </div>
+        </section>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

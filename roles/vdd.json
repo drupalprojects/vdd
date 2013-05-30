@@ -1,0 +1,23 @@
+{
+  "name": "vdd",
+  "env_run_lists": {},
+  "default_attributes": {
+    "mysql": {
+      "server_repl_password": "root",
+      "server_debian_password": "root"
+    }
+  },
+  "override_attributes": {},
+  "json_class": "Chef::Role",
+  "run_list": [
+    "recipe[apt]",
+    "recipe[apache2]",
+    "recipe[php]",
+    "recipe[apache2::mod_php5]",
+    "recipe[mysql::client]",
+    "recipe[mysql::server]",
+    "recipe[vdd]"
+  ],
+  "description": "VDD Apache, PHP, MySQL plus other tools configuration.",
+  "chef_type": "role"
+}
