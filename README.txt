@@ -56,7 +56,7 @@ your environment.
      runs Vagrant to bring up a working environment.
 
      Run next command to download and prepare Ubuntu 12 box:
-     $ vagrant init precise32 http://files.vagrantup.com/precise32.box
+     $ vagrant box add precise32 http://files.vagrantup.com/precise32.box
 
 
   4. Prepare VDD source code
