@@ -1,5 +1,9 @@
 [color]
-  ui = true
+  ui = <%= node["git"]["color"]["ui"] %>
 
 [core]
-  editor = vi
+  editor = <%= node["git"]["core"]["editor"] %>
+
+[user]
+  name = <%= node["git"]["user"]["name"] %>
+  email = <%= node["git"]["user"]["email"] %>
