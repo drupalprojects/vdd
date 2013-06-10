@@ -25,6 +25,9 @@
       "site_mail": "box@example.com"
     }
   },
+  "xdebug": {
+    "remote_host": "192.168.1.2"
+  },
   "custom_roles": [
     "vdd_example"
   ]

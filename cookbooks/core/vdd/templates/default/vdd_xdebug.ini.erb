@@ -1,2 +1,5 @@
-zend_extension_ts=<%= %x[find / -name 'xdebug.so' 2> /dev/null] %>
+zend_extension=<%= %x[find / -name 'xdebug.so' 2> /dev/null] %>
 xdebug.show_exception_trace=0
+xdebug.remote_enable=1
+xdebug.remote_host=<%= node["xdebug"]["remote_host"] %>
+xdebug.remote_port=9000
