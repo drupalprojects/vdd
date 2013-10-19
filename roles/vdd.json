@@ -16,7 +16,19 @@
     "recipe[apache2::mod_php5]",
     "recipe[mysql::client]",
     "recipe[mysql::server]",
-    "recipe[vdd]"
+    "recipe[vdd::bash]",
+    "recipe[vdd::apache]",
+    "recipe[vdd::vdd_sites]",
+    "recipe[vdd::php]",
+    "recipe[vdd::drush]",
+    "recipe[vdd::phpmyadmin]",
+    "recipe[vdd::mysql]",
+    "recipe[vdd::xdebug]",
+    "recipe[vdd::git]",
+    "recipe[vdd::mc]",
+    "recipe[vdd::rsync]",
+    "recipe[vdd::curl]",
+    "recipe[vdd::vdd_help]"
   ],
   "description": "VDD Apache, PHP, MySQL plus other tools configuration.",
   "chef_type": "role"
