@@ -12,8 +12,6 @@
   "run_list": [
     "recipe[apt]",
     "recipe[apache2]",
-    "recipe[php]",
-    "recipe[apache2::mod_php5]",
     "recipe[mysql::client]",
     "recipe[mysql::server]",
     "recipe[vdd::bash]",

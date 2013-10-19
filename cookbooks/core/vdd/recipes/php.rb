@@ -1,3 +1,6 @@
+require_recipe "php"
+require_recipe "apache2::mod_php5"
+
 pkgs = [
   "php5-gd",
   "php5-mysql",
