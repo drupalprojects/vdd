@@ -6,6 +6,9 @@
     "guest_path": "/var/www",
     "use_nfs": false
   },
+  "php": {
+    "version": "5.4.20"
+  },
   "mysql": {
     "server_root_password": "root"
   },
