@@ -7,7 +7,7 @@
     "use_nfs": false
   },
   "php": {
-    "version": "5.4.20"
+    "version": false
   },
   "mysql": {
     "server_root_password": "root"
