@@ -28,9 +28,6 @@
       "site_mail": "box@example.com"
     }
   },
-  "xdebug": {
-    "remote_host": "192.168.1.2"
-  },
   "git": {
     "user": {
       "name": "Example User",
