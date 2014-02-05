@@ -16,10 +16,17 @@ Vagrant.configure("2") do |config|
     # RAM
     vb.customize ["modifyvm", :id, "--memory", vdd_config["memory"]]
 
-    # Synced Folder
-    config.vm.synced_folder vdd_config["synced_folder"]["host_path"],
-      vdd_config["synced_folder"]["guest_path"],
-      :nfs => vdd_config["synced_folder"]["use_nfs"]
+    # Synced Folders
+    vdd_config["synced_folder"].each do |folder|
+      if folder["use_nfs"] == true
+        config.vm.synced_folder folder["host_path"], folder["guest_path"], type: "nfs"
+        # This uses uid and gid of the user that started vagrant
+        config.nfs.map_uid = Process.uid
+        config.nfs.map_gid = Process.gid
+      else
+        config.vm.synced_folder folder["host_path"], folder["guest_path"]
+      end
+    end
   end
 
   # Customize provisioner
