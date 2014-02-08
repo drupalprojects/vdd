@@ -162,6 +162,9 @@ valid. http://jsonlint.com/ can help to check it.
     network. While you can choose any IP you'd like, you should use an IP from
     the reserved private address space.
 
+  * cpus (number, required)
+    Number of CPUs.
+
   * memory (string, required)
     RAM available to virtual machine. Minimum value is 1024.
 
