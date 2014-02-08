@@ -1,24 +1,29 @@
 if node["php"]["version"]
   node.override["php"]["version"] = node["php"]["version"]
   node.override["php"]["configure_options"]["mysql"] = false
-  require_recipe "php::source"
+  include_recipe "php::source"
 else
- require_recipe "php"
+ include_recipe "php"
 end
 
-require_recipe "apache2::mod_php5"
+include_recipe "apache2::mod_php5"
 
 pkgs = [
   "php5-gd",
   "php5-mysql",
   "php5-mcrypt",
-  "php5-curl"
+  "php5-curl",
+  "php5-dev"
 ]
 
 pkgs.each do |pkg|
   package pkg do
     action :install
   end
+end
+
+php_pear "uploadprogress" do
+  action :install
 end
 
 template "/etc/php5/apache2/conf.d/vdd_php.ini" do
