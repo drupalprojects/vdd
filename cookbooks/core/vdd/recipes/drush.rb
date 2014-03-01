@@ -2,31 +2,34 @@ php_pear "Console_Table" do
   action :install
 end
 
-dc = php_pear_channel "pear.drush.org" do
-  action :discover
+# Install drush-master, required for drush with D8 sites.
+git "/usr/local/bin/drush-master" do
+  repository "https://github.com/drush-ops/drush.git"
+  reference "master"
+  action :sync
 end
 
-php_pear "drush" do
-  channel dc.channel_name
-  action :install
+link "/usr/bin/drush" do
+  to "/usr/local/bin/drush-master/drush"
 end
 
-directory "/etc/drush" do
-  owner "root"
-  group "root"
-  mode "0755"
-  action :create
+bash "install-drush-master" do
+  cwd "/usr/local/bin/drush-master"
+  code <<-EOH
+  chmod u+x /usr/local/bin/drush-master/drush
+  composer install
+  EOH
 end
 
 if node["sites"]
-  template "/etc/drush/aliases.drushrc.php" do
+  template "/usr/local/bin/drush-master/aliases.drushrc.php" do
     source "aliases.drushrc.php.erb"
     owner "root"
     group "root"
     mode "0644"
   end
 
-  template "/etc/drush/drushrc.php" do
+  template "/usr/local/bin/drush-master/drushrc.php" do
     source "drushrc.php.erb"
     owner "root"
     group "root"

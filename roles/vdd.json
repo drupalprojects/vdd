@@ -18,7 +18,6 @@
     "recipe[vdd::apache]",
     "recipe[vdd::vdd_sites]",
     "recipe[vdd::php]",
-    "recipe[vdd::drush]",
     "recipe[vdd::phpmyadmin]",
     "recipe[vdd::mysql]",
     "recipe[vdd::xdebug]",
@@ -26,6 +25,8 @@
     "recipe[vdd::mc]",
     "recipe[vdd::rsync]",
     "recipe[vdd::curl]",
+    "recipe[vdd::composer]",
+    "recipe[vdd::drush]",
     "recipe[vdd::vdd_help]"
   ],
   "description": "VDD Apache, PHP, MySQL plus other tools configuration.",
