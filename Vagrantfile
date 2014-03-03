@@ -11,6 +11,12 @@ Vagrant.configure("2") do |config|
   # Networking
   config.vm.network :private_network, ip: vdd_config["ip"]
 
+  # Forwarded Ports
+  vdd_config["forwarded_port"].each do |port|
+    config.vm.network "forwarded_port", guest: port["guest_port"],
+      host: port["host_port"], protocol: port["protocol"], auto_correct: true
+  end
+
   # Customize provider
   config.vm.provider :virtualbox do |vb|
     # CPU
