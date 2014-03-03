@@ -23,6 +23,7 @@
     "recipe[vdd::xdebug]",
     "recipe[vdd::git]",
     "recipe[vdd::mc]",
+    "recipe[vdd::apc]",
     "recipe[vdd::rsync]",
     "recipe[vdd::curl]",
     "recipe[vdd::composer]",
