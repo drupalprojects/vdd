@@ -30,9 +30,7 @@ Vagrant.configure("2") do |config|
     # Synced Folders
     vdd_config["synced_folder"].each do |folder|
       if folder["use_nfs"] == true
-        config.vm.synced_folder folder["host_path"], folder["guest_path"],
-          mount_options: ["dmode=775,fmode=664"],
-          type: "nfs"
+        config.vm.synced_folder folder["host_path"], folder["guest_path"], type: "nfs"
         # This uses uid and gid of the user that started vagrant
         config.nfs.map_uid = Process.uid
         config.nfs.map_gid = Process.gid
