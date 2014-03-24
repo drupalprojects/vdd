@@ -38,7 +38,24 @@
       "account_pass": "root",
       "account_mail": "box@example.com",
       "site_name": "Drupal 7",
-      "site_mail": "box@example.com"
+      "site_mail": "box@example.com",
+      "vhost": {
+        "document_root": "drupal7/public",
+        "url": "drupal7.dev",
+        "alias": ["www.drupal7.dev", "drupal7.local"]
+      }
+    },
+    "drupal7_multisite": {
+      "account_name": "root",
+      "account_pass": "root",
+      "account_mail": "box@example.com",
+      "site_name": "Drupal 7",
+      "site_mail": "box@example.com",
+      "vhost": {
+        "document_root": "drupal7/public",
+        "url": "drupal7multisite.dev",
+        "alias": ["www.drupal7multisite.dev", "drupal7multisite.local"]
+      }
     },
     "drupal8": {
       "account_name": "root",

@@ -6,8 +6,14 @@
     <title>Vagrant Drupal Development</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <style type="text/css">
-      ol.code {
+      .code {
         font-family: monospace;
+        background-color: #f6f6f2;
+        border: 1px solid #CCC;
+        padding: 10px;
+        margin-bottom: .5em;
+        list-style-type: none;
+        width: 500px;
       }
     </style>
   </head>
@@ -26,8 +32,30 @@
   <h3>Configured Sites</h3>
   <ul>
     <% @sites.each do |index, site| %>
-    <li><a href="/<%= index %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)</li>
+    <li>
+     <%- if defined?(site["vhost"]["url"]) then -%>
+       <a href="http://<%= site["vhost"]["url"] %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
+     <%- else -%>
+       <a href="/<%= index %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
+     <%- end -%>
+    </li>
     <% end %>
+  </ul>
+
+  <h4>Add the following to host (Win or Mac) machine's <a href="http://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/" target="_blank">hosts file</a>:</h4>
+  <ul class="code">
+    <li># Sites declared in VDD's config.json</li>
+    <% @sites.each do |index, site| %>
+      <%- if defined?(site["vhost"]["url"]) then -%>
+        <li><%= node["ip"] %> <%= site["vhost"]["url"] %> </li>
+      <%- end -%>
+      <%- if defined?(site["vhost"]["alias"]) then -%>
+        <%- site["vhost"]["alias"].each do |vhostalias| -%>
+          <li><%= node["ip"] %> <%= vhostalias %> </li>
+        <%- end -%>
+      <%- end -%>
+    <% end %>
+    <li># End of sites declared with VDD</li>
   </ul>
 
   <h3>Development Tools</h3>

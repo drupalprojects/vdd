@@ -199,7 +199,7 @@ valid. http://jsonlint.com/ can help to check it.
       * server_root_password (string, required)
         MySQL server root password.
 
-  * sites (object ob objects, required)
+  * sites (object of objects, required)
     List of sites (similar to virtual hosts) to configure. At least one site is
     required.
 
@@ -222,6 +222,18 @@ valid. http://jsonlint.com/ can help to check it.
 
           * site_mail (string, required)
             Drupal site email.
+
+          * vhost settings (object of strings, optional)
+            Include to create an Apache virtual host for this site.
+
+              * document_root (string, optional)
+                Location where Apache will find Drupal core.
+
+              * url (string, optional)
+                Site url. E.g. yoursitenamehere.dev
+
+              * alias (array of strings, optional)
+                List of additional urls for the vhost. E.g. www.yoursitenamehere.dev
 
   * xdebug (object of strings, optional)
     Xdebug configuration.
