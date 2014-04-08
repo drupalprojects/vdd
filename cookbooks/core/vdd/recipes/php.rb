@@ -1,11 +1,12 @@
-if node["php"]["version"]
-  node.override["php"]["version"] = node["php"]["version"]
-  node.override["php"]["configure_options"]["mysql"] = false
-  include_recipe "php::source"
-else
- include_recipe "php"
+apt_repository "php54" do
+  uri "http://ppa.launchpad.net/ondrej/php5-oldstable/ubuntu"
+  distribution node['lsb']['codename']
+  components ["main"]
+  keyserver "keyserver.ubuntu.com"
+  key "E5267A6C"
 end
 
+include_recipe 'php'
 include_recipe "apache2::mod_php5"
 
 pkgs = [
@@ -22,19 +23,8 @@ pkgs.each do |pkg|
   end
 end
 
-php_pear "uploadprogress" do
-  action :install
-end
-
 template "/etc/php5/apache2/conf.d/vdd_php.ini" do
   source "vdd_php.ini.erb"
   mode "0644"
   notifies :restart, "service[apache2]", :delayed
-end
-
-bash "phpinfo" do
-  code <<-EOH
-  echo "<?php phpinfo();" > /var/www/phpinfo.php
-  EOH
-  not_if { File.exists?("/var/www/phpinfo.php") }
 end

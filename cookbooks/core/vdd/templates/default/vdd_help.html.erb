@@ -71,6 +71,7 @@
   <ul>
     <li><a href="#q1">How to ssh into virtual machine?</a></li>
     <li><a href="#q2">How to quickly install Drupal?</a></li>
+    <li><a href="#q3">How to install fresh Drupal 8 version?</a></li>
   </ul>
 
   <h4>Answers</h4>
@@ -91,6 +92,15 @@
     <li>vagrant guest$ cd ~/sites/<%= document_root.split(%r{\/\s*}).slice(0..n-2).each{ |index| index << "/"} unless n == 1 %></li>
     <li>vagrant guest$ drush dl drupal-7 --drupal-project-rename="<%= document_root.split(%r{\/\s*}).last %>"</li>
     <li>vagrant guest$ drush @<%= @sites.first[0] %> si standard -y</li>
+  </ol>
+
+  <h5 id="q3">How to install fresh Drupal 8 version?</h5>
+  <p>For this example we'll setup Drupal 8 on a site declared in the config.json: <em>drupal8 (in the default config.json)</em></p>
+  <ol class="code">
+    <li>Win/Mac/Linux host$ vagrant ssh</li>
+    <li>vagrant guest$ cd ~/sites/drupal8</li>
+    <li>vagrant guest$ git clone --branch 8.x http://git.drupal.org/project/drupal.git .</li>
+    <li>vagrant guest$ drush @drupal8 si standard -y</li>
   </ol>
 
   </body>

@@ -185,14 +185,6 @@ valid. http://jsonlint.com/ can help to check it.
         seeing less than ideal performance with synced folders, NFS can offer a
         solution. http://docs.vagrantup.com/v2/synced-folders/nfs.
 
-  * php (object of strings, required)
-    PHP configuration.
-
-      * version (string or false, required)
-        Desired PHP version. Please, see http://www.php.net/releases for proper
-        version numbers. If you would like to use standard Ubuntu package you
-        should set number to "false". Example: "version": false.
-
   * mysql (object of strings, required)
     MySQL configuration.
 

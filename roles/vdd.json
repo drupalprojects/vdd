@@ -18,6 +18,7 @@
     "recipe[vdd::apache]",
     "recipe[vdd::vdd_sites]",
     "recipe[vdd::php]",
+    "recipe[vdd::uploadprogress]",
     "recipe[vdd::mailcatcher]",
     "recipe[vdd::phpmyadmin]",
     "recipe[vdd::mysql]",
