@@ -3,7 +3,7 @@
 <% @node["sites"].each do |index, site| %>
 // Drush alias for <%= index %>
 $aliases['<%= index %>'] = array(
-  'root' => '/var/www/<%= index %>',
+  'root' => '/var/www/<%= defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index %>',
   'uri' => '<%= node["ip"] %>/<%= index %>',
   'databases' => array (
     'default' => array (

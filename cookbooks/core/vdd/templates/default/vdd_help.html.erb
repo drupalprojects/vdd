@@ -13,7 +13,7 @@
         padding: 10px;
         margin-bottom: .5em;
         list-style-type: none;
-        width: 500px;
+        width: 650px;
       }
     </style>
   </head>
@@ -76,20 +76,21 @@
   <h4>Answers</h4>
 
   <h5 id="q1">How to ssh into virtual machine?</h5>
-  <p>Open you terminal application and enter directory with your VDD copy. Then
-    simply execute next command:</p>
+  <p>Open your terminal (e.g. iTerm2 or Powershell) application and change to the directory with your VDD copy. Then simply execute next command:</p>
   <ol class="code">
     <li>$ vagrant ssh</li>
   </ol>
 
   <h5 id="q2">How to quickly install Drupal?</h5>
-  <p>For this example we'll setup Drupal 7 on previously configured VDD site <em>test_site</em>.
-    Make sure that <em>test_site</em> is included in <em>sites</em> section in config.json.
-    Enter virtual machine by SSH. Open terminal and write next commands:</p>
+  <p>For this example we'll setup Drupal 7 on a site declared in the config.json: <em><%= @sites.first[0] %></em></p>
   <ol class="code">
-    <li>$ cd ~/sites &amp;&amp; rm -rf <em>test_site</em></li>
-    <li>$ drush dl drupal-7 --drupal-project-rename="<em>test_site</em>"</li>
-    <li>$ drush @<em>test_site</em> si standard</li>
+    <li>Win/Mac/Linux host$ vagrant ssh</li>
+    <% document_root = defined?(@sites.first[1]["vhost"]["document_root"]) ? @sites.first[1]["vhost"]["document_root"] : @sites.first[0] %>
+    <% n = document_root.split(%r{\/\s*}).length %>
+    <li>vagrant guest$ rm -rf ~/sites/<%= document_root.split(%r{\/\s*}).slice(0..n-1).each{ |index| index << "/"} %></li>
+    <li>vagrant guest$ cd ~/sites/<%= document_root.split(%r{\/\s*}).slice(0..n-2).each{ |index| index << "/"} unless n == 1 %></li>
+    <li>vagrant guest$ drush dl drupal-7 --drupal-project-rename="<%= document_root.split(%r{\/\s*}).last %>"</li>
+    <li>vagrant guest$ drush @<%= @sites.first[0] %> si standard -y</li>
   </ol>
 
   </body>
