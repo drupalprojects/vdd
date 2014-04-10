@@ -63,6 +63,7 @@
     <li><a href="http://<%= node["ip"] %>:1080/">MailCatcher</a></li>
     <li><a href="/phpmyadmin">phpMyAdmin</a></li>
     <li><a href="/phpinfo.php">phpinfo()</a></li>
+    <li><a href="/webgrind">Webgrind</a></li>
   </ul>
 
   <h3>FAQ</h3>
@@ -72,6 +73,7 @@
     <li><a href="#q1">How to ssh into virtual machine?</a></li>
     <li><a href="#q2">How to quickly install Drupal?</a></li>
     <li><a href="#q3">How to install fresh Drupal 8 version?</a></li>
+    <li><a href="#q4">What is Webgrind and how would I use it?</a></li>
   </ul>
 
   <h4>Answers</h4>
@@ -97,11 +99,20 @@
   <h5 id="q3">How to install fresh Drupal 8 version?</h5>
   <p>For this example we'll setup Drupal 8 on a site declared in the config.json: <em>drupal8 (in the default config.json)</em></p>
   <ol class="code">
-    <li>Win/Mac/Linux host$ vagrant ssh</li>
-    <li>vagrant guest$ cd ~/sites/drupal8</li>
+    <li>Win/Mac/Linux host$ vagrant ssh</li>    <li>vagrant guest$ cd ~/sites/drupal8</li>
     <li>vagrant guest$ git clone --branch 8.x http://git.drupal.org/project/drupal.git .</li>
     <li>vagrant guest$ drush @drupal8 si standard -y</li>
   </ol>
 
+  <h5 id="q4">What is Webgrind and how do I use it?</h5>
+  <p>Webgrind is a Xdebug Profiling Web Frontend in PHP. Xdebug can help <a href="http://devzone.zend.com/1120/introducing-xdebug/">simplify debugging</a>. Enable Xdebug by including "?XDEBUG_PROFILE=1" in the url. For example:</p>
+  <ul class="code">
+    <%- if defined?(@sites.first[1]["vhost"]["url"]) then -%>
+      <li><a href="http://<%= @sites.first[1]["vhost"]["url"] %>/admin/reports/status?XDEBUG_PROFILE=1">http://<%= @sites.first[1]["vhost"]["url"] %>/admin/reports/status?XDEBUG_PROFILE=1</a></li>
+    <%- else -%>
+      <li><a href="http://<%= node["ip"] %>/<%= @sites.first[0] %>/admin/reports/status?XDEBUG_PROFILE=1">http://<%= node["ip"] %>/<%= @sites.first[0] %>/admin/reports/status?XDEBUG_PROFILE=1</a></li>
+    <%- end -%>
+  </ul>
+  <p>After generating Xdebug data, visit the <a href="/webgrind">Webgrind</a> dashboard to inspect results.</p>
   </body>
 </html>
