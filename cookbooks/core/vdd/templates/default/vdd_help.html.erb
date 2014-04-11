@@ -29,7 +29,7 @@
     <li><a href="#faq">FAQ</a></li>
   </ul>
 
-  <h3>Configured Sites</h3>
+  <h3 id="sites">Configured Sites</h3>
   <ul>
     <% @sites.each do |index, site| %>
     <li>
@@ -58,7 +58,7 @@
     <li># End of sites declared with VDD</li>
   </ul>
 
-  <h3>Development Tools</h3>
+  <h3 id="dev">Development Tools</h3>
   <ul>
     <li><a href="http://<%= node["ip"] %>:1080/">MailCatcher</a></li>
     <li><a href="/phpmyadmin">phpMyAdmin</a></li>
@@ -66,7 +66,7 @@
     <li><a href="/webgrind">Webgrind</a></li>
   </ul>
 
-  <h3>FAQ</h3>
+  <h3 id="faq">FAQ</h3>
 
   <h4>Questions</h4>
   <ul>
