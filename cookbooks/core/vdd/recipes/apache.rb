@@ -22,6 +22,9 @@ web_app "localhost" do
   template "localhost.conf.erb"
 end
 
+node['apache']['user'] = "vagrant"
+node['apache']['group'] = "vagrant"
+
 template "/etc/apache2/conf.d/vdd_apache.conf" do
   source "vdd_apache.conf.erb"
   mode "0644"
