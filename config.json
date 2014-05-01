@@ -7,11 +7,6 @@
       "host_path": "data/",
       "guest_path": "/var/www",
       "use_nfs": false
-    },
-    {
-      "host_path": "log",
-      "guest_path": "/var/log/apache2",
-      "use_nfs": false
     }
   ],
   "forwarded_port": [
