@@ -62,18 +62,6 @@
       "site_mail": "box@example.com"
     }
   },
-  "git": {
-    "user": {
-      "name": "Example User",
-      "email": "username@example.com"
-    },
-    "core": {
-      "editor": "vi"
-    },
-    "color": {
-      "ui": true
-    }
-  },
   "custom_roles": [
     "vdd_example"
   ]
