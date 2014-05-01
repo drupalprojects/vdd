@@ -1,6 +1,5 @@
 {
   "ip": "192.168.44.44",
-  "cpus": 1,
   "memory": "1024",
   "synced_folder": [
     {

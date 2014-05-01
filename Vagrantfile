@@ -22,11 +22,6 @@ Vagrant.configure("2") do |config|
 
   # Customize provider.
   config.vm.provider :virtualbox do |vb|
-    # CPU.
-    if vdd_config["cpus"] > 1
-      vb.customize ["modifyvm", :id, "--cpus", vdd_config["cpus"]]
-      vb.customize ["modifyvm", :id, "--ioapic", "on"]
-    end
     # RAM.
     vb.customize ["modifyvm", :id, "--memory", vdd_config["memory"]]
 
