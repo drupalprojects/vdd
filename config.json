@@ -9,18 +9,7 @@
       "use_nfs": false
     }
   ],
-  "forwarded_port": [
-    {
-      "guest_port": 35729,
-      "host_port": 35729,
-      "protocol": "tcp"
-    },
-    {
-      "guest_port": 8983,
-      "host_port": 8983,
-      "protocol": "tcp"
-    }
-  ],
+  "forwarded_ports": [],
   "mysql": {
     "server_root_password": "root"
   },
