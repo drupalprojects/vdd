@@ -26,10 +26,11 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--memory", vdd_config["memory"]]
 
     # Synced Folders.
-    vdd_config["synced_folder"].each do |folder|
-      if folder["use_nfs"] == true
+    vdd_config["synced_folders"].each do |folder|
+      case folder["type"]
+      when "nfs"
         config.vm.synced_folder folder["host_path"], folder["guest_path"], type: "nfs"
-        # This uses uid and gid of the user that started vagrant
+        # This uses uid and gid of the user that started vagrant.
         config.nfs.map_uid = Process.uid
         config.nfs.map_gid = Process.gid
       else

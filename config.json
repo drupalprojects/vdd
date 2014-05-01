@@ -1,11 +1,11 @@
 {
   "ip": "192.168.44.44",
   "memory": "1024",
-  "synced_folder": [
+  "synced_folders": [
     {
       "host_path": "data/",
       "guest_path": "/var/www",
-      "use_nfs": false
+      "type": "default"
     }
   ],
   "forwarded_ports": [],
