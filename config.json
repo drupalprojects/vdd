@@ -24,6 +24,18 @@
         "url": "drupal8.dev",
         "alias": ["www.drupal8.dev"]
       }
+    },
+    "drupal7": {
+      "account_name": "root",
+      "account_pass": "root",
+      "account_mail": "box@example.com",
+      "site_name": "Drupal 7",
+      "site_mail": "box@example.com",
+      "vhost": {
+        "document_root": "drupal7",
+        "url": "drupal7.dev",
+        "alias": ["www.drupal7.dev"]
+      }
     }
   },
   "custom_roles": [
