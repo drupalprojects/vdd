@@ -32,7 +32,8 @@
     "recipe[vdd::curl]",
     "recipe[vdd::composer]",
     "recipe[vdd::drush]",
-    "recipe[vdd::vdd_help]"
+    "recipe[vdd::vdd_help]",
+    "recipe[vdd::vim]"
   ],
   "description": "VDD Apache, PHP, MySQL plus other tools configuration.",
   "chef_type": "role"
