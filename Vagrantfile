@@ -39,6 +39,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Run initial shell script.
+  config.vm.provision :shell, :path => "shell/initial.sh"
+
   # Customize provisioner.
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = [
