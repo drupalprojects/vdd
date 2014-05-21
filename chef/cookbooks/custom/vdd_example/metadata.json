@@ -1,0 +1,11 @@
+{
+  "name": "vdd_example",
+  "description": "Example VDD cookbook.",
+  "license": "GPL v3",
+  "platforms": {
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+    "vdd": ">= 0.0.0"
+  }
+}

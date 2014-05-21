@@ -1,21 +1,20 @@
 Vagrant.configure("2") do |config|
 
   # Load config JSON.
-  vdd_config_path = File.expand_path(File.dirname(__FILE__)) + "/config.json"
-  vdd_config = JSON.parse(File.read(vdd_config_path))
+  config_json = JSON.parse(File.read("config.json"))
 
   # Prepare base box.
   config.vm.box = "precise32"
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
   # Configure networking.
-  config.vm.network :private_network, ip: vdd_config["ip"]
+  config.vm.network :private_network, ip: config_json["vm"]["ip"]
 
   # Configure forwarded ports.
   config.vm.network "forwarded_port", guest: 35729, host: 35729, protocol: "tcp", auto_correct: true
   config.vm.network "forwarded_port", guest: 8983, host: 8983, protocol: "tcp", auto_correct: true
   # User defined forwarded ports.
-  vdd_config["forwarded_ports"].each do |port|
+  config_json["vm"]["forwarded_ports"].each do |port|
     config.vm.network "forwarded_port", guest: port["guest_port"],
       host: port["host_port"], protocol: port["protocol"], auto_correct: true
   end
@@ -23,10 +22,10 @@ Vagrant.configure("2") do |config|
   # Customize provider.
   config.vm.provider :virtualbox do |vb|
     # RAM.
-    vb.customize ["modifyvm", :id, "--memory", vdd_config["memory"]]
+    vb.customize ["modifyvm", :id, "--memory", config_json["vm"]["memory"]]
 
     # Synced Folders.
-    vdd_config["synced_folders"].each do |folder|
+    config_json["vm"]["synced_folders"].each do |folder|
       case folder["type"]
       when "nfs"
         config.vm.synced_folder folder["host_path"], folder["guest_path"], type: "nfs"
@@ -40,27 +39,16 @@ Vagrant.configure("2") do |config|
   end
 
   # Run initial shell script.
-  config.vm.provision :shell, :path => "shell/initial.sh"
+  config.vm.provision :shell, :path => "chef/shell/initial.sh"
 
   # Customize provisioner.
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = [
-      "cookbooks/site",
-      "cookbooks/core",
-      "cookbooks/custom"
-    ]
-    chef.roles_path = "roles"
-
-    # Prepare chef JSON.
-    chef.json = vdd_config
-
-    # Add VDD role.
+    chef.json = config_json
+    chef.custom_config_path = "chef/solo.rb"
+    chef.cookbooks_path = ["chef/cookbooks/berks", "chef/cookbooks/core", "chef/cookbooks/custom"]
+    chef.data_bags_path = "chef/data_bags"
+    chef.roles_path = "chef/roles"
     chef.add_role "vdd"
-
-    # Add custom roles.
-    vdd_config["custom_roles"].each do |role|
-      chef.add_role role
-    end
   end
 
 end

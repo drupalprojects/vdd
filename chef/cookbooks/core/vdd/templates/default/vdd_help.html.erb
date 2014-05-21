@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+  <head>
+    <title>Vagrant Drupal Development</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+      .code {
+        font-family: monospace;
+        background-color: #f6f6f2;
+        border: 1px solid #CCC;
+        padding: 10px;
+        margin-bottom: .5em;
+        list-style-type: none;
+        width: 650px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Welcome to VDD!</h1>
+
+    <p>Hello, developer! On this page you can find links to your configured sites and development tools. Also there is a list of frequently asked questions.</p>
+
+    <ul>
+      <li><a href="#sites">Configured Sites</a></li>
+      <li><a href="#dev">Development</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+
+    <h2 id="sites">Configured Sites</h2>
+
+    <h3>Add the following to host machine's <a href="http://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/" target="_blank">hosts file</a>:</h3>
+    <ul class="code">
+      <li># Sites declared in VDD's config.json</li>
+      <% @sites.each do |index, site| %>
+        <%- if defined?(site["vhost"]["url"]) then -%>
+          <li><%= node["vm"]["ip"] %> <%= site["vhost"]["url"] %> </li>
+        <%- end -%>
+        <%- if defined?(site["vhost"]["alias"]) then -%>
+          <%- site["vhost"]["alias"].each do |vhostalias| -%>
+            <li><%= node["vm"]["ip"] %> <%= vhostalias %> </li>
+          <%- end -%>
+        <%- end -%>
+      <% end %>
+      <li># End of sites declared with VDD</li>
+    </ul>
+
+    <ul>
+      <% @sites.each do |index, site| %>
+      <li>
+       <%- if defined?(site["vhost"]["url"]) then -%>
+         <a href="http://<%= site["vhost"]["url"] %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
+       <%- else -%>
+         <a href="/<%= index %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
+       <%- end -%>
+      </li>
+      <% end %>
+    </ul>
+
+    <h2 id="dev">Development Tools</h2>
+    <ul>
+      <li><a href="http://<%= node["vm"]["ip"] %>:1080/">MailCatcher</a></li>
+      <li><a href="/phpmyadmin">phpMyAdmin</a></li>
+      <li><a href="/phpinfo.php">phpinfo()</a></li>
+      <li><a href="/webgrind">Webgrind</a></li>
+    </ul>
+
+    <h2 id="faq">FAQ</h2>
+
+    <h3>Questions</h3>
+    <ul>
+      <li><a href="#q1">Where can I find help?</a></li>
+      <li><a href="#q2">How to ssh into virtual machine?</a></li>
+      <li><a href="#q3">How to install fresh Drupal 8 version?</a></li>
+      <li><a href="#q4">How to quickly install Drupal 7?</a></li>
+      <li><a href="#q5">What is Webgrind and how would I use it?</a></li>
+    </ul>
+
+    <h3>Answers</h3>
+
+    <h4 id="q1">Where can I find help?</h4>
+    <p>Please check <a href="https://drupal.org/node/2008758">project documentation</a> on drupal.org. For support, join us on IRC in the <i>#drupal-vdd</i> channel.</p>
+
+    <h4 id="q2">How to ssh into virtual machine?</h4>
+    <p>Open your terminal (e.g. iTerm2 or Powershell) application and change to the directory with your VDD copy. Then simply execute next command:</p>
+    <ol class="code">
+      <li>$ vagrant ssh</li>
+    </ol>
+
+    <h4 id="q3">How to install fresh Drupal 8 version?</h4>
+    <p>For this example we'll setup Drupal 8 on a site declared in the config.json: <em>drupal8 (in the default config.json)</em></p>
+    <ol class="code">
+      <li>Win/Mac/Linux host$ vagrant ssh</li>
+      <li>vagrant guest$ cd ~/sites/drupal8</li>
+      <li>vagrant guest$ git clone --branch 8.x http://git.drupal.org/project/drupal.git .</li>
+      <li>vagrant guest$ drush @drupal8 si standard -y</li>
+    </ol>
+
+    <h4 id="q4">How to quickly install Drupal 7?</h4>
+    <p>Make shure that appropriate site exists in config.json file. Don't forget to run 'vagrant provision' after changing config.json.</p>
+    <ol class="code">
+      <li>Win/Mac/Linux host$ vagrant ssh</li>
+      <li>vagrant guest$ rm -rf ~/sites/drupal7</li>
+      <li>vagrant guest$ cd ~/sites</li>
+      <li>vagrant guest$ drush dl drupal-7 --drupal-project-rename="drupal7"</li>
+      <li>vagrant guest$ drush @drupal7 si standard -y</li>
+    </ol>
+
+    <h4 id="q5">What is Webgrind and how do I use it?</h4>
+    <p>Webgrind is a Xdebug Profiling Web Frontend in PHP. Xdebug can help <a href="http://devzone.zend.com/1120/introducing-xdebug/">simplify debugging</a>.</p>
+    <ul>
+      <li>Enable Xdebug by including "?XDEBUG_PROFILE=1" in the url. For example: <i>http://drupal8.dev/admin/reports/status?XDEBUG_PROFILE=1</i>.</li>
+      <li>After generating Xdebug data, visit the <a href="/webgrind">Webgrind</a> dashboard to inspect results.</li>
+    </ul>
+  </body>
+</html>

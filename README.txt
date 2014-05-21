@@ -2,25 +2,11 @@ Vagrant Drupal Development
 --------------------------
 
 Vagrant Drupal Development (VDD) is fully configured and ready to use
-development environment built on Linux (Ubuntu 12) with Vagrant, VirtualBox and
-Chef Solo provisioner. VDD is virtualized environment, so your base system will
-not be changed and remain clean after installation. You can create and delete as
-much environments as you wish without any consequences.
+development environment built with VirtualBox, Vagrant, Linux and Chef Solo
+provisioner.
 
-Note: VDD works great with 6, 7 and 8 versions of Drupal.
-
-The main goal of the project is to provide easy to use fully functional, highly
+The main goal of the project is to provide easy to use, fully functional, highly
 customizable and extendable Linux based environment for Drupal development.
-
-Setup is very simple, fast and can be performed on Windows, Linux or Mac
-platforms. It's simple to clone ready environment to your Laptop or home
-computer and then keep it synchronized.
-
-If you don't familiar with Vagrant, please read about it. Documentation is very
-simple to read and understand. http://docs.vagrantup.com/v2/
-
-To start VDD you don't need to write your Vagrantfile. All configurations can be
-done inside simple JSON configuration file.
 
 Full VDD documentation can be found on drupal.org:
 https://drupal.org/node/2008758
@@ -50,24 +36,20 @@ the source code.
      just fine. By default Drupal 8 and Drupal 7 sites are configured.
 
   6. Build your environment
+     Please double check your config.json file after editing. VDD can't start
+     with invalid configuration. We recommend to use JSON validator.
+     This one is great: http://jsonlint.com/
+
      To build your environment execute next command inside your VDD copy:
      $ vagrant up
 
      Vagrant will start to build your environment. You'll see green status
      messages while Chef is configuring the system.
 
-     Please double check your config.json file after editing. VDD can't start
-     with invalid configuration. We recommend to use JSON validator.
-     This one is great: http://jsonlint.com/
-
   7. Visit 192.168.44.44 address
      If you didn't change default IP address in config.json file you'll see
      VDD's main page. Main page has links to configured sites, development tools
      and list of frequently asked questions.
-
-  8. SSH into your virtual machine
-     Run next command inside your VDD copy's directory:
-     $ vagrant ssh
 
 Now you have ready to use virtual development server. By default 2 sites
 are configured: Drupal 7 and Drupal 8. You can add new ones in config.json file
@@ -108,6 +90,34 @@ Vagrant's basic commands (should be executed inside VDD directory):
 
 Official Vagrant site has beautiful documentation.
 http://docs.vagrantup.com/v2/
+
+
+Extending VDD
+-------------
+
+VDD can be easily customized and extended. You may implement your custom
+cookbook and place it inside chef/cookbooks/custom directory or you may use
+berkshelf to download cookbook from remote repository.
+
+Cookbook inside chef/cookbooks/custom directory
+-----------------------------------------------
+
+  1. Take a look at vdd_example cookbook inside chef/cookbooks/custom directory.
+  2. Create your own cookbook and place it inside chef/cookbooks/custom directory.
+  3. Include your recipies in run_list in vdd.json role file inside chef/roles directory.
+
+Remote cookbook using berkshelf
+-------------------------------
+
+  Berkshelf is great cookbook manager for Chef. It can automatically download
+  cookbooks and their dependencies. Please, learn more at http://berkshelf.com/.
+
+  1. Install berkshelf on your host machine.
+  2. Include link to remote cookbooks' repository in Berksfile.
+  3. Delete Berksfile.lock file and chef/cookbooks/berks directory.
+  4. Run next command inside VDD directory. It will download all dependencies.
+    $ berks vendor chef/cookbooks/berks
+
 
 If you find a problem, incorrect comment, obsolete or improper code or such,
 please let us know by creating a new issue at
