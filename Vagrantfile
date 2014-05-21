@@ -51,4 +51,7 @@ Vagrant.configure("2") do |config|
     chef.add_role "vdd"
   end
 
+  # Run final shell script.
+  config.vm.provision :shell, :path => "chef/shell/final.sh", :args => config_json["vm"]["ip"]
+
 end
