@@ -4,7 +4,7 @@
 // Drush alias for <%= index %>
 $aliases['<%= index %>'] = array(
   'root' => '/var/www/<%= defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index %>',
-  'uri' => '<%= node["ip"] %>/<%= index %>',
+  'uri' => '<%= defined?(site["vhost"]["url"]) ? site["vhost"]["url"] : node["vm"]["ip"] + "/" + index %>',
   'databases' => array (
     'default' => array (
       'default' => array (
