@@ -11,10 +11,10 @@ link "/home/vagrant/sites" do
   to "/var/www"
 end
 
-# Add www-data to vagrant group
-group "vagrant" do
+# Add vagrant to www-data group
+group "www-data" do
   action :modify
-  members "www-data"
+  members "vagrant"
   append true
 end
 

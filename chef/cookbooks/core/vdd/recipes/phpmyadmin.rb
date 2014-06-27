@@ -11,3 +11,10 @@ end
 package "phpmyadmin" do
   action :install
 end
+
+directory "/var/lib/phpmyadmin/tmp" do
+  owner "vagrant"
+  group "www-data"
+  mode 00755
+  action :create
+end
