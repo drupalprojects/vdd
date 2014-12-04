@@ -1,0 +1,25 @@
+<VirtualHost *:80>
+  DocumentRoot /var/www
+  ServerName localhost
+  RewriteEngine On
+  ErrorLog /var/log/apache2/error.log
+  LogLevel warn
+  CustomLog /var/log/apache2/access.log combined
+  ServerSignature On
+</VirtualHost>
+
+<% @node["vdd"]["sites"].each do |index, site| %>
+  <%- if defined?(site["vhost"]) then -%>
+    <VirtualHost *:80>
+      DocumentRoot /var/www/<%= defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index %>
+      ServerName <%= defined?(site["vhost"]["url"]) ? site["vhost"]["url"] : index %>
+      ServerAlias <%= defined?(site["vhost"]["alias"]) ? site["vhost"]["alias"].join(" ") : index %>
+      ServerAdmin <%= site["account_mail"] %>
+      RewriteEngine On
+      ErrorLog /var/log/apache2/<%= index %>.error.log
+      LogLevel warn
+      CustomLog /var/log/apache2/<%= index %>.access.log combined
+      ServerSignature On
+    </VirtualHost>
+  <% end %>
+<%- end -%>

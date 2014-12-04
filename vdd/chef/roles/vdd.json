@@ -1,0 +1,43 @@
+{
+  "name": "vdd",
+  "env_run_lists": {},
+  "default_attributes": {
+    "mysql": {
+      "server_root_password": "root",
+      "server_repl_password": "root",
+      "server_debian_password": "root"
+    }
+  },
+  "override_attributes": {},
+  "json_class": "Chef::Role",
+  "run_list": [
+    "recipe[apt]",
+    "recipe[apache2]",
+    "recipe[mysql::client]",
+    "recipe[mysql::server]",
+    "recipe[vdd::apache]",
+    "recipe[vdd::graphviz]",
+    "recipe[vdd::vdd_sites]",
+    "recipe[vdd::php]",
+    "recipe[vdd::uploadprogress]",
+    "recipe[vdd::mailcatcher]",
+    "recipe[vdd::phpmyadmin]",
+    "recipe[vdd::mysql]",
+    "recipe[vdd::xdebug]",
+    "recipe[vdd::git]",
+    "recipe[vdd::webgrind]",
+    "recipe[vdd::mc]",
+    "recipe[vdd::apc]",
+    "recipe[vdd::rsync]",
+    "recipe[vdd::curl]",
+    "recipe[vdd::composer]",
+    "recipe[vdd::drush]",
+    "recipe[vdd::vdd_help]",
+    "recipe[vdd::vim]",
+    "recipe[vdd::patchutils]",
+    "recipe[vdd::siege]",
+    "recipe[vdd_example]"
+  ],
+  "description": "Installs Drupal development environment.",
+  "chef_type": "role"
+}

@@ -1,0 +1,30 @@
+<?php
+
+<% @node["vdd"]["sites"].each do |index, site| %>
+// Drush alias for <%= index %>
+$aliases['<%= index %>'] = array(
+  'root' => '/var/www/<%= defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index %>',
+  'uri' => '<%= defined?(site["vhost"]["url"]) ? site["vhost"]["url"] : node["vm"]["ip"] + "/" + index %>',
+  'databases' => array (
+    'default' => array (
+      'default' => array (
+        'driver' => 'mysql',
+        'username' => 'root',
+        'password' => '<%= node["mysql"]["server_root_password"] %>',
+        'database' => '<%= index %>',
+      ),
+    ),
+  ),
+  'command-specific' => array(
+    'site-install' => array(
+      'account-name' => '<%= site["account_name"] %>',
+      'account-pass' => '<%= site["account_pass"] %>',
+      'account-mail' => '<%= site["account_mail"] %>',
+      'site-name' => '<%= site["site_name"] %>',
+      'site-mail' => '<%= site["site_mail"] %>',
+      'yes' => FALSE,
+    ),
+  ),
+);
+
+<% end %>

@@ -1,0 +1,14 @@
+{
+  "name": "vdd",
+  "description": "Installs Drupal development environment.",
+  "license": "GPL v3",
+  "platforms": {
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+    "apache2": ">= 0.0.0",
+    "apt": ">= 0.0.0",
+    "database": ">= 0.0.0",
+    "php": ">= 0.0.0"
+  }
+}
