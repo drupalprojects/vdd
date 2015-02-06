@@ -19,6 +19,7 @@ bash "install-drush-master" do
   chmod u+x /usr/local/bin/drush-master/drush
   composer install
   EOH
+  not_if { ::File.exists?("/usr/local/bin/drush-master/drush") }
 end
 
 template "/usr/local/bin/drush-master/drushrc.php" do
