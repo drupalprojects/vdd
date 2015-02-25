@@ -10,20 +10,6 @@ if node["vdd"]["sites"]
       htdocs = htdocs[1..-1]
     end
 
-    # Create subidrectores, allow for multiple layers deep.
-    htdocs = "var/www/" + htdocs
-    htdocs = htdocs.split(%r{\/\s*})
-    folder = "/"
-    for i in (0..htdocs.length - 1)
-      folder = folder + htdocs[i] + "/"
-      directory folder do
-        owner "vagrant"
-        group "vagrant"
-        mode "0755"
-        action :create
-      end
-    end
-
     mysql_connection_info = {
       :host => "localhost",
       :username => "root",
