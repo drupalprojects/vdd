@@ -1,8 +1,3 @@
-directory "/var/www" do
-  owner "vagrant"
-  group "vagrant"
-end
-
 file "/var/www/index.html" do
   action :delete
 end

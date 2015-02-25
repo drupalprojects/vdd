@@ -5,13 +5,11 @@
     "synced_folders": [
       {
         "host_path": "data/",
-        "guest_path": "/var/www",
-        "type" : "nfs"
+        "guest_path": "/var/www"
       },
       {
         "host_path": "[insert path to sites dir here]",
-        "guest_path": "/var/www/vhosts",
-        "type" : "nfs"
+        "guest_path": "/var/www/vhosts"
       }
 
     ],

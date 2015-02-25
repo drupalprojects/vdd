@@ -26,15 +26,10 @@ Vagrant.configure("2") do |config|
 
     # Synced Folders.
     config_json["vm"]["synced_folders"].each do |folder|
-      case folder["type"]
-      when "nfs"
-        config.vm.synced_folder folder["host_path"], folder["guest_path"], type: "nfs"
-        # This uses uid and gid of the user that started vagrant.
-        config.nfs.map_uid = Process.uid
-        config.nfs.map_gid = Process.gid
-      else
-        config.vm.synced_folder folder["host_path"], folder["guest_path"]
-      end
+      config.vm.synced_folder folder["host_path"], folder["guest_path"], type: "nfs"
+      # This uses uid and gid of the user that started vagrant.
+      config.nfs.map_uid = Process.uid
+      config.nfs.map_gid = Process.gid
     end
   end
 
