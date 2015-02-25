@@ -1,13 +1,16 @@
 [mysqld]
 key_buffer = 128M
 thread_cache_size = 3
-tmp_table_size = 128M
-max_heap_table_size = 128M
-table_definition_cache = 800
-table_open_cache = 800
-innodb_buffer_pool_size = 512M
+tmp_table_size = 64M
+max_heap_table_size = 64M
+innodb_buffer_pool_size = 256M
 innodb_buffer_pool_instances = 1
 innodb_flush_method = O_DIRECT
+
+max_allowed_packet = 256M
+wait_timeout = 600
+
+query_cache_size = 16M
 
 [mysqldump]
 max_allowed_packet = 32M
