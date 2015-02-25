@@ -1,0 +1,36 @@
+{
+  "vm": {
+    "ip": "192.168.44.44",
+    "memory": "1024",
+    "synced_folders": [
+      {
+        "host_path": "data/",
+        "guest_path": "/var/www",
+        "type" : "nfs"
+      },
+      {
+        "host_path": "[insert path to sites dir here]",
+        "guest_path": "/var/www/vhosts",
+        "type" : "nfs"
+      }
+
+    ],
+    "forwarded_ports": []
+  },
+  "vdd": {
+    "sites": {
+      "[site_key]": {
+        "account_name": "root",
+        "account_pass": "root",
+        "account_mail": "box@example.com",
+        "site_name": "[Site name]",
+        "site_mail": "box@example.com",
+        "vhost": {
+          "document_root" : "[relative/path/to/docroot]",
+          "url": "[site_key].dev",
+          "alias": ["www.[site_key].dev"]
+        }
+      }
+    }
+  }
+}
