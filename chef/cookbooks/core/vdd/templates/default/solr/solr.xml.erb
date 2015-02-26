@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<solr sharedLib="lib" persistent="true">
+  <cores adminPath="/admin/cores" defaultCoreName="<%= @cores.first %>">
+    <% @cores.each do |core| %>
+    <core name="<%= core %>" instanceDir="<%= core %>/"/>
+    <% end %>
+  </cores>
+</solr>

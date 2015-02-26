@@ -8,12 +8,15 @@
         "guest_path": "/var/www"
       },
       {
-        "host_path": "[insert path to sites dir here]",
+        "host_path": "../../Sites",
         "guest_path": "/var/www/vhosts"
       }
 
     ],
     "forwarded_ports": []
+  },
+  "solr" : {
+    "version": "4.6.1"
   },
   "vdd": {
     "sites": {

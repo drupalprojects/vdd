@@ -37,7 +37,8 @@
     "recipe[vdd::patchutils]",
     "recipe[vdd::siege]",
     "recipe[vdd_example]",
-    "recipe[solr]"
+    "recipe[solr]",
+    "recipe[vdd::vdd_solr]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"
