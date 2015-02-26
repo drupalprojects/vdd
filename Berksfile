@@ -20,4 +20,4 @@ cookbook "xfs", "= 1.1.0"
 cookbook "xml", "= 1.2.4"
 cookbook "yum", "= 3.2.0"
 cookbook "yum-epel", "= 0.3.6"
-cookbook 'solr', '~> 0.3.0'
+cookbook "solr", "~> 0.3.0"
