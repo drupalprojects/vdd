@@ -18,6 +18,7 @@ bash "install-drush-master" do
   code <<-EOH
   chmod u+x /usr/local/bin/drush-master/drush
   composer install
+  git checkout 6.2.0
   EOH
 end
 
