@@ -1,0 +1,29 @@
+{
+  "name": "hosts_file",
+  "description": "Provides managed hosts file",
+  "long_description": "# Managed Hosts File\n\nManage your hosts file with chef.\n\n### Base configurables:\n\n* `default[:hosts_file][:path] = '/etc/hosts'`\n* `default[:hosts_file][:define_self] = 'ip_address' # or 'loopback' or 'localhost_only'`\n\n### Via Attributes\n\n```ruby\noverride_attributes(\n  :hosts_file => {\n    :custom_entries => {\n      '192.168.0.100' => 'www.google.com',\n      '192.168.0.101' => %w(www.yahoo.com www.altavista.com)\n    }\n  }\n)\n```\n\n### Via LWRP\n\n```ruby\nhosts_file_entry '192.168.0.100' do\n  hostname 'www.google.com'\n  aliases %w(google.com gmail.com www.gmail.com)\n  comment \"Override some google lookups\"\nend\n```\n\nand ensure you add the default recipe to the run list:\n\n```ruby\nrun_list([\"recipe[hosts_file]\"])\n```\n\n### Repo:\n\n* https://github.com/hw-cookbooks/hosts_file\n",
+  "maintainer": "Chris Roberts",
+  "maintainer_email": "chrisroberts.code@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.2.0"
+}

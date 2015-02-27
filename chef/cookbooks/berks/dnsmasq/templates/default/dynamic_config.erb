@@ -1,0 +1,19 @@
+<% @config.sort.each do |k,v| -%>
+  <% if v -%>
+    <% if(v.is_a?(Array)) -%>
+      <% v.sort.each do |val| -%>
+<%= k %>=<%= val %>
+      <% end -%>
+    <% else -%>
+<%= k %>=<%= v %>
+    <% end -%>
+  <% else -%>
+<%= k %>
+  <% end -%>
+<% end -%>
+
+<% if @list -%>
+<% @list.sort.each do |i| -%>
+<%= i %>
+<% end -%>
+<% end -%>

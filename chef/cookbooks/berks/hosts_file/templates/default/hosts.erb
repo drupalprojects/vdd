@@ -1,0 +1,6 @@
+# Hosts file managed by Chef!
+
+<% Array(node.run_state[:hosts_file][:maps].map{|k,v| "#{k}\t#{v}"}).sort.each do |line| -%>
+<%= line %>
+<% end -%>
+

@@ -1,0 +1,36 @@
+{
+  "name": "dnsmasq",
+  "description": "Installs and configures dnsmasq",
+  "long_description": "# DNSMasq\n\nInstall and configure dnsmasq. Depends on the [hosts_file cookbook](https://github.com/hw-cookbooks/hosts_file).\n\n# Recipes\n\n## default\nInstalls the `dnsmasq` package. Depending on the `[:dnsmasq][:enable_dns]` and `[:dnsmasq][:enable_dhcp]` attributes it includes the `dns` and `dhcp` recipes respectively.\n\n## dhcp\n\nIncludes the `default` recipe and writes the contents of the `node[:dnsmasq][:dhcp]` attribute hash to `/etc/dnsmasq.d/dhcp.conf`. Here is an example of the necessary attributes for DHCP with TFTP enabled:\n\n```ruby\n'dnsmasq' => {\n  'enable_dhcp' => true,\n  'dhcp' => {\n    'dhcp-authoritative' => nil,\n    'dhcp-range' => 'eth0,10.0.0.10,10.0.0.100,12h',\n    'dhcp-option' => '3', #turns off everything except basic DHCP\n    'domain' => 'lab.atx',\n    'interface' => 'eth0',\n    'dhcp-boot' => 'pxelinux.0',\n    'enable-tftp' => nil,\n    'tftp-root' => '/var/lib/tftpboot',\n    'tftp-secure' => nil\n  }\n}\n```\n\n## dns\n\nIncludes the `default` and `manage_hostsfile` recipes, then writes the content of the `node[:dnsmasq][:dns]` attribute hash to `/etc/dnsmasq.d/dns.conf`.\n\n## manage_hostsfile\n\nLoads the `dnsmasq` data bag `managed_hosts` item and merges it with any nodes in the `[:dnsmasq][:managed_hosts]` attribute, then writes them out the the `/etc/hosts/` via the `hosts_file` cookbook.\n\n# Usage\n\n## Data Bag\n\nIf you need manage your DNS hosts you may use the `dnsmasq` data bag `managed_hosts` item. It takes the form:\n\n```json\n{\n    \"id\": \"managed_hosts\",\n    \"192.168.0.100\": \"www.google.com\",\n    \"192.168.0.101\": [\"www.yahoo.com\", \"www.altavista.com\"]\n}\n```\n\n## Attributes\n\n* `[:dnsmasq][:enable_dns]` whether to enable the DNS service, default is `true`\n* `[:dnsmasq][:enable_dhcp]` whether to enabled the DHCP service, default is `false`\n* `[:dnsmasq][:managed_hosts]` hash of IPs and hostname/array of hostnames for the `manage_hostfile` recipe, default is empty\n* `[:dnsmasq][:managed_hosts_bag]` name of the data bag item, default is `managed_hosts`\n* `[:dnsmasq][:dhcp]` = hash of settings and values for the `/etc/dnsmasq.d/dhcp.conf`, default is empty\n* `[:dnsmasq][:dhcp_options]` = list of options to be added to the `/etc/dnsmasq.d/dhcp.conf` (ie. `['dhcp-host=80:ee:73:0a:fa:d9,crushinator,10.0.0.11']`), default is empty.\n* `[:dnsmasq][:dns]` hash of settings and values for the `/etc/dnsmasq.d/dns.conf`, defaults are\n```ruby\n{\n  'no-poll' => nil,\n  'no-resolv' => nil,\n  'server' => '127.0.0.1'\n}\n```\n* `[:dnsmasq][:dns_options]` = list of options to be added to the `/etc/dnsmasq.d/dns.conf`, default is empty.\n\n## Testing\n\nPlease refer to the [TESTING file](TESTING.md) to see instructions for testing this cookbook. It is currently tested on the following platforms: CentOS 5.9, CentOS 6.4, Debian 7.1, Ubuntu 10.04, 12.04 and 13.04.\n\n# Repo:\n\n* https://github.com/hw-cookbooks/dnsmasq\n",
+  "maintainer": "Chris Roberts",
+  "maintainer_email": "chrisroberts.code@gmail.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "ubuntu": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "scientific": ">= 0.0.0",
+    "oracle": ">= 0.0.0"
+  },
+  "dependencies": {
+    "hosts_file": ">= 0.0.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.2.0"
+}

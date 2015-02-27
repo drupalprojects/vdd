@@ -1,0 +1,5 @@
+# Dynamic hosts file dropped off by Chef!
+
+<% @hosts.each do |k,v| -%>
+<%= "#{k}\t" %><%= v %>
+<% end -%>
