@@ -20,16 +20,16 @@
   },
   "vdd": {
     "sites": {
-      "[site_key]": {
+      "[shortname]": {
         "account_name": "root",
         "account_pass": "root",
         "account_mail": "box@example.com",
-        "site_name": "[Site name]",
+        "site_name": "[shortname]",
         "site_mail": "box@example.com",
         "vhost": {
-          "document_root" : "[relative/path/to/docroot]",
-          "url": "[site_key].dev",
-          "alias": ["www.[site_key].dev"]
+          "document_root" : "[shortname].dev/docroot",
+          "url": "[shortname].dev",
+          "alias": ["www.[shortname].dev"]
         }
       }
     }
