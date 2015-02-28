@@ -43,7 +43,9 @@
     "recipe[vdd::vdd_dnsmasq]",
     "recipe[nodejs]",
     "recipe[nodejs::npm]",
-    "recipe[vdd::grunt]"
+    "recipe[vdd::grunt]",
+    "recipe[mongodb]",
+    "recipe[vdd::mongodb]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"

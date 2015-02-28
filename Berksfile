@@ -23,3 +23,4 @@ cookbook "yum-epel", "= 0.3.6"
 cookbook "solr", "~> 0.3.0"
 cookbook "dnsmasq", "~> 0.2.0"
 cookbook "nodejs", "~> 2.2.0"
+cookbook 'mongodb', '~> 0.16.2'
