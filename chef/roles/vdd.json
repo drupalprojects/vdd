@@ -40,7 +40,10 @@
     "recipe[solr]",
     "recipe[vdd::vdd_solr]",
     "recipe[dnsmasq]",
-    "recipe[vdd::vdd_dnsmasq]"
+    "recipe[vdd::vdd_dnsmasq]",
+    "recipe[nodejs]",
+    "recipe[nodejs::npm]",
+    "recipe[vdd::grunt]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"
