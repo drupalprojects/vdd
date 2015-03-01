@@ -1,0 +1,96 @@
+#
+# This file is managed by Chef.
+# Do NOT modify this file directly.
+#
+
+# Configuration file for varnish instance <%= @instance %>
+#
+# /etc/init.d/<%= @instance -%> expects the variable $DAEMON_OPTS to be set from this
+# shell script fragment.
+#
+
+# Should we start varnishd at boot?  Set to "no" to disable.
+START=<%= @start %>
+
+# Maximum number of open files (for ulimit -n)
+NFILES=<%= @nfiles %>
+
+# Locked shared memory (for ulimit -l)
+# Default log size is 82MB + header
+MEMLOCK=<%= @memlock %>
+
+# Maximum number of threads (for ulimit -u)
+NPROCS="<%= @nprocs -%>"
+
+# Maximum size of corefile (for ulimit -c). Default in Fedora is 0
+DAEMON_COREFILE_LIMIT="<%= @corefile -%>"
+
+# Set this to 1 to make init script reload try to switch vcl without restart.
+# To make this work, you need to set the following variables
+# explicit: VARNISH_VCL_CONF, VARNISH_ADMIN_LISTEN_ADDRESS,
+# VARNISH_ADMIN_LISTEN_PORT, VARNISH_SECRET_FILE, or in short,
+# use Alternative 3, Advanced configuration, below
+RELOAD_VCL=<%= @reload_vcl %>
+
+# See varnishd(1) for more information.
+#
+# # Main configuration file. You probably want to change it :)
+VARNISH_VCL_CONF=<%= @config_file %>
+#
+# # Default address and port to bind to
+# # Blank address means all IPv4 and IPv6 interfaces, otherwise specify
+# # a host name, an IPv4 dotted quad, or an IPv6 address in brackets.
+VARNISH_LISTEN_ADDRESS=<%= @listen_address %>
+VARNISH_LISTEN_PORT=<%= @listen_port %>
+#
+# # Telnet admin interface listen address and port
+VARNISH_ADMIN_LISTEN_ADDRESS=<%= @admin_listen_address %>
+VARNISH_ADMIN_LISTEN_PORT=<%= @admin_listen_port %>
+#
+# # Shared secret file for admin interface
+# -s ${VARNISH_SECRET_FILE} \
+VARNISH_SECRET_FILE=<%= @secret_file %>
+#
+# -w ${VARNISH_MIN_THREADS},${VARNISH_MAX_THREADS},${VARNISH_THREAD_TIMEOUT} \
+# # Cache file location
+VARNISH_STORAGE_FILE=<%=@storage_dir-%>/<%=@instance-%>.bin
+#
+# # Cache file size: in bytes, optionally using k / M / G / T suffix,
+# # or in percentage of available disk space using the % suffix.
+VARNISH_STORAGE_SIZE=<%= @storage_size %>
+#
+# # Varnish Instance name
+VARNISH_INSTANCE_NAME=<%= @instance %>
+# # Backend storage specification
+#VARNISH_STORAGE="file,${VARNISH_STORAGE_FILE},${VARNISH_STORAGE_SIZE}"
+#VARNISH_STORAGE="malloc,${VARNISH_STORAGE_SIZE}"
+<% case @storage_type -%>
+<% when 'memory' -%>
+VARNISH_STORAGE="malloc,${VARNISH_STORAGE_SIZE}"
+<% when 'file' -%>
+VARNISH_STORAGE="file,${VARNISH_STORAGE_FILE},${VARNISH_STORAGE_SIZE}"
+<% end -%>
+#
+# # Default TTL used when the backend does not specify one
+VARNISH_TTL=<%= @ttl %>
+#
+# # DAEMON_OPTS is used by the init script.  If you add or remove options, make
+# # sure you update this section, too.
+DAEMON_OPTS="-a ${VARNISH_LISTEN_ADDRESS}:${VARNISH_LISTEN_PORT} \
+             -f ${VARNISH_VCL_CONF} \
+             -n ${VARNISH_INSTANCE_NAME} \
+             <% if @admin_listen_address && @admin_listen_port -%>
+             -T ${VARNISH_ADMIN_LISTEN_ADDRESS}:${VARNISH_ADMIN_LISTEN_PORT} \
+             <% end -%>
+             -t ${VARNISH_TTL} \
+             -u <%= @user -%> -g <%= @group -%> \
+             -S ${VARNISH_SECRET_FILE} \
+             <% unless @options.empty? -%>
+             <% Hash[@options.sort].each do |key, value| %>
+             <% if key && value -%>
+             -p <%= key -%>=<%= value -%> \
+             <% end -%>
+             <% end -%>
+             <% end -%>
+             -s ${VARNISH_STORAGE}"
+

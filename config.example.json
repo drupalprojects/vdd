@@ -18,6 +18,9 @@
   "solr" : {
     "version": "4.6.1"
   },
+  "varnish": {
+    "version": "3.0"
+  },
   "vdd": {
     "sites": {
       "[shortname]": {

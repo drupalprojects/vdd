@@ -1,0 +1,15 @@
+<%= @log_dir -%>/varnishncsa-<%= @instance -%>.log <%= @log_dir -%>/varnish-<%= @instance -%>.log {
+  daily
+  rotate 7
+  missingok
+  compress
+  delaycompress
+  missingok
+  postrotate
+    for service in varnishlog-<%= @instance -%> varnishncsa-<%= @instance -%>; do
+      if /usr/bin/pgrep -P 1 $service >/dev/null; then
+        /usr/sbin/invoke-rc.d $service reload > /dev/null
+      fi
+    done
+  endscript
+}

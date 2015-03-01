@@ -1,0 +1,13 @@
+<%= @log_dir -%>/varnishncsa-<%= @instance -%>.log <%= @log_dir -%>/varnish-<%= @instance -%>.log {
+  daily
+  rotate 7
+  missingok
+  compress
+  notifempty
+  sharedsicripts
+  delaycompress
+  postrotate
+    /bin/kill -HUP `cat /var/run/varnishlog-<%= @instance -%>.pid 2>/dev/null` 2> /dev/null || true
+    /bin/kill -HUP `cat /var/run/varnishncsa-<%= @instance -%>.pid 2>/dev/null` 2> /dev/null || true
+  endscript
+}
