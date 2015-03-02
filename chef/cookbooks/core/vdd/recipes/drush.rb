@@ -5,7 +5,7 @@ end
 # Install drush-master, required for drush with D8 sites.
 git "/usr/local/bin/drush-master" do
   repository "https://github.com/drush-ops/drush.git"
-  reference "master"
+  revision node["vdd"]["drush"]["version"]
   action :sync
 end
 

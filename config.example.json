@@ -22,6 +22,9 @@
     "version": "3.0"
   },
   "vdd": {
+    "drush": {
+      "version" : "6.5.0"
+    },
     "sites": {
       "[shortname]": {
         "account_name": "root",
