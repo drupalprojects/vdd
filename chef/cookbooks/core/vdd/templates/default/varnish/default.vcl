@@ -19,6 +19,12 @@ backend default {
   .port = "80";
 }
 
+# Still served cached pages if backend goes away.
+sub vcl_backend_response {
+    set beresp.ttl = 10s;
+    set beresp.grace = 1h;
+}
+
 # Respond to incoming requests.
 sub vcl_recv {
   # Use anonymous, cached pages if all backends are down.
