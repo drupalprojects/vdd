@@ -15,6 +15,9 @@
     ],
     "forwarded_ports": []
   },
+  "drush": {
+    "version" : "6.2.0"
+  },
   "solr" : {
     "version": "4.6.1"
   },
@@ -42,9 +45,6 @@
     "group": "www-data"
   },
   "vdd": {
-    "drush": {
-      "version" : "6.2.0"
-    },
     "sites": {
       "[shortname]": {
         "account_name": "root",
