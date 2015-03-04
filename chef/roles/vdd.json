@@ -33,6 +33,7 @@
     "recipe[vdd::composer]",
     "recipe[vdd::drush]",
     "recipe[vdd::vdd_help]",
+    "recipe[vim_config]",
     "recipe[vdd::vim]",
     "recipe[vdd::patchutils]",
     "recipe[vdd::siege]",

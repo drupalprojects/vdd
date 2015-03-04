@@ -1,0 +1,63 @@
+---
+kitchen:
+  log_level: debug
+
+driver:
+  name: vagrant
+
+platforms:
+- name: centos-6.5
+- name: debian-6.0.8
+- name: debian-7.2.0
+- name: ubuntu-10.04
+- name: ubuntu-12.04
+- name: ubuntu-12.10
+- name: ubuntu-13.04
+- name: ubuntu-13.10
+
+suites:
+  - name: default
+    run_list: &default_run_list
+      - recipe[vim]
+      - recipe[vim_config]
+    attributes: {}
+  - name: git_pathogen
+    run_list: *default_run_list
+    attributes:
+      vim_config:
+        plugin_manager: "pathogen"
+        bundles: &default_git_bundle
+          git:
+            - git://github.com/scrooloose/nerdcommenter.git
+  - name: mercurial_pathogen
+    run_list: *default_run_list
+    attributes:
+      vim_config:
+        plugin_manager: "pathogen"
+        bundles: &default_hg_bundle
+          hg:
+            - https://bitbucket.org/delroth/vim-ack
+  - name: git_vundle
+    run_list: *default_run_list
+    attributes:
+      vim_config:
+        plugin_manager: "vundle"
+        bundles: *default_git_bundle
+  - name: mercurial_vundle
+    run_list: *default_run_list
+    attributes:
+      vim_config:
+        plugin_manager: "vundle"
+        bundles: *default_hg_bundle
+  - name: git_unbundle
+    run_list: *default_run_list
+    attributes:
+      vim_config:
+        plugin_manager: "unbundle"
+        bundles: *default_git_bundle
+  - name: mercurial_unbundle
+    run_list: *default_run_list
+    attributes:
+      vim_config:
+        plugin_manager: "unbundle"
+        bundles: *default_hg_bundle
