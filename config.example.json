@@ -15,11 +15,14 @@
     ],
     "forwarded_ports": []
   },
+  "java": {
+    "jdk_version": "7"
+  },
   "drush": {
     "version" : "6.2.0"
   },
   "solr" : {
-    "version": "4.6.1"
+    "version": "4.10.3"
   },
   "varnish": {
     "version": "3.0"
