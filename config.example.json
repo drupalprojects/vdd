@@ -21,6 +21,26 @@
   "varnish": {
     "version": "3.0"
   },
+  "ssl": {
+    "ssl_cert": {
+      "source": "self-signed",
+      "path": "/etc/nginx/ssl/nginx.crt"
+    },
+    "ssl_key": {
+      "source": "self-signed",
+      "path": "/etc/nginx/ssl/nginx.key"
+    },
+    "common_name":  "*.dev",
+    "country":  "uk",
+    "city":  "canterbury",
+    "state":  "kent",
+    "organization":  "deeson",
+    "department":  "drupal",
+    "email":  "drupal@drupal7.dev",
+    "years":  10,
+    "owner":  "www-data",
+    "group": "www-data"
+  },
   "vdd": {
     "drush": {
       "version" : "6.2.0"

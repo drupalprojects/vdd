@@ -31,7 +31,8 @@ modules = [
   "authn_file",
   "authz_default",
   "authz_groupfile",
-  "authz_user"
+  "authz_user",
+  "ssl"
 ]
 
 modules.each do |mod|

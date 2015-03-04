@@ -47,7 +47,9 @@
     "recipe[mongodb]",
     "recipe[vdd::mongodb]",
     "recipe[varnish_ng]",
-    "recipe[vdd::varnish]"
+    "recipe[vdd::varnish]",
+    "recipe[nginx]",
+    "recipe[vdd::nginx]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"
