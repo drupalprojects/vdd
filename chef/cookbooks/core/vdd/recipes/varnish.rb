@@ -7,5 +7,5 @@ template "/etc/default/varnish" do
 end
 
 service "varnish" do
-  action :start
+  action :restart
 end
