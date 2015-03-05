@@ -28,3 +28,7 @@ $conf['reverse_proxy'] = TRUE;
 
 // Tell Drupal what addresses the proxy server(s) use.
 $conf['reverse_proxy_addresses'] = array('127.0.0.1');
+
+$conf['apachesolr_default_environment'] = 'solr';
+$conf['apachesolr_environments']['solr']['url'] = "http://localhost:8984/solr/<%= @shortcode %>";
+
