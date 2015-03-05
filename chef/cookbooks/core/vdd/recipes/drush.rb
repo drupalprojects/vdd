@@ -13,10 +13,29 @@ link "/usr/bin/drush" do
   to "/usr/local/bin/drush-master/drush"
 end
 
-bash "install-drush-master" do
-  cwd "/usr/local/bin/drush-master"
+bash "install-drush-7" do
+  cwd "/usr/local/bin/drush-7"
   code <<-EOH
-  chmod u+x /usr/local/bin/drush-master/drush
+  chmod u+x /usr/local/bin/drush-7/drush
+  composer install
+  EOH
+end
+
+# Install drush7, required for drush with D8 sites.
+git "/usr/local/bin/drush-7" do
+  repository "https://github.com/drush-ops/drush.git"
+  revision node["drush"]["version7"]
+  action :sync
+end
+
+link "/usr/bin/drush7" do
+  to "/usr/local/bin/drush-7/drush"
+end
+
+bash "install-drush-7" do
+  cwd "/usr/local/bin/drush-7"
+  code <<-EOH
+  chmod u+x /usr/local/bin/drush-7/drush
   composer install
   EOH
 end

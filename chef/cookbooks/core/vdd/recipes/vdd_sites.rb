@@ -1,3 +1,9 @@
+directory "/var/site-php" do
+  mode  00777
+  action :create
+  recursive true
+end
+
 if node["vdd"]["sites"]
 
   node["vdd"]["sites"].each do |index, site|
@@ -18,6 +24,22 @@ if node["vdd"]["sites"]
     mysql_database index do
       connection mysql_connection_info
       action :create
+    end
+
+    # Create a settings dir for each site.
+    directory "/var/www/settings/#{index}" do
+      mode  00777
+      action :create
+      recursive true
+    end
+
+    template "/var/www/settings/#{index}/settings.inc" do
+      source "drupal/settings.erb"
+      variables(
+        shortcode: index,
+        site: site
+      )
+      mode 0644
     end
 
   end

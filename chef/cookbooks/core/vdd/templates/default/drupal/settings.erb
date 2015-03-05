@@ -1,0 +1,30 @@
+<?php
+
+$databases = array(
+    'default' => array (
+      'default' => array (
+        'driver' => 'mysql',
+        'username' => 'root',
+        'password' => '<%= node["mysql"]["server_root_password"] %>',
+        'database' => '<%= @shortcode %>',
+        'host' => '127.0.0.1',
+      ),
+    ),
+);
+
+$https = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+$base_protocol = $https ? 'https' : 'http';
+$base_url = $base_protocol . '://<%= @shortcode %>.dev';
+
+$port = $_SERVER['SERVER_PORT'];
+if ($port == '8080') {
+  $base_url .= ':8080';
+}
+
+$cookie_domain = '.<%= @shortcode %>.dev';
+
+// Tell Drupal it's behind a proxy.
+$conf['reverse_proxy'] = TRUE;
+
+// Tell Drupal what addresses the proxy server(s) use.
+$conf['reverse_proxy_addresses'] = array('127.0.0.1');
