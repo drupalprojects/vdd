@@ -1,3 +1,4 @@
 .vagrant
 config.json
 .idea
+.DS_Store
