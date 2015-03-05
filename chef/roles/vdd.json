@@ -50,7 +50,8 @@
     "recipe[varnish_ng]",
     "recipe[vdd::varnish]",
     "recipe[nginx]",
-    "recipe[vdd::nginx]"
+    "recipe[vdd::nginx]",
+    "recipe[vdd::bash]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"

@@ -1,9 +1,9 @@
 server {
         listen 443 ssl;
 
-        server_name *.dev;
-        ssl_certificate /var/www/ssl/nginx.crt;
-        ssl_certificate_key /var/www/ssl/nginx.key;
+        server_name <%= @shortcode %>.dev;
+        ssl_certificate /var/www/ssl/<%= @shortcode %>.crt;
+        ssl_certificate_key /var/www/ssl/<%= @shortcode %>.key;
 
         location / {
             proxy_pass http://127.0.0.1:8080;
