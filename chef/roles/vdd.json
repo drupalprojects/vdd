@@ -51,7 +51,8 @@
     "recipe[vdd::varnish]",
     "recipe[nginx]",
     "recipe[vdd::nginx]",
-    "recipe[vdd::bash]"
+    "recipe[vdd::bash]",
+    "recipe[vdd::pimpmylogs]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"
