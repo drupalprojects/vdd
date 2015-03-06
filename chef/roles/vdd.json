@@ -52,6 +52,8 @@
     "recipe[nginx]",
     "recipe[vdd::nginx]",
     "recipe[vdd::bash]",
+    "recipe[memcached]",
+    "recipe[vdd::memcache]",
     "recipe[vdd::pimpmylogs]"
   ],
   "description": "Installs Drupal development environment.",
