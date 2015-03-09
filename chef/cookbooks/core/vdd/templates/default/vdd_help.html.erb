@@ -48,7 +48,7 @@
       <% @sites.each do |index, site| %>
       <li>
        <%- if defined?(site["vhost"]["url"]) then -%>
-         <a href="http://<%= site["vhost"]["url"] %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
+         <a href="https://<%= site["vhost"]["url"] %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
        <%- else -%>
          <a href="/<%= index %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
        <%- end -%>
@@ -61,6 +61,7 @@
       <li><a href="http://<%= node["vm"]["ip"] %>:1080/">MailCatcher</a></li>
       <li><a href="/phpmyadmin">phpMyAdmin</a></li>
       <li><a href="/phpinfo.php">phpinfo()</a></li>
+      <li><a href="/pimpmylogs">PimpMyLogs</a></li>
       <li><a href="/webgrind">Webgrind</a></li>
     </ul>
 
@@ -73,6 +74,8 @@
       <li><a href="#q3">How to install fresh Drupal 8 version?</a></li>
       <li><a href="#q4">How to quickly install Drupal 7?</a></li>
       <li><a href="#q5">What is Webgrind and how would I use it?</a></li>
+      <li><a href="#q6">How to use memcache</a></li>
+      <li><a href="#q7">How to use SSL and varnish</a></li>
     </ul>
 
     <h3>Answers</h3>
@@ -111,5 +114,31 @@
       <li>Enable Xdebug by including "?XDEBUG_PROFILE=1" in the url. For example: <i>http://drupal8.dev/admin/reports/status?XDEBUG_PROFILE=1</i>.</li>
       <li>After generating Xdebug data, visit the <a href="/webgrind">Webgrind</a> dashboard to inspect results.</li>
     </ul>
+
+    <h4 id="q6">How to use memcache?</h4>
+    <p>You can use memcache as a cache backend in your drupal sites by downloading the memcache module into you sites/all/modules/contrib directory then adding the following tio you sites/[shortcode].dev/settings.php file</p>
+    <ol class="code">
+       <li>$conf['cache_backends'][] = './sites/all/modules/contrib/memcache/memcache.inc';</li>
+       <li>$conf['cache_default_class'] = 'MemCacheDrupal';</li>
+       <li>$conf['cache_class_form'] = 'DrupalDatabaseCache';</li>
+       <li>$conf['cache_class_cache_form'] = 'DrupalDatabaseCache';</li>
+       <li>$conf['lock_inc'] = 'sites/all/modules/contrib/memcache/memcache-lock.inc';</li>
+       <li>$conf['memcache_stampede_protection'] = TRUE;</li>
+       <li>$conf['memcache_servers'] = array('127.0.0.1:11211' => 'default');</li>
+       <li>$conf['memcache_key_prefix'] = '[shortname]';</li>
+     </ol>
+
+     <h4 id="q7">How to use Varnish and SSL</h4>
+     <p>If you have required the settings file correctly then nothing else is needed. Your site should respond on https://[shortname].dev (nginx and varnish) and http://[shortname].dev:8080 (just varnish).
+     </p>
+     <p>You can also add the SSL certificates to your Mac’s keychain to make it trust the certificate and you get a nice green padlock.  There is a certificate per site:
+     </p>
+     <ol>
+     <li>Open finder and open the directory ~/Applications/vdd/data/ssl</li>
+     <li>Double click each crt file, your Mac keychain will open</li>
+     <li>Click Always trust</li>
+     <li>Type your password into the popup and click Update settings</li>
+     </ol>
+
   </body>
 </html>
