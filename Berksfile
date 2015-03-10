@@ -1,6 +1,6 @@
 source "https://api.berkshelf.com"
 
-cookbook "apache2", "= 1.10.4"
+cookbook "apache2", "= 2.0.0"
 cookbook "apt", "= 2.4.0"
 cookbook "aws", "= 2.2.0"
 cookbook "build-essential", "= 2.0.2"

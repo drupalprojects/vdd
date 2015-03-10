@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: apache2
-# Recipe:: perl
+# Recipe:: mod_perl
 #
 # adapted from the mod_python recipe by Jeremy Bingham
 #
@@ -21,15 +21,28 @@
 
 case node['platform_family']
 when 'debian'
-  %w[libapache2-mod-perl2 libapache2-request-perl apache2-mpm-prefork].each do |pkg|
+  %w(libapache2-mod-perl2 libapache2-request-perl apache2-mpm-prefork).each do |pkg|
     package pkg
   end
+when 'suse'
+  package 'apache2-mod_perl' do
+    notifies :run, 'execute[generate-module-list]', :immediately
+  end
+
+  package 'perl-Apache2-Request'
 when 'rhel', 'fedora'
   package 'mod_perl' do
     notifies :run, 'execute[generate-module-list]', :immediately
   end
 
   package 'perl-libapreq2'
+when 'freebsd'
+  if node['apache']['version'] == '2.4'
+    package 'ap24-mod_perl2'
+  else
+    package 'ap22-mod_perl2'
+  end
+  package 'p5-libapreq2'
 end
 
 file "#{node['apache']['dir']}/conf.d/perl.conf" do

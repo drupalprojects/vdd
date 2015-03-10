@@ -1,5 +1,5 @@
 DEPENDENCIES
-  apache2 (= 1.10.4)
+  apache2 (= 2.0.0)
   apt (= 2.4.0)
   aws (= 2.2.0)
   build-essential (= 2.0.2)
@@ -32,7 +32,7 @@ DEPENDENCIES
 GRAPH
   7-zip (1.0.2)
     windows (>= 1.2.2)
-  apache2 (1.10.4)
+  apache2 (2.0.0)
     iptables (>= 0.0.0)
     logrotate (>= 0.0.0)
     pacman (>= 0.0.0)

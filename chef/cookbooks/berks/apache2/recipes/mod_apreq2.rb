@@ -24,6 +24,10 @@ include_recipe 'apache2::default'
 case node['platform_family']
 when 'debian'
   package 'libapache2-mod-apreq2'
+when 'suse'
+  package 'apache2-mod_apreq2' do
+    notifies :run, 'execute[generate-module-list]', :immediately
+  end
 when 'rhel', 'fedora'
   package 'libapreq2' do
     notifies :run, 'execute[generate-module-list]', :immediately
@@ -32,14 +36,9 @@ when 'rhel', 'fedora'
   # seems that the apreq lib is weirdly broken or something - it needs to be
   # loaded as 'apreq', but on RHEL & derivitatives the file needs a symbolic
   # link to mod_apreq.so.
-  link '/usr/lib64/httpd/modules/mod_apreq.so' do
-    to      '/usr/lib64/httpd/modules/mod_apreq2.so'
-    only_if 'test -f /usr/lib64/httpd/modules/mod_apreq2.so'
-  end
-
-  link '/usr/lib/httpd/modules/mod_apreq.so' do
-    to      '/usr/lib/httpd/modules/mod_apreq2.so'
-    only_if 'test -f /usr/lib/httpd/modules/mod_apreq2.so'
+  link "#{node['apache']['libexec_dir']}/mod_apreq.so" do
+    to "#{node['apache']['libexec_dir']}/mod_apreq2.so"
+    only_if "test -f #{node['apache']['libexec_dir']}/mod_apreq2.so"
   end
 end
 

@@ -1,8 +1,9 @@
 #
 # Cookbook Name:: apache2
-# Recipe:: php5
+# Recipe:: mod_php5
 #
 # Copyright 2008-2013, Opscode, Inc.
+# Copyright 2014, OneHealth Solutions, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +27,6 @@ when 'arch'
   end
 when 'rhel'
   package 'which'
-
   package 'php package' do
     if node['platform_version'].to_f < 6.0
       package_name 'php53'
@@ -37,21 +37,20 @@ when 'rhel'
     not_if 'which php'
   end
 when 'fedora'
-  package 'php package' do
-    package_name 'php'
+  package 'which'
+  package 'php' do
+    notifies :run, 'execute[generate-module-list]', :immediately
+    not_if 'which php'
+  end
+when 'suse'
+  package 'which'
+  package 'php' do
     notifies :run, 'execute[generate-module-list]', :immediately
     not_if 'which php'
   end
 when 'freebsd'
-  freebsd_port_options 'php5' do
-    options 'APACHE' => true
-    action :create
-  end
-
-  package 'php package' do
-    package_name 'php5'
-    source 'ports'
-    notifies :run, 'execute[generate-module-list]', :immediately
+  %w(php5 mod_php5 libxml2).each do |pkg|
+    freebsd_package pkg
   end
 end
 
@@ -61,9 +60,6 @@ file "#{node['apache']['dir']}/conf.d/php.conf" do
 end
 
 apache_module 'php5' do
-  case node['platform_family']
-  when 'rhel', 'fedora', 'freebsd'
-    conf true
-    filename 'libphp5.so'
-  end
+  conf true
+  filename 'libphp5.so'
 end
