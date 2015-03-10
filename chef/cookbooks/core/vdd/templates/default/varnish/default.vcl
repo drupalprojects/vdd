@@ -36,7 +36,7 @@ sub vcl_recv {
 
   if (req.restarts == 0) {
     if (req.http.x-forwarded-for) {
-      set req.http.X-Forwarded-For = req.http.X-Forwarded-For + ", " + client.ip;
+      set req.http.X-Forwarded-For = req.http.X-Forwarded-For;
     }
     else {
       set req.http.X-Forwarded-For = client.ip;
@@ -84,7 +84,7 @@ sub vcl_recv {
     #    cookie string.
     set req.http.Cookie = ";" + req.http.Cookie;
     set req.http.Cookie = regsuball(req.http.Cookie, "; +", ";");
-    set req.http.Cookie = regsuball(req.http.Cookie, ";(SESS[a-z0-9]+|SSESS[a-z0-9]+|NO_CACHE)=", "; \1=");
+    set req.http.Cookie = regsuball(req.http.Cookie, ";(SESS[a-z0-9]+|SSESS[a-z0-9]+|NO_CACHE|XDEBUG_SESSION)=", "; \1=");
     set req.http.Cookie = regsuball(req.http.Cookie, ";[^ ][^;]*", "");
     set req.http.Cookie = regsuball(req.http.Cookie, "^[; ]+|[; ]+$", "");
 
