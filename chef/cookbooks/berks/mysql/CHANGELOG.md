@@ -1,6 +1,178 @@
 mysql Cookbook CHANGELOG
 ========================
-This file is used to list changes made in each version of the mysql cookbook.
+
+v6.0.15 (2015-03-10)
+--------------------
+- Moved --defaults-file as first option to mysql_install_db_script
+
+v6.0.15 (2015-02-26)
+--------------------
+- Updating docker detection fix to pass specs
+
+v6.0.14 (2015-02-26)
+--------------------
+- Fixed debian system service :disable action. Now survives reboot
+- Fixing centos-7 instance :enable action. Now survives
+- Not applying Apparmor policy if running in a Docker container
+
+v6.0.13 (2015-02-15)
+--------------------
+- Adding support for special characters in initial_root_password
+- Fixing failure status bug in sysvinit script
+
+v6.0.12 (2015-02-30)
+--------------------
+- No changes. Released a 6.0.11 that was identical to 6.0.10.
+  Git before coffee.
+
+v6.0.11 (2015-02-30)
+--------------------
+- Adding support for configurable socket files
+
+v6.0.10 (2015-01-19)
+------------------
+- Fix #282 - Fixing up data_dir template variable
+
+v6.0.9 (2015-01-19)
+------------------
+- Fix #282 - undefined method `parsed_data_dir' bug
+
+v6.0.8 (2015-01-19)
+------------------
+- Refactoring helper methods out of resource classes
+
+v6.0.7 (2015-01-14)
+------------------
+- Fixing timing issue with Upstart provider :restart and :reload
+  actions where service returns before being available
+
+v6.0.6 (2014-12-26)
+------------------
+- Fixing subtle bug where MysqlCookbook::Helper methods were polluting Chef::Resource
+
+v6.0.5 (2014-12-25)
+------------------
+- Using 'include_recipe' instead of 'recipe_eval' in LWRP
+- Fixing type checking on package_name attribute in mysql_client resource.
+
+v6.0.4 (2014-12-21)
+------------------
+- Suggest available versions if current is not available for current platform.
+
+v6.0.3 (2014-12-17)
+------------------
+- Adding bind_address parameter to mysql_service resource
+
+v6.0.2 (2014-12-17)
+------------------
+- Fixing sysvinit provider to survive reboots
+
+v6.0.1 (2014-12-16)
+------------------
+- Fixing Upstart template to survive reboots
+
+v6.0.0 (2014-12-15)
+------------------
+- Major version update
+- Cookbook now provides LWRPs instead of recipes
+- Platform providers re-factored into init system providers
+- Separated :create and :start actions for use in recipes that build containers
+- mysql_service now supports multiple instances on the same machine
+- mysql_service no longer attempts to manage user records
+- Removal of debian-sys-maint
+- Unified Sysvinit script that works on all platforms
+- mysql_config resource introduced
+- mysql_client fixed up
+- Refactored acceptance tests
+- Temporarily dropped FreeBSD support
+
+v5.6.1 (2014-10-29)
+------------------
+- Use Gem::Version instead of Chef::Version
+
+v5.6.0 (2014-10-29)
+------------------
+- Changing default charset to utf8
+- Quoting passwords in debian.cnf.erb
+- Amazon 2014.09 support
+- Ubuntu 14.10 support
+- Only hide passwords from STDOUT via "sensitive true" in chef-client higher than 11.14
+- Updating test harness
+
+v5.5.4 (2014-10-07)
+------------------
+- Adding sensitive flag to execute resources to protect passwords from logs  
+
+v5.5.3 (2014-09-24)
+------------------
+- Reverting back to Upstart on Ubuntu 14.04
+
+v5.5.2 (2014-09-8)
+------------------
+- Reverting commit that broke Debian pass_string
+
+v5.5.1 (2014-09-2)
+------------------
+- Switching Ubuntu service provider to use SysVinit instead of Upstart
+
+v5.5.0 (2014-08-27)
+-------------------
+- Adding package version and action parameters to mysql_service resource
+- Fixing Debian pass_string
+
+v5.4.4 (2014-08-27)
+-------------------
+- Changing module namespace to MysqlCookbook
+
+v5.4.3 (2014-08-25)
+-------------------
+- More refactoring. Moving helper function bits into resource parsed_parameters
+
+v5.4.2 (2014-08-25)
+-------------------
+- Moving provider local variables into definitions for RHEL provider
+
+v5.4.1 (2014-08-25)
+-------------------
+- Refactoring resources into the LWRP style with parsed parameters
+- Moving provider local variables into definitions
+
+v5.4.0 (2014-08-25)
+-------------------
+- #212 - support for centos-7 (mysql55 and mysql56)
+- Adding (untested) Debian-6 support
+- Adding Suse support to metadata.rb
+- Adding ability to change MySQL root password
+- Added libmysqlclient-devel package to SuSE client provider
+- Appeasing AppArmor
+- Reducing duplication in client provider
+
+v5.3.6 (2014-06-18)
+-------------------
+- Fixing pid path location. Updating tests to include real RHEL
+
+
+v5.3.4 (2014-06-16)
+-------------------
+- Fixing specs for Amazon Linux server package names
+
+
+v5.3.2 (2014-06-16)
+-------------------
+- Fixing Amazon Linux support
+
+
+v5.3.0 (2014-06-11)
+-------------------
+- #189 - Fix server_repl_password description
+- #191 - Adding support for server55 and server56 on el-6
+- #193 - Fix syntax in mysql_service example
+- #199 - Adding Suse support
+
+
+v5.2.12 (2014-05-19)
+--------------------
+PR #192 - recipes/server.rb should honor parameter node['mysql']['version']
 
 
 v5.2.10 (2014-05-15)
@@ -130,10 +302,10 @@ Fixing style cops
 v4.0.12
 -------
 ### Bug
-- **[COOK-4068](https://tickets.opscode.com/browse/COOK-4068)** - rework MySQL Windows recipe
+- **[COOK-4068](https://tickets.chef.io/browse/COOK-4068)** - rework MySQL Windows recipe
 
 ### Improvement
-- **[COOK-3801](https://tickets.opscode.com/browse/COOK-3801)** - Add innodb_adaptive_flushing_method and innodb_adaptive_checkpoint
+- **[COOK-3801](https://tickets.chef.io/browse/COOK-3801)** - Add innodb_adaptive_flushing_method and innodb_adaptive_checkpoint
 
 
 v4.0.10
@@ -180,7 +352,7 @@ v4.0.0
 v3.0.12
 -------
 ### Bug
-- **[COOK-3752](https://tickets.opscode.com/browse/COOK-3752)** - mysql service fails to start in mysql::server recipe
+- **[COOK-3752](https://tickets.chef.io/browse/COOK-3752)** - mysql service fails to start in mysql::server recipe
 
 
 v3.0.10
@@ -191,33 +363,33 @@ v3.0.10
 v3.0.8
 ------
 ### Bug
-- **[COOK-3749](https://tickets.opscode.com/browse/COOK-3749)** - Fix a regression with Chef 11-specific features
+- **[COOK-3749](https://tickets.chef.io/browse/COOK-3749)** - Fix a regression with Chef 11-specific features
 
 
 v3.0.6
 ------
 ### Bug
-- **[COOK-3674](https://tickets.opscode.com/browse/COOK-3674)** - Fix an issue where the MySQL server fails to set the root password correctly when `data_dir` is a non-default value
-- **[COOK-3647](https://tickets.opscode.com/browse/COOK-3647)** - Fix README typo (databas => database)
-- **[COOK-3477](https://tickets.opscode.com/browse/COOK-3477)** - Fix log-queries-not-using-indexes not working
-- **[COOK-3436](https://tickets.opscode.com/browse/COOK-3436)** - Pull percona repo in compilation phase
-- **[COOK-3208](https://tickets.opscode.com/browse/COOK-3208)** - Fix README typo (LitenPort => ListenPort)
-- **[COOK-3149](https://tickets.opscode.com/browse/COOK-3149)** - Create my.cnf before installing
-- **[COOK-2681](https://tickets.opscode.com/browse/COOK-2681)** - Fix log_slow_queries for 5.5+
-- **[COOK-2606](https://tickets.opscode.com/browse/COOK-2606)** - Use proper bind address on cloud providers
+- **[COOK-3674](https://tickets.chef.io/browse/COOK-3674)** - Fix an issue where the MySQL server fails to set the root password correctly when `data_dir` is a non-default value
+- **[COOK-3647](https://tickets.chef.io/browse/COOK-3647)** - Fix README typo (databas => database)
+- **[COOK-3477](https://tickets.chef.io/browse/COOK-3477)** - Fix log-queries-not-using-indexes not working
+- **[COOK-3436](https://tickets.chef.io/browse/COOK-3436)** - Pull percona repo in compilation phase
+- **[COOK-3208](https://tickets.chef.io/browse/COOK-3208)** - Fix README typo (LitenPort => ListenPort)
+- **[COOK-3149](https://tickets.chef.io/browse/COOK-3149)** - Create my.cnf before installing
+- **[COOK-2681](https://tickets.chef.io/browse/COOK-2681)** - Fix log_slow_queries for 5.5+
+- **[COOK-2606](https://tickets.chef.io/browse/COOK-2606)** - Use proper bind address on cloud providers
 
 ### Improvement
-- **[COOK-3498](https://tickets.opscode.com/browse/COOK-3498)** - Add support for replicate_* variables in my.cnf
+- **[COOK-3498](https://tickets.chef.io/browse/COOK-3498)** - Add support for replicate_* variables in my.cnf
 
 
 v3.0.4
 ------
 ### Bug
-- **[COOK-3310](https://tickets.opscode.com/browse/COOK-3310)** - Fix missing `GRANT` option
-- **[COOK-3233](https://tickets.opscode.com/browse/COOK-3233)** - Fix escaping special characters
-- **[COOK-3156](https://tickets.opscode.com/browse/COOK-3156)** - Fix GRANTS file when `remote_root_acl` is specified
-- **[COOK-3134](https://tickets.opscode.com/browse/COOK-3134)** - Fix Chef 11 support
-- **[COOK-2318](https://tickets.opscode.com/browse/COOK-2318)** - Remove redundant `if` block around `node.mysql.tunable.log_bin`
+- **[COOK-3310](https://tickets.chef.io/browse/COOK-3310)** - Fix missing `GRANT` option
+- **[COOK-3233](https://tickets.chef.io/browse/COOK-3233)** - Fix escaping special characters
+- **[COOK-3156](https://tickets.chef.io/browse/COOK-3156)** - Fix GRANTS file when `remote_root_acl` is specified
+- **[COOK-3134](https://tickets.chef.io/browse/COOK-3134)** - Fix Chef 11 support
+- **[COOK-2318](https://tickets.chef.io/browse/COOK-2318)** - Remove redundant `if` block around `node.mysql.tunable.log_bin`
 
 v3.0.2
 ------
@@ -281,7 +453,7 @@ Under Chef Solo, you must set the node attributes for the root, debian and repl 
 - [COOK-1687] - duplicate `innodb_buffer_pool_size` attribute
 - [COOK-1704] - mysql cookbook fails spec tests when minitest-handler cookbook enabled
 - [COOK-1737] - Fail a chef-solo run when `server_root_password`, `server_debian_password`, and/or `server_repl_password` is not set
-- [COOK-1769] - link to database recipe in mysql README goes to old opscode/cookbooks repo instead of opscode-cookbook organization
+- [COOK-1769] - link to database recipe in mysql README goes to old chef/cookbooks repo instead of chef-cookbook organization
 - [COOK-1963] - use `platform_family`
 
 v1.3.0

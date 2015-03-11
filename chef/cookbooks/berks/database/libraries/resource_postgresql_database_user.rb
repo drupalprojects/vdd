@@ -1,8 +1,8 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Author:: Lamont Granquist (<lamont@opscode.com>)
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Author:: Lamont Granquist (<lamont@chef.io>)
 # Author:: Marco Betti (<m.betti@gmail.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Copyright:: Copyright (c) 2011 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,15 +28,60 @@ class Chef
         super
         @resource_name = :postgresql_database_user
         @provider = Chef::Provider::Database::PostgresqlUser
+        @createdb = false
+        @createrole = false
+        @login = true
+        @replication = false
+        @superuser = false
         @schema_name = nil
         @allowed_actions.push(:create, :drop, :grant, :grant_schema)
+      end
+
+      def createdb(arg = nil)
+        set_or_return(
+          :createdb,
+          arg,
+          equal_to: [true, false]
+        )
+      end
+
+      def createrole(arg = nil)
+        set_or_return(
+          :createrole,
+          arg,
+          equal_to: [true, false]
+        )
+      end
+
+      def login(arg = nil)
+        set_or_return(
+          :login,
+          arg,
+          equal_to: [true, false]
+        )
+      end
+
+      def replication(arg = nil)
+        set_or_return(
+          :replication,
+          arg,
+          equal_to: [true, false]
+        )
       end
 
       def schema_name(arg = nil)
         set_or_return(
           :schema_name,
           arg,
-          :kind_of => String
+          kind_of: String
+        )
+      end
+
+      def superuser(arg = nil)
+        set_or_return(
+          :superuser,
+          arg,
+          equal_to: [true, false]
         )
       end
     end

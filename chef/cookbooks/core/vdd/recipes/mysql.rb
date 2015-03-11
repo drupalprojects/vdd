@@ -1,10 +1,16 @@
-service "mysql" do
-  supports :restart => true, :start => true, :stop => true
-  action :nothing
+mysql_service 'default' do
+  port '3306'
+  version '5.5'
+  initial_root_password node['mysql']['server_root_password']
+  action [:create, :start]
 end
 
-template "/etc/mysql/conf.d/vdd_my.cnf" do
-  source "vdd_my.cnf.erb"
-  mode "0644"
-  notifies :restart, "service[mysql]", :delayed
+mysql_config 'default' do
+  source 'vdd_my.cnf.erb'
+  notifies :restart, 'mysql_service[default]'
+  action :create
+end
+
+mysql_client 'default' do
+  action :create
 end

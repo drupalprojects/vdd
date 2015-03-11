@@ -1,7 +1,7 @@
 {
   "vm": {
     "ip": "192.168.44.44",
-    "memory": "1024",
+    "memory": "2048",
     "synced_folders": [
       {
         "host_path": "data/",
@@ -11,22 +11,8 @@
         "host_path": "../../Sites",
         "guest_path": "/var/www/vhosts"
       }
-
     ],
     "forwarded_ports": []
-  },
-  "java": {
-    "jdk_version": "7"
-  },
-  "drush": {
-    "version" : "6.5.0",
-    "version7": "7.0.0-alpha9"
-  },
-  "solr" : {
-    "version": "4.10.3"
-  },
-  "varnish": {
-    "version": "3.0"
   },
   "vdd": {
     "sites": {

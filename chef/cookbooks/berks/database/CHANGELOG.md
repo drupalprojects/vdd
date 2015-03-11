@@ -1,6 +1,58 @@
-database Cookbook CHANGELOG
-=======================
-This file is used to list changes made in each version of the database cookbook.
+Database cookbook README
+========================
+
+v4.0.3 (2015-02-22)
+-------------------
+- Unbreak postgresql_database_resource on older versions of PostgreSQL
+
+v4.0.2 (2015-02-09)
+-------------------
+- Removing leftover mysql recipe that installs the mysql2_chef_gem.
+
+v4.0.1 (2015-02-05)
+-------------------
+- Fixing merge conflicts with master on 4.0.0 attempted release
+
+v4.0.0 (2015-02-05)
+-------------------
+- Decoupled mysql2_chef_gem cookbook.
+  Users must now install it themselves before utilizing mysql_database
+  or mysql_database_user resources.
+- Fixing various MilClass errors in mysql providers
+- Restoring missing :query action for mysql
+- Restoring grant_option support for mysql
+- Adding revoke action for mysql
+
+v3.1.0 (2015-01-30)
+-------------------
+- Add support for postgresql_database_user privileges
+- Add postgresql_database_test cookbook to test/fixtures
+
+v3.0.3 (2015-01-20)
+-------------------
+- Bugfix: bugfix: lack of node['mysql']['version'] causing NilClass error
+
+v3.0.2 (2015-01-16)
+-------------------
+- Fix bug to allow grants on databases with special characters
+
+v3.0.1 (2015-01-16)
+-------------------
+- Enabling ssl for provider_mysql_database_user
+
+v3.0.0 (2015-01-15)
+-------------------
+- Removing out of scope recipes
+- porting to mysql2_chef_gem
+- adding test-kitchen suites for mysql
+
+v2.3.1 (2014-12-13)
+-------------------
+- Locking mysql and mysql-chef_gem dependencies down in metadata.rb
+
+v2.3.0 (2014-08-13)
+-------------------
+- [#62] Allow requiring SSL
 
 
 v2.2.0 (2014-05-07)
@@ -48,23 +100,23 @@ v2.0.0 (2014-02-25)
 v1.6.0
 ------
 ### New Feature
-- **[COOK-4009](https://tickets.opscode.com/browse/COOK-4009)** - Add PostgreSQL SCHEMA management capability
+- **[COOK-4009](https://tickets.chef.io/browse/COOK-4009)** - Add PostgreSQL SCHEMA management capability
 
 ### Improvement
-- **[COOK-3862](https://tickets.opscode.com/browse/COOK-3862)** - Improve database cookbook documentation
+- **[COOK-3862](https://tickets.chef.io/browse/COOK-3862)** - Improve database cookbook documentation
 
 
 v1.5.2
 ------
 ### Improvement
-- **[COOK-3716](https://tickets.opscode.com/browse/COOK-3716)** - Add ALTER SQL Server user roles
+- **[COOK-3716](https://tickets.chef.io/browse/COOK-3716)** - Add ALTER SQL Server user roles
 
 
 v1.5.0
 ------
 ### Improvement
-- **[COOK-3546](https://tickets.opscode.com/browse/COOK-3546)** - Add connection parameters `:socket`
-- **[COOK-1709](https://tickets.opscode.com/browse/COOK-1709)** - Add 'grant_option' parameter
+- **[COOK-3546](https://tickets.chef.io/browse/COOK-3546)** - Add connection parameters `:socket`
+- **[COOK-1709](https://tickets.chef.io/browse/COOK-1709)** - Add 'grant_option' parameter
 
 v1.4.0
 -------

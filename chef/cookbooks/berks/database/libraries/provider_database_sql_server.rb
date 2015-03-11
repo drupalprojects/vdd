@@ -1,6 +1,6 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Copyright:: Copyright (c) 2011 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,6 +72,7 @@ class Chef
         end
 
         private
+
         def exists?
           exists = false
           begin
@@ -92,10 +93,10 @@ class Chef
         def db
           @db ||= begin
             ::TinyTds::Client.new(
-              :host => @new_resource.connection[:host],
-              :username => @new_resource.connection[:username],
-              :password => @new_resource.connection[:password],
-              :port => @new_resource.connection[:port] || 1433
+              host: @new_resource.connection[:host],
+              username: @new_resource.connection[:username],
+              password: @new_resource.connection[:password],
+              port: @new_resource.connection[:port] || 1433
             )
           end
         end

@@ -47,6 +47,6 @@ Vagrant.configure("2") do |config|
   end
 
   # Run final shell script.
- # config.vm.provision :shell, :path => "chef/shell/final.sh", :args => config_json["vm"]["ip"]
+  config.vm.provision :shell, :path => "chef/shell/final.sh", :args => config_json["vm"]["ip"]
 
 end

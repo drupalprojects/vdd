@@ -1,14 +1,10 @@
-directory "/var/site-php" do
-  mode  00777
-  action :create
-  recursive true
+mysql2_chef_gem 'default' do
+  action :install
 end
 
 if node["vdd"]["sites"]
 
   node["vdd"]["sites"].each do |index, site|
-    include_recipe "database::mysql"
-
     htdocs = defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index
 
     # Avoid potential duplicate slash in docroot path from config.json input.
@@ -17,10 +13,11 @@ if node["vdd"]["sites"]
     end
 
     mysql_connection_info = {
-      :host => "localhost",
+      :host => "127.0.0.1",
       :username => "root",
       :password => node["mysql"]["server_root_password"]
     }
+
     mysql_database index do
       connection mysql_connection_info
       action :create

@@ -2,10 +2,42 @@
   "name": "vdd",
   "env_run_lists": {},
   "default_attributes": {
+    "vm": {
+      "ip": "192.168.44.44",
+      "memory": "1024",
+      "synced_folders": [
+        {
+          "host_path": "data/",
+          "guest_path": "/var/www"
+        },
+        {
+          "host_path": "../../Sites",
+          "guest_path": "/var/www/vhosts"
+        }
+
+      ],
+      "forwarded_ports": []
+    },
     "mysql": {
       "server_root_password": "root",
       "server_repl_password": "root",
       "server_debian_password": "root"
+    },
+    "php": {
+      "ext_conf_dir": "/etc/php5/mods-available"
+    },
+    "java": {
+      "jdk_version": "7"
+    },
+    "drush": {
+      "version" : "6.5.0",
+      "version7": "7.0.0-alpha9"
+    },
+    "solr" : {
+      "version": "4.10.3"
+    },
+    "varnish": {
+      "version": "4.0"
     }
   },
   "override_attributes": {},
@@ -13,16 +45,14 @@
   "run_list": [
     "recipe[apt]",
     "recipe[apache2]",
-    "recipe[mysql::client]",
-    "recipe[mysql::server]",
     "recipe[vdd::apache]",
     "recipe[vdd::graphviz]",
+    "recipe[vdd::mysql]",
     "recipe[vdd::vdd_sites]",
     "recipe[vdd::php]",
     "recipe[vdd::uploadprogress]",
     "recipe[vdd::mailcatcher]",
     "recipe[vdd::phpmyadmin]",
-    "recipe[vdd::mysql]",
     "recipe[vdd::xdebug]",
     "recipe[vdd::git]",
     "recipe[vdd::webgrind]",
