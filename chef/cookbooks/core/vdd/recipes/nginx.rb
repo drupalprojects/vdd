@@ -46,8 +46,13 @@ if node["vdd"]["sites"]
     log "WebApp1 certificate is here: #{cert.cert_path}"
     log "WebApp1 private key is here: #{cert.key_path}"
 
+    nginxtemplate = 'apache'
+    if (site['webserver'])
+      nginxtemplate = "#{site['webserver']}"
+    end
+
     template "/etc/nginx/sites-enabled/#{index}.dev" do
-      source "nginx/site"
+      source "nginx/#{nginxtemplate}site"
       variables(
         shortcode: index
       )

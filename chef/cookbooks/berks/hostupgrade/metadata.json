@@ -1,0 +1,86 @@
+{
+  "name": "hostupgrade",
+  "description": "Updates and Upgrades Host",
+  "long_description": "HOSTUPGRADE Cookbook\n=====\n<br />\nBasic cookbook for upgrading linux hosts.  Check for updates and then perform an upgrade.  Flag available to only run once, the first time.\n\n>#### Supported Chef Versions\n>Chef 12 and below\n>#### Supported Platforms\n>Debian(6.x+), Ubuntu(10.04+)\n>CentOS(6.x+), RedHat, Fedora(20+)\n>#### Tested Against\n>Debian 6.x and above\n>Ubuntu 10.04 and above\n>CenOS 6.x and above\n>Fedora 20\n>#### Planned Improvements\n>0.2.0 - Add Windows Hosts\n\nNo additional cookboks are required.\n<br />\n<br />\n<br />\n#Attributes\n_____\n### hostupgrade::default\n<br />\n<table>\n  <tr>\n    <th>Key</th>\n    <th>Type</th>\n    <th>Description</th>\n    <th>Default</th>\n  </tr>\n  <tr>\n    <td><tt>[\"hostupgrade\"][\"update_system\"]</tt></td>\n    <td>Boolean</td>\n    <td>Update repository information</td>\n    <td><tt>true</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"hostupgrade\"][\"upgrade_system\"]</tt></td>\n    <td>Boolean</td>\n    <td>Perform upgrades to OS</td>\n    <td><tt>true</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"hostupgrade\"][\"first_time_only\"]</tt></td>\n    <td>Boolean</td>\n    <td>Only Perform Updates & Upgrades on First-Run</td>\n    <td><tt>true</tt></td>\n  </tr>\n</table>\n<br />\n<br />\n<br />\n# Recipe Usage\n\n### php-fpm::upgrade (required)\n\nPerform host update/upgrade. Include `hostupgrade::upgrade` in your node's `run_list`:\n\n```json\n{\n  \"name\":\"my_node\",\n  \"run_list\": [\n    \"recipe[hostupgrade::upgrade]\"\n  ]\n}\n```\n<br />\n<br />\n<br />\n# License and Authors\n___\nAuthors: Brian Stajkowski\n\nCopyright 2014 Brian Stajkowski\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.",
+  "maintainer": "Brian Stajkowski",
+  "maintainer_email": "stajkowski",
+  "license": "Apache Open License",
+  "platforms": {
+    "ubuntu": ">= 10.04",
+    "debian": ">= 6.0",
+    "centOS": ">= 6.5",
+    "Redhat": ">= 0.0.0",
+    "Fedora": ">= 20.0"
+  },
+  "dependencies": {
+
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+    "hostupgrade/update_system": {
+      "display_name": "System Updates",
+      "description": "Check for system updates but does not trigger an upgrade.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "hostupgrade::default"
+      ],
+      "default": "true",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "hostupgrade/upgrade_system": {
+      "display_name": "System Upgrades",
+      "description": "Perform system upgrades.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "hostupgrade::default"
+      ],
+      "default": "true",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "hostupgrade/first_time_only": {
+      "display_name": "Run First-Time",
+      "description": "Perform system upgrades only on first-run",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "hostupgrade::default"
+      ],
+      "default": "true",
+      "choice": [
+
+      ],
+      "calculated": false
+    }
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.1.3",
+  "source_url": "",
+  "issues_url": ""
+}

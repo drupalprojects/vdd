@@ -12,8 +12,12 @@ $databases = array(
     ),
 );
 
-$https = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
-$_SERVER['HTTPS'] = $https ? 'on' : 'off';
+$https = TRUE;
+
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
+  $https = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+  $_SERVER['HTTPS'] = $https ? 'on' : 'off';
+}
 
 $base_protocol = $https ? 'https' : 'http';
 $base_url = $base_protocol . '://<%= @shortcode %>.dev';

@@ -1,0 +1,197 @@
+{
+  "name": "php5-fpm",
+  "description": "Installs/Configures php5-fpm",
+  "long_description": "PHP5-FPM Cookbook\n=====\n<br />\nAdding pools can be done by way of LWRP provider or by modifying JSON directly in the attributes file or overriding the attributes through other methods, environments, roles, etc.  Usage of the receipes beyond ::install is optional and not\nneeded if using the LWRP provider.\n\nWhen using the JSON option with recipes, if you do not wish to use a configuration value in the JSON attributes, you can simply set it to NOT_SET and it will not be included in the configuration file.  Additionally, you can add more\nconfiguration values if they are missing, future proofing the template generation with JSON.\n\nAs of version 4.0, you can auto-calculate the procs and workers needed and define the percentage of resources the pool should consume on the server.  This allows for quick creation of php-fpm pools and not having\nto perform the calculation yourself.  Please see the LWRP attributes below and the auto-calculation example, but the simplest explanation is the pm configuration will be determined by the calculation.  If the pm\ntype is set to static then the max_children will only be used.  If the type is dynamic, the auto-calculation will populate the additional pm configuration options but not the pm.max_requests, this will need to be set\nmanually.\n\n>#### Supported Chef Versions\n>Chef 12 and below\n>#### Supported Platforms\n>Debian(6.x+), Ubuntu(10.04+)\n>CentOS(6.x+), RedHat, Fedora(20+)\n>#### Tested Against\n>Debian 6.x and above\n>Ubuntu 10.04 and above\n>CenOS 6.x and above\n>Fedora 20\n>#### Planned Improvements\n>0.4.3 - Any additional bugs\n>#### Required Cookbooks\n>hostupgrade\n\n<br />\n<br />\n<br />\n#Attributes\n_____\n### php5-fpm::default\n<br />\n<table>\n  <tr>\n    <th>Key</th>\n    <th>Type</th>\n    <th>Description</th>\n    <th>Default</th>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"use_cookbook_repos\"]</tt></td>\n    <td>Boolean</td>\n    <td>Use cookbook to install repos for earlier OS versions, ubuntu 10.04, centos 6.x, debian 6.x</td>\n    <td><tt>true</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"run_update\"]</tt></td>\n    <td>Boolean</td>\n    <td>Run hostupgrade::upgrade. Will only run first-run by default; set [\"hostupgrade\"][\"first_time_only\"] to false if required every time.</td>\n    <td><tt>true</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"install_php_modules\"]</tt></td>\n    <td>Boolean</td>\n    <td>Install Additional PHP Modules stated in [\"php_fpm\"][\"php_modules\"]</td>\n    <td><tt>false</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"php_modules\"]</tt></td>\n    <td>Array</td>\n    <td>List additional PHP Modules you wish to install.</td>\n    <td><tt>['php5-common','php5-mysql','php5-curl','php5-gd'] *OS Dependent</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"create_users\"]</tt></td>\n    <td>Boolean</td>\n    <td>Configure Users. Must include recipe recipe[php5-fpm::create_user]</td>\n    <td><tt>true</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"users\"]</tt></td>\n    <td>JSON</td>\n    <td>Users/Directories to Add</td>\n    <td><tt>Attributes File</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"config\"]</tt></td>\n    <td>JSON</td>\n    <td>PHP-FPM.conf Configuration Values</td>\n    <td><tt>Attributes File</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"pools\"]</tt></td>\n    <td>JSON</td>\n    <td>pool.conf Configuration Values</td>\n    <td><tt>Attributes File</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"ubuntu1004_config\"]</tt></td>\n    <td>JSON</td>\n    <td>PHP-FPM.conf Configuration Values Ubuntu 10.04 Only</td>\n    <td><tt>Attributes File</tt></td>\n  </tr>\n  <tr>\n    <td><tt>[\"php_fpm\"][\"ubuntu1004_pools\"]</tt></td>\n    <td>JSON</td>\n    <td>pool.conf Configuration Values Ubuntu 10.04 Only</td>\n    <td><tt>Attributes File</tt></td>\n  </tr>\n</table>\n<br />\n<br />\n<br />\n# Resource/Provider\n______\n## php5_fpm_pool\n<br />\n### Actions\n\n* create\n* modify\n* delete\n<br />\n<br />\n\n### Attribute Parameters\n\n<table>\n    <tr>\n        <th>Attribute</th>\n        <th>Type</th>\n        <th>Description</th>\n    </tr>\n    <tr>\n        <td>overwrite</td>\n        <td>True/False Default: false</td>\n        <td>Determine if the pool configuration will be overwritten if it exists.</td>\n    </tr>\n    <tr>\n        <td><b>Base Pool</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>pool_name</td>\n        <td>String</td>\n        <td>Name of the pool; it will also be used to name the pool file.</td>\n    </tr>\n    <tr>\n        <td>pool_user</td>\n        <td>String Default: www-data</td>\n        <td>Sets the <i>user</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pool_group</td>\n        <td>String Default: www-data</td>\n        <td>Sets the <i>group</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>listen_address</td>\n        <td>String Default: 127.0.0.1</td>\n        <td>Sets the <i>listen</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>listen_port</td>\n        <td>Integer Default: 9000</td>\n        <td>Sets the <i>listen</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>listen_allowed_clients</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>listen.allowed_clients</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>listen_owner</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>listen.owner</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>listen_group</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>listen.group</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>listen_mode</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>listen.mode</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>use_sockets</td>\n        <td>Boolean Default: false</td>\n        <td>If set, this overrides IPv4 assignment for <i>listen</i> attribute in the pool conf file to use sockets</td>\n    </tr>\n    <tr>\n        <td>listen_socket</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>listen</i> attribute in the pool conf file.(Requires: use_sockets true)</td>\n    </tr>\n    <tr>\n        <td>listen_backlog</td>\n        <td>Integer Default: 65536</td>\n        <td>Sets the <i>listen.backlog</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td><b>PM Config</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>pm</td>\n        <td>String Default: dynamic</td>\n        <td>Sets the <i>pm</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pm_max_children</td>\n        <td>Integer Default: 10</td>\n        <td>Sets the <i>pm.max_children</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pm_start_servers</td>\n        <td>Integer Default: 4</td>\n        <td>Sets the <i>pm.start_servers</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pm_min_spare_servers</td>\n        <td>Integer Default: 2</td>\n        <td>Sets the <i>pm.min_spare_servers</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pm_max_spare_servers</td>\n        <td>Integer Default: 6</td>\n        <td>Sets the <i>pm.max_spare_servers</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pm_process_idle_timeout</td>\n        <td>String Default: 10s</td>\n        <td>Sets the <i>pm.process_idle_timeout</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pm_max_requests</td>\n        <td>Integer Default: 0</td>\n        <td>Sets the <i>pm.max_requests</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>pm_status_path</td>\n        <td>String Default: /status</td>\n        <td>Sets the <i>pm.status_path</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td><b>Ping</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>ping_path</td>\n        <td>String Default: /ping</td>\n        <td>Sets the <i>ping.path</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>ping_response</td>\n        <td>String Default: /pong</td>\n        <td>Sets the <i>ping.response</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td><b>Logging</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>access_format</td>\n        <td>String Default: %R - %u %t \\\"%m %r\\\" %s</td>\n        <td>Sets the <i>access.format</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>request_slowlog_timeout</td>\n        <td>Integer Default: 0</td>\n        <td>Sets the <i>request_slowlog_timeout</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>request_terminate_timeout</td>\n        <td>Integer Default: 0</td>\n        <td>Sets the <i>request_terminate_timeout</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>access_log</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>access.log</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>slow_log</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>slowlog</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td><b>MISC</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>chdir</td>\n        <td>String Default: /</td>\n        <td>Sets the <i>chdir</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>chroot</td>\n        <td>String Default: nil</td>\n        <td>Sets the <i>chroot</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>catch_workers_output</td>\n        <td>String yes/no Default: no</td>\n        <td>Sets the <i>catch_workers_output</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>security_limit_extensions</td>\n        <td>String Default: .php</td>\n        <td>Sets the <i>security.limit_extensions</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>rlimit_files</td>\n        <td>Integer Default: nil</td>\n        <td>Sets the <i>rlimit_files</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>rlimit_core</td>\n        <td>Integer Default: nil</td>\n        <td>Sets the <i>rlimit_core</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td><b>PHP Conf Flags/Values</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>php_ini_flags</td>\n        <td>Hash Default: nil</td>\n        <td>Sets the <i>php_flag[]</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>php_ini_values</td>\n        <td>Hash Default: nil</td>\n        <td>Sets the <i>php_value[]</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>php_ini_admin_flags</td>\n        <td>Hash Default: nil</td>\n        <td>Sets the <i>php_admin_flag[]</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td>php_ini_admin_values</td>\n        <td>Hash Default: nil</td>\n        <td>Sets the <i>php_admin_value[]</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td><b>Environment Vars</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>env_variables</td>\n        <td>Hash Default: nil</td>\n        <td>Sets the <i>env[]</i> attribute in the pool conf file.</td>\n    </tr>\n    <tr>\n        <td><b>Auto-Calculate</b></td>\n        <td></td>\n        <td></td>\n    </tr>\n    <tr>\n        <td>auto_calculate</td>\n        <td>String Default: false</td>\n        <td>Enables auto-calculation of php-fpm pool resources.</td>\n    </tr>\n    <tr>\n        <td>percent_share</td>\n        <td>Integer 1 - 100 Default: 100</td>\n        <td>Defines the percentage share of the server resources the pool can consume.</td>\n    </tr>\n    <tr>\n        <td>round_down</td>\n        <td>String Default: false</td>\n        <td>Round-up is defined by default; set round_down to trye to go the other way.</td>\n    </tr>\n</table>\n<br />\n<br />\n\n### Example\n\n```\nphp5_fpm_pool \"example\" do\n    pool_user \"www-data\"\n    pool_group \"www-data\"\n    listen_address \"127.0.0.1\"\n    listen_port 8000\n    listen_allowed_clients \"127.0.0.1\"\n    listen_owner \"nobody\"\n    listen_group \"nobody\"\n    listen_mode \"0666\"\n    php_ini_flags (\n                    { \"display_errors\" => \"off\", \"log_errors\" => \"on\"}\n                  )\n    php_ini_values (\n                      { \"sendmail_path\" => \"/usr/sbin/sendmail -t -i -f www@my.domain.com\", \"memory_limit\" => \"32M\"}\n                  )\n    overwrite true\n    action :create\n    notifies :restart, \"service[#{node[\"php_fpm\"][\"package\"]}]\", :delayed\nend\n```\n\n```\nphp5_fpm_pool \"example\" do\n    pool_user \"fpm_user\"\n    pool_group \"fpm_group\"\n    listen_allowed_clients \"127.0.0.1\"\n    pm_max_children 30\n    pm_start_servers 10\n    pm_min_spare_servers 5\n    pm_max_spare_servers 10\n    pm_process_idle_timeout \"30s\"\n    pm_max_requests 1000\n    pm_status_path \"/mystatus\"\n    ping_path \"/myping\"\n    ping_response \"/myresponse\"\n    php_ini_flags (\n                      { \"display_errors\" => \"on\", \"log_errors\" => \"off\"}\n                  )\n    php_ini_values (\n                       { \"sendmail_path\" => \"/usr/sbin/sendmail -t -i -f www@my.yourdomain.com\", \"memory_limit\" => \"16M\"}\n                   )\n    action :modify\n    notifies :restart, \"service[#{node[\"php_fpm\"][\"packag\"]}]\", :delayed\nend\n```\n<br />\n<br />\n\n### Auto-Calculate Example\n\n```\nphp5_fpm_pool \"example\" do\n    pool_user \"fpm_user\"\n    pool_group \"fpm_group\"\n    listen_allowed_clients \"127.0.0.1\"\n    auto_calculate true\n    percent_share 80\n    round_down true\n    pm_process_idle_timeout \"30s\"\n    pm_max_requests 1000\n    pm_status_path \"/mystatus\"\n    ping_path \"/myping\"\n    ping_response \"/myresponse\"\n    php_ini_flags (\n                      { \"display_errors\" => \"on\", \"log_errors\" => \"off\"}\n                  )\n    php_ini_values (\n                       { \"sendmail_path\" => \"/usr/sbin/sendmail -t -i -f www@my.yourdomain.com\", \"memory_limit\" => \"16M\"}\n                   )\n    action :modify\n    notifies :restart, \"service[#{node[\"php_fpm\"][\"package\"]}]\", :delayed\nend\n```\n<br />\n<br />\n\n### Sockets Example\n\n```\nphp5_fpm_pool \"example3sockets\" do\n    pool_user \"fpm_user\"\n    pool_group \"fpm_group\"\n    use_sockets true\n    listen_socket \"/var/run/phpfpm_example.sock\"\n    listen_owner \"fpm_user\"\n    listen_group \"fpm_group\"\n    listen_mode \"0660\"\n    overwrite true\n    action :create\n    notifies :restart, \"service[#{node[\"php_fpm\"][\"package\"]}]\", :delayed\nend\n```\n\n<br />\n<br />\n<br />\n# Recipe Usage\n\n### php-fpm::install (required)\n\nInstall PHP5-FPM. Include `php5-fpm::install` in your node's `run_list`:\n\n```json\n{\n  \"name\":\"my_node\",\n  \"run_list\": [\n    \"recipe[php5-fpm::install]\"\n  ]\n}\n```\n\n### php5-fpm::create_user (optional)\n\nThis will create users and directories for use with pools. Include `php5-fpm::create_user` in your node's `run_list`:\n\n```json\n{\n  \"name\":\"my_node\",\n  \"run_list\": [\n    \"recipe[php5-fpm::create_user]\"\n  ]\n}\n```\n\n### php5-fpm::configure_pools (optional)\n\nThis will create pools based on JSON attributes.  Not needed if you are using the LWRP provider. Include `php5-fpm::configure_pools` in your node's `run_list`:\n\n```json\n{\n  \"name\":\"my_node\",\n  \"run_list\": [\n    \"recipe[php5-fpm::configure_pools]\"\n  ]\n}\n```\n\n### php5-fpm::example_pool (optional)\n\nExample on how to use the LWRP provider.  This is not a required recipe but include `php5-fpm::example_pool` in your node's `run_list` if you wish to try the example:\n\n```json\n{\n  \"name\":\"my_node\",\n  \"run_list\": [\n    \"recipe[php5-fpm::example_pool]\"\n  ]\n}\n```\n<br />\n<br />\n<br />\n# License and Authors\n___\nAuthors: Brian Stajkowski\n\nCopyright 2014 Brian Stajkowski\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.",
+  "maintainer": "Brian Stajkowski",
+  "maintainer_email": "stajkowski",
+  "license": "Apache Open License",
+  "platforms": {
+    "ubuntu": ">= 10.04",
+    "debian": ">= 6.0",
+    "centOS": ">= 6.5",
+    "Redhat": ">= 0.0.0",
+    "Fedora": ">= 20.0"
+  },
+  "dependencies": {
+    "hostupgrade": ">= 0.1.3"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+    "php_fpm/install_php_modules": {
+      "display_name": "PHP5-FPM Install PHP Modules",
+      "description": "Boolean value to indicate if additional php_modules should be installed.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install"
+      ],
+      "default": "true",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/use_cookbook_repos": {
+      "display_name": "PHP5-FPM Use Cookbook Repos",
+      "description": "Let the cookbook install repos for PHP5-FPM for earlier OS versions.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install"
+      ],
+      "default": "true",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/run_update": {
+      "display_name": "PHP5-FPM Run Update",
+      "description": "Let the install recipe run an update and upgrade.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install"
+      ],
+      "default": "true",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/create_users": {
+      "display_name": "PHP5-FPM Create Users JSON",
+      "description": "JSON value of users to add to the local system for pools.",
+      "type": "string",
+      "required": "recommended",
+      "recipes": [
+        "php5_fpm::create_user"
+      ],
+      "default": "{ \"users\":\n\t                        {\n\t\t                        \"fpm_user\": { \"dir\": \"/base_path\", \"system\": \"true\", \"group\": \"fpm_group\" }\n\t                        }\n                        }",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/package": {
+      "display_name": "PHP5-FPM Package Name",
+      "description": "Package value name determined by OS.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install",
+        "php5_fpm:configure_pools",
+        "php5_fpm:configure_fpm"
+      ],
+      "default": "php5-fpm",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/base_path": {
+      "display_name": "PHP5-FPM Package Base Path",
+      "description": "Base path for php5-fpm for installation of pools and configuration.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install",
+        "php5_fpm:configure_pools",
+        "php5_fpm:configure_fpm"
+      ],
+      "default": "/etc/php5/fpm",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/conf_file": {
+      "display_name": "PHP5-FPM Configuration File Location",
+      "description": "Base configuration file location and name.  This is platform specific.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install",
+        "php5_fpm:configure_pools",
+        "php5_fpm:configure_fpm"
+      ],
+      "default": "php-fpm.conf",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/pools_path": {
+      "display_name": "PHP5-FPM Pools Directory Location",
+      "description": "Pools configuration directory location.  This is platform specific.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install",
+        "php5_fpm:configure_pools"
+      ],
+      "default": "pool.d",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/pools_include": {
+      "display_name": "PHP5-FPM Pool Include Path",
+      "description": "Directory for php-fpm.conf to include pools directory.  This is platform specific.",
+      "type": "string",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install",
+        "php5_fpm:configure_pools"
+      ],
+      "default": "pool.d/*.conf",
+      "choice": [
+
+      ],
+      "calculated": false
+    },
+    "php_fpm/php_modules": {
+      "display_name": "PHP5-FPM Additional PHP Modules",
+      "description": "Additional modules to be installed, if enabled, for php.  This is platform specific.",
+      "type": "array",
+      "required": "required",
+      "recipes": [
+        "php5_fpm::install"
+      ],
+      "default": [
+        "php5-common",
+        "php5-mysql",
+        "php5-curl",
+        "php5-gd"
+      ],
+      "choice": [
+
+      ],
+      "calculated": false
+    }
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.4.4",
+  "source_url": "",
+  "issues_url": ""
+}

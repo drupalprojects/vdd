@@ -27,3 +27,7 @@ end
 link "/etc/php5/apache2/conf.d/vdd_xdebug.ini" do
   to "/etc/php5/mods-available/vdd_xdebug.ini"
 end
+
+link "/etc/php5/cli/conf.d/vdd_xdebug.ini" do
+  to "/etc/php5/mods-available/vdd_xdebug.ini"
+end

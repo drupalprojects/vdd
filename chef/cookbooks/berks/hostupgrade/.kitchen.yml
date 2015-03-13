@@ -1,0 +1,70 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      provider: virtualbox
+      box: ubuntu/trusty64
+      customize:
+        memory: 1024
+        cpus: 1
+  - name: ubuntu-12.04
+    driver:
+      provider: virtualbox
+      box: hashicorp/precise64
+      customize:
+        memory: 1024
+        cpus: 1
+  - name: ubuntu-10.04
+    driver:
+      provider: virtualbox
+      box: chef/ubuntu-10.04
+      customize:
+        memory: 1024
+        cpus: 1
+  - name: debian-6
+    driver:
+      provider: virtualbox
+      box: chef/debian-6.0.8
+      customize:
+        memory: 1024
+        cpus: 1
+  - name: debian-7
+    driver:
+      provider: virtualbox
+      box: chef/debian-7.6
+      customize:
+        memory: 1024
+        cpus: 1
+  - name: centos-6.5
+    driver:
+      provider: virtualbox
+      box: chef/centos-6.5
+      customize:
+        memory: 1024
+        cpus: 1
+  - name: centos-7.0
+    driver:
+      provider: virtualbox
+      box: chef/centos-7.0
+      customize:
+        memory: 1024
+        cpus: 1
+  - name: fedora-20
+    driver:
+      provider: virtualbox
+      box: chef/fedora-20
+      customize:
+        memory: 1024
+        cpus: 1
+
+suites:
+  - name: default
+    run_list:
+      - recipe[hostupgrade::upgrade]
+    attributes:
