@@ -48,6 +48,8 @@ if node["vdd"]["sites"]
 
     nginxtemplate = 'apache'
     if (site['webserver'])
+      # if the site's webserver param is set to 'nginx' then load in the config
+      # which causes nginx to be the webserver on https instead of varnish and apache
       nginxtemplate = "#{site['webserver']}"
     end
 
