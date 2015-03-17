@@ -1,4 +1,5 @@
 pkgs = [
+  "php5",
   "php5-gd",
   "php5-mysql",
   "php5-mcrypt",
