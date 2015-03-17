@@ -12,7 +12,8 @@
         "guest_path": "/var/www/vhosts"
       }
     ],
-    "forwarded_ports": []
+    "forwarded_ports": [],
+    "persist_db": true
   },
   "vdd": {
     "sites": {
