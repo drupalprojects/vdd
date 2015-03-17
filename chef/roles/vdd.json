@@ -43,6 +43,7 @@
   "override_attributes": {},
   "json_class": "Chef::Role",
   "run_list": [
+    "recipe[vdd::swap]",
     "recipe[apt]",
     "recipe[apache2]",
     "recipe[vdd::apache]",
