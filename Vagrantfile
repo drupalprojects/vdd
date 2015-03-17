@@ -1,4 +1,8 @@
+#vagrant plugin install vagrant-persistent-storage
+
 Vagrant.configure("2") do |config|
+
+
 
   # Load config JSON.
   config_json = JSON.parse(File.read("config.json"))
@@ -33,6 +37,20 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  if config_json["vm"]["persist_db"]
+    unless Vagrant.has_plugin?("vagrant-persistent-storage")
+      raise 'vagrant-persistent-storage is required to enable persist_db. Please install it with "vagrant plugin install vagrant-persistent-storage"'
+    end
+   config.persistent_storage.enabled = true
+   config.persistent_storage.location = "persistant-storage.vdi"
+   config.persistent_storage.size = 20280
+   config.persistent_storage.mountname = 'persistant'
+   config.persistent_storage.filesystem = 'ext4'
+   config.persistent_storage.mountpoint = '/mnt/persistant'
+   config.persistent_storage.use_lvm = false
+
+  end
+
   # Run initial shell script.
   config.vm.provision :shell, :path => "chef/shell/initial.sh"
 
@@ -40,7 +58,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :chef_solo do |chef|
     chef.json = config_json
     chef.custom_config_path = "chef/solo.rb"
-    chef.cookbooks_path = ["chef/cookbooks/berks", "chef/cookbooks/core", "chef/cookbooks/custom"]
+    chef.cookbooks_path = ["chef/cookbooks/berks", "chef/cookbooks/core"]
     chef.data_bags_path = "chef/data_bags"
     chef.roles_path = "chef/roles"
     chef.add_role "vdd"
