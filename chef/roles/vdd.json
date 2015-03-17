@@ -68,7 +68,6 @@
     "recipe[vdd::vim]",
     "recipe[vdd::patchutils]",
     "recipe[vdd::siege]",
-    "recipe[vdd_example]",
     "recipe[solr]",
     "recipe[vdd::vdd_solr]",
     "recipe[dnsmasq]",
