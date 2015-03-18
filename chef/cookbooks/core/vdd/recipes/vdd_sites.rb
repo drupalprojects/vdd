@@ -1,4 +1,5 @@
 mysql2_chef_gem 'default' do
+  provider Chef::Provider::Mysql2ChefGem::Mariadb
   action :install
 end
 
