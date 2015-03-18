@@ -1,15 +1,12 @@
-#
 # Cookbook Name:: nginx
-# Recipe:: repo
-# Author:: Nick Rycar <nrycar@bluebox.net>
-#
-# Copyright 2008-2013, Chef Software, Inc.
+# Recipe:: repo_passenger
+# Author:: Jose Alberto Suarez Lopez <ja@josealberto.org>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,21 +18,22 @@
 case node['platform_family']
 when 'rhel', 'fedora'
 
-  yum_repository 'nginx' do
-    description 'Nginx.org Repository'
-    baseurl         node['nginx']['upstream_repository']
-    gpgkey      'http://nginx.org/keys/nginx_signing.key'
-    action :create
+  log 'There is not official phusion passenger repo for redhat based systems.' do
+    level :info
   end
 
 when 'debian'
   include_recipe 'apt::default'
+  package 'apt-transport-https'
 
-  apt_repository 'nginx' do
-    uri          node['nginx']['upstream_repository']
+  apt_repository 'phusionpassenger' do
+    uri 'https://oss-binaries.phusionpassenger.com/apt/passenger'
     distribution node['lsb']['codename']
-    components   %w(nginx)
-    deb_src      true
-    key          'http://nginx.org/keys/nginx_signing.key'
+    components %w(main)
+    deb_src true
+    keyserver 'keyserver.ubuntu.com'
+    key '561F9B9CAC40B2F7'
   end
+
+  include_recipe 'nginx::passenger'
 end
