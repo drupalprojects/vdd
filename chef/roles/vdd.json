@@ -23,6 +23,10 @@
       "server_repl_password": "root",
       "server_debian_password": "root"
     },
+    "mariadb" : {
+      "use_default_repository": true,
+      "server_root_password": "root"
+    },
     "php": {
       "ext_conf_dir": "/etc/php5/mods-available"
     },
@@ -49,6 +53,7 @@
     "recipe[vdd::apache]",
     "recipe[vdd::graphviz]",
     "recipe[vdd::mysql]",
+    "recipe[mariadb::default]",
     "recipe[vdd::vdd_sites]",
     "recipe[vdd::php]",
     "recipe[php5-fpm::install]",
