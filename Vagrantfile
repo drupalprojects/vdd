@@ -38,6 +38,22 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Enable vagrant-hostsupdater support, if the plugin is installed
+  # see https://github.com/cogitatio/vagrant-hostsupdater for details
+  if Vagrant.has_plugin?("vagrant-hostsupdater")
+    config.vm.hostname = "vdd.dev"
+    config.hostsupdater.aliases = []
+
+    config_json["vdd"]["sites"].each do |index, site|
+        config.hostsupdater.aliases.push(site["vhost"]["url"])
+        if site["vhost"]["alias"]
+          site["vhost"]["alias"].each do |alias_url|
+            config.hostsupdater.aliases.push(alias_url)
+          end
+        end
+    end
+  end
+
   # Run initial shell script.
   config.vm.provision :shell, :path => "chef/shell/initial.sh"
 

@@ -27,8 +27,13 @@
     </ul>
 
     <h2 id="sites">Configured Sites</h2>
-
     <h3>Add the following to host machine's <a href="http://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/" target="_blank">hosts file</a>:</h3>
+    <p>You can install the <a href="https://github.com/cogitatio/vagrant-hostsupdater" target="_blank">vagrant-hostsupdater</a> plugin, which takes care of the host entries when starting and halting vagrant. To install the plugin just type:</p>
+    <ol class="code">
+          <li>$ vagrant plugin install vagrant-hostsupdater</li>
+          <li>$ vagrant reload</li>
+    </ol>
+    <p>Or copy and paste this configuration to your hosts file:</p>
     <ul class="code">
       <li># Sites declared in VDD's config.json</li>
       <% @sites.each do |index, site| %>
