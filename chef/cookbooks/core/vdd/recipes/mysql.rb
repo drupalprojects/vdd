@@ -8,3 +8,9 @@ template "/etc/mysql/conf.d/vdd_my.cnf" do
   mode "0644"
   notifies :restart, "service[mysql]", :delayed
 end
+
+template "/home/vagrant/.my.cnf" do
+  source "vdd_user.my.cnf.erb"
+  mode "0644"
+  notifies :restart, "service[mysql]", :delayed
+end
