@@ -45,7 +45,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision :chef_solo do |chef|
     chef.json = config_json
     chef.custom_config_path = "chef/solo.rb"
-    chef.cookbooks_path = ["chef/cookbooks/berks", "chef/cookbooks/core", "chef/cookbooks/custom"]
     chef.data_bags_path = "chef/data_bags"
     chef.roles_path = "chef/roles"
     chef.add_role "vdd"
