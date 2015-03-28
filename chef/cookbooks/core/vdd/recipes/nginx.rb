@@ -56,7 +56,8 @@ if node["vdd"]["sites"]
     template "/etc/nginx/sites-enabled/#{index}.dev" do
       source "nginx/#{nginxtemplate}site"
       variables(
-        shortcode: index
+        shortcode: index,
+        docroot: site['vhost']['document_root']
       )
     end
 

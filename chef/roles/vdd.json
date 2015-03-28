@@ -38,6 +38,11 @@
     },
     "varnish": {
       "version": "4.0"
+    },
+    "mongodb": {
+      "config": {
+        "dbpath": "/mnt/persistant/mongodb"
+      }
     }
   },
   "override_attributes": {},

@@ -6,7 +6,7 @@ server {
         ssl_certificate /var/www/ssl/<%= @shortcode %>.crt;
         ssl_certificate_key /var/www/ssl/<%= @shortcode %>.key;
 
-        root /var/www/vhosts/<%= @shortcode %>.dev/docroot; ## <-- Your only path reference.
+        root /var/www/vhosts/<%= @docroot %>;
 
         # Enable compression, this will help if you have for instance advagg<200e> module
         # by serving Gzip versions of the files.
