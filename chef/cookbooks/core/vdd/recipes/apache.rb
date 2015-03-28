@@ -27,10 +27,8 @@ modules = [
   "reqtimeout",
   "env",
   "setenvif",
-  "auth_basic",
   "authn_file",
   "authz_groupfile",
-  "authz_user",
   "ssl"
 ]
 
