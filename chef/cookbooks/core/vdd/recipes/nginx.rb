@@ -53,7 +53,7 @@ if node["vdd"]["sites"]
       nginxtemplate = "#{site['webserver']}"
     end
 
-    template "/etc/nginx/sites-enabled/#{index}.dev" do
+    template "/etc/nginx/sites-enabled/#{index}.dev.conf" do
       source "nginx/#{nginxtemplate}site"
       variables(
         shortcode: index,
