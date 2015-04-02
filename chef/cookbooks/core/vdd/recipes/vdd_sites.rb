@@ -1,3 +1,13 @@
+# Determine if the directory is NFS.
+nfs = 0
+node["vm"]["synced_folders"].each do |folder|
+  if folder['guest_path'] == '/var/www'
+    if folder['type'] == 'nfs'
+      nfs = 1
+    end
+  end
+end
+
 if node["vdd"]["sites"]
 
   node["vdd"]["sites"].each do |index, site|
@@ -9,7 +19,6 @@ if node["vdd"]["sites"]
     if htdocs.start_with?("/")
       htdocs = htdocs[1..-1]
     end
-
     # Create subidrectores, allow for multiple layers deep.
     htdocs = "var/www/" + htdocs
     htdocs = htdocs.split(%r{\/\s*})
@@ -17,9 +26,11 @@ if node["vdd"]["sites"]
     for i in (0..htdocs.length - 1)
       folder = folder + htdocs[i] + "/"
       directory folder do
-        owner "vagrant"
-        group "vagrant"
-        mode "0755"
+        if nfs == 0
+          owner "vagrant"
+          group "vagrant"
+          mode "0755"
+        end
         action :create
       end
     end

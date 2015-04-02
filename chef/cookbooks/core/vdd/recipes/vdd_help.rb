@@ -1,7 +1,20 @@
+# Determine if the directory is NFS.
+nfs = 0
+node["vm"]["synced_folders"].each do |folder|
+  if folder['guest_path'] == '/var/www'
+    if folder['type'] == 'nfs'
+      nfs = 1
+    end
+  end
+end
+
+
 template "/var/www/index.html" do
   source "vdd_help.html.erb"
-  owner "vagrant"
-  group "vagrant"
+  if nfs == 0
+    owner "vagrant"
+    group "vagrant"
+  end
   mode 00644
   variables(
     :sites => node["vdd"]["sites"]

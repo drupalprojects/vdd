@@ -1,14 +1,18 @@
+# Determine if the directory is NFS.
+nfs = 0
+node["vm"]["synced_folders"].each do |folder|
+  if folder['guest_path'] == '/var/www'
+    if folder['type'] == 'nfs'
+      nfs = 1
+    end
+  end
+end
+
 directory "/var/www" do
-  owner "vagrant"
-  group "vagrant"
-end
-
-file "/var/www/index.html" do
-  action :delete
-end
-
-link "/home/vagrant/sites" do
-  to "/var/www"
+  if nfs == 0
+    owner "vagrant"
+    group "vagrant"
+  end
 end
 
 # Add vagrant to www-data group
@@ -16,6 +20,15 @@ group "www-data" do
   action :modify
   members "vagrant"
   append true
+end
+
+
+file "/var/www/index.html" do
+  action :delete
+end
+
+link "/home/vagrant/sites" do
+  to "/var/www"
 end
 
 web_app "localhost" do
