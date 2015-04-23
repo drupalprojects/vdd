@@ -40,6 +40,9 @@
     "solr" : {
       "version": "4.10.3"
     },
+    "apache" : {
+      "listen_ports": [ 8082 ]
+    },
     "varnish": {
       "version": "4.0"
     },
