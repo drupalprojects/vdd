@@ -9,7 +9,7 @@ NFILES=131072
 # you need to increase this number as well
 MEMLOCK=82000
 
-DAEMON_OPTS="-a :8080 \
+DAEMON_OPTS="-a :80 \
              -T 127.0.0.1:6082 \
              -f /etc/varnish/default.vcl \
              -S /etc/varnish/secret \
