@@ -13,6 +13,11 @@ group "vagrant" do
   append true
 end
 
+template "/etc/apache2/ports.conf" do
+  source "apache2/ports.conf.erb"
+  mode 0644
+end
+
 web_app "localhost" do
   template "localhost.conf.erb"
 end
