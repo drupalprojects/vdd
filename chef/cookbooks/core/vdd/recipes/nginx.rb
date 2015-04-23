@@ -19,8 +19,8 @@ cert = ssl_certificate "ssl_nginx" do
   years 10
 end
 
-template "/etc/nginx/sites-enabled/default" do
-  source "nginx/default"
+template "/etc/nginx/sites-enabled/default.conf" do
+  source "nginx/default.conf.erb"
 end
 
 if node["vdd"]["sites"]
@@ -46,15 +46,8 @@ if node["vdd"]["sites"]
     log "WebApp1 certificate is here: #{cert.cert_path}"
     log "WebApp1 private key is here: #{cert.key_path}"
 
-    nginxtemplate = 'apache'
-    if (site['webserver'])
-      # if the site's webserver param is set to 'nginx' then load in the config
-      # which causes nginx to be the webserver on https instead of varnish and apache
-      nginxtemplate = "#{site['webserver']}"
-    end
-
     template "/etc/nginx/sites-enabled/#{index}.dev.conf" do
-      source "nginx/#{nginxtemplate}site"
+      source "nginx/nginxsite"
       variables(
         shortcode: index,
         docroot: site['vhost']['document_root']
