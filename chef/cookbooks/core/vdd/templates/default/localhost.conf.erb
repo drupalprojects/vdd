@@ -1,4 +1,4 @@
-<VirtualHost *:80>
+<VirtualHost *:8082>
   DocumentRoot /var/www
   ServerName localhost
   RewriteEngine On
@@ -10,7 +10,7 @@
 
 <% @node["vdd"]["sites"].each do |index, site| %>
   <%- if defined?(site["vhost"]) then -%>
-    <VirtualHost *:80>
+    <VirtualHost *:8082>
       DocumentRoot /var/www/vhosts/<%= defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index %>
       ServerName <%= defined?(site["vhost"]["url"]) ? site["vhost"]["url"] : index %>
       ServerAlias <%= defined?(site["vhost"]["alias"]) ? site["vhost"]["alias"].join(" ") : index %>
