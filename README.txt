@@ -1,6 +1,8 @@
 Vagrant Drupal Development
 --------------------------
 
+This is a fork of VDD.
+
 Vagrant Drupal Development (VDD) is fully configured and ready to use
 development environment built with VirtualBox, Vagrant, Linux and Chef Solo
 provisioner.
@@ -10,8 +12,6 @@ customizable and extendable Linux based environment for Drupal development.
 
 Full VDD documentation can be found on drupal.org:
 https://drupal.org/node/2008758
-
-For support, join us on IRC in the #drupal-vdd channel.
 
 
 Getting Started
@@ -51,10 +51,30 @@ the source code.
      VDD's main page. Main page has links to configured sites, development tools
      and list of frequently asked questions.
 
-Now you have ready to use virtual development server. By default 2 sites
-are configured: Drupal 7 and Drupal 8. You can add new ones in config.json file
-anytime.
+Now you have ready to use virtual development server.
 
+What's included
+---------------
+
+This fork of VDD includes:
+
+* Ubuntu Trusty 64 bit image
+* Varnish HTTP accelerator (port 80)
+* nginx web server (port 8082)
+* SSL terminator using nginx - sites are available on https (port 443)
+* Apache web server for legacy projects (port 8082)
+* Mailcatcher
+* Pimp my logs
+* XDebug
+* Apache Solr automatically configured per environment (port 8984)
+* SSL certificate is created per environment
+* MariaDB database
+* MongoDB
+* NodeJS
+* Grunt
+* Memcached
+* APC
+* dnsmasq for automatic DNS with host machine (all *.dev domains can be made to route to the VM)
 
 Basic Usage
 -----------
