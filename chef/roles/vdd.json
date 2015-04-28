@@ -25,7 +25,11 @@
     },
     "mariadb" : {
       "use_default_repository": true,
-      "server_root_password": "root"
+      "server_root_password": "root",
+      "mysqld": {
+        "connect_timeout": 600,
+        "wait_timeout": 1800
+      }
     },
     "php": {
       "ext_conf_dir": "/etc/php5/mods-available"
