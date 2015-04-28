@@ -35,6 +35,6 @@ modules.each do |mod|
     code <<-EOH
     php5enmod #{mod}
     EOH
-    not_if { File.exists?("/etc/php5/mods-available/#{mod}.ini") }
+    only_if { File.exists?("/etc/php5/mods-available/#{mod}.ini") }
   end
 end
