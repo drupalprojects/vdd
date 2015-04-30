@@ -137,6 +137,11 @@ server {
                 try_files $uri @rewrite;
         }
 
+        # All private files need to be handled by Drupal.
+        location ~ ^/system/files/.* {
+            try_files $uri @rewrite;
+        }
+
         location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
                 add_header Access-Control-Allow-Origin *;
                 expires max;
