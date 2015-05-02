@@ -127,6 +127,8 @@ server {
                 fastcgi_param SCRIPT_FILENAME $request_filename;
                 fastcgi_intercept_errors on;
                 fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_buffers 16 1M;
+                fastcgi_buffer_size 1M;
         }
 
         # Fighting with Styles? This little gem is amazing.

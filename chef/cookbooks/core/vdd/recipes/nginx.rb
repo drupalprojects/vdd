@@ -46,12 +46,26 @@ if node["vdd"]["sites"]
     log "WebApp1 certificate is here: #{cert.cert_path}"
     log "WebApp1 private key is here: #{cert.key_path}"
 
-    template "/etc/nginx/sites-enabled/#{index}.dev.conf" do
-      source "nginx/nginxsite"
-      variables(
-        shortcode: index,
-        docroot: site['vhost']['document_root']
-      )
+      if File.exists?("/var/www/vhosts/#{index}.dev/.vdd/nginx.conf")
+        file "/etc/nginx/sites-enabled/#{index}.dev.conf" do
+          owner 'www-data'
+          group 'www-data'
+          mode 0755
+          content ::File.open("/var/www/vhosts/#{index}.dev/.vdd/nginx.conf").read
+          action :create
+        end
+      else
+        template "/etc/nginx/sites-enabled/#{index}.dev.conf" do
+          if site['type'].present? && site['type'] == 'symfony'
+            source "nginx/nginx-symfony-site"
+          else
+            source "nginx/nginx-drupal-site"
+          end
+          variables(
+            shortcode: index,
+            docroot: site['vhost']['document_root']
+          )
+        end
     end
 
   end
