@@ -29,6 +29,10 @@ if ($port == '8080') {
 
 $cookie_domain = '.<%= @shortcode %>.dev';
 
+// File paths...
+$conf['file_temporary_path'] = '/tmp';
+$conf['file_private_path'] = '/mnt/persistant/site-files/<%= @shortcode %>/private';
+
 // Tell Drupal it's behind a proxy.
 $conf['reverse_proxy'] = TRUE;
 

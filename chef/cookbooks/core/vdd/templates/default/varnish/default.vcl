@@ -164,19 +164,19 @@ sub vcl_recv {
   # Large static files are delivered directly to the end-user without
   # waiting for Varnish to fully read the file first.
   # Varnish 4 fully supports Streaming, so set do_stream in vcl_backend_response()
-  if (req.url ~ "^[^?]*\.(mp[34]|rar|tar|tgz|gz|wav|zip|bz2|xz|7z|avi|mov|ogm|mpe?g|mk[av])(\?.*)?$") {
-    unset req.http.Cookie;
-    return (hash);
-  }
+  # if (req.url ~ "^[^?]*\.(mp[34]|rar|tar|tgz|gz|wav|zip|bz2|xz|7z|avi|mov|ogm|mpe?g|mk[av])(\?.*)?$") {
+  #   unset req.http.Cookie;
+  #   return (hash);
+  # }
 
   # Remove all cookies for static files
   # A valid discussion could be held on this line: do you really need to cache static files that don't cause load? Only if you have memory left.
   # Sure, there's disk I/O, but chances are your OS will already have these files in their buffers (thus memory).
   # Before you blindly enable this, have a read here: https://ma.ttias.be/stop-caching-static-files/
-  if (req.url ~ "^[^?]*\.(bmp|bz2|css|doc|eot|flv|gif|gz|ico|jpeg|jpg|js|less|pdf|png|rtf|swf|txt|woff|xml)(\?.*)?$") {
-    unset req.http.Cookie;
-    return (hash);
-  }
+  # if (req.url ~ "^[^?]*\.(bmp|bz2|css|doc|eot|flv|gif|gz|ico|jpeg|jpg|js|less|pdf|png|rtf|swf|txt|woff|xml)(\?.*)?$") {
+  #   unset req.http.Cookie;
+  #   return (hash);
+  # }
 
   # Send Surrogate-Capability headers to announce ESI support to backend
   set req.http.Surrogate-Capability = "key=ESI/1.0";

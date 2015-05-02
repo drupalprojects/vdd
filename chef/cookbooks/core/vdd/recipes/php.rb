@@ -5,7 +5,8 @@ pkgs = [
   "php5-mcrypt",
   "php5-curl",
   "php5-dev",
-  "php5-sqlite"
+  "php5-sqlite",
+  "php5-mongo"
 ]
 
 pkgs.each do |pkg|
@@ -35,6 +36,6 @@ modules.each do |mod|
     code <<-EOH
     php5enmod #{mod}
     EOH
-    not_if { File.exists?("/etc/php5/mods-available/#{mod}.ini") }
+    only_if { File.exists?("/etc/php5/mods-available/#{mod}.ini") }
   end
 end

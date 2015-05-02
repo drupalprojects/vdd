@@ -40,5 +40,18 @@ if node["vdd"]["sites"]
       mode 0644
     end
 
+    # Create a private files dir for each site.
+    ["/mnt/persistant/site-files",
+     "/mnt/persistant/site-files/#{index}",
+     "/mnt/persistant/site-files/#{index}/private"].each do |dir|
+      directory dir do
+        owner 'www-data'
+        group 'www-data'
+        mode  00755
+        action :create
+        recursive true
+      end
+    end
+
   end
 end
