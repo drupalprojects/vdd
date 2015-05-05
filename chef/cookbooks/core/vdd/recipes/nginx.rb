@@ -27,6 +27,12 @@ if node["vdd"]["sites"]
 
   node["vdd"]["sites"].each do |index, site|
 
+    site_type = "drupal7"
+
+    if !site["type"].nil? then
+      site_type = site["type"]
+    end
+
     cert = ssl_certificate "ssl_#{index}" do
       cert_source "self-signed"
       cert_path "/var/www/ssl/#{index}.crt"
@@ -56,11 +62,7 @@ if node["vdd"]["sites"]
         end
       else
         template "/etc/nginx/sites-enabled/#{index}.dev.conf" do
-          if site['type'].present? && site['type'] == 'symfony'
-            source "nginx/nginx-symfony-site"
-          else
-            source "nginx/nginx-drupal-site"
-          end
+          source "nginx/nginx-#{site_type}-site.conf.erb"
           variables(
             shortcode: index,
             docroot: site['vhost']['document_root']

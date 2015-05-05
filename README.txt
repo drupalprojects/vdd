@@ -75,6 +75,7 @@ This fork of VDD includes:
 * Memcached
 * APC
 * dnsmasq for automatic DNS with host machine (all *.dev domains can be made to route to the VM)
+* Support for Drupal7 and symfony PHP projects (use "type": "symfony" in config.json)
 
 Basic Usage
 -----------

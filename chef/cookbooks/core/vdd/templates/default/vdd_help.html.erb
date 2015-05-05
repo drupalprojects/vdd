@@ -52,6 +52,10 @@
        <%- else -%>
          <a href="/<%= index %>"><%= site["site_name"] %></a> (Drush alias is @<%= index %>)
        <%- end -%>
+
+       <%- if defined?(site["type"]) then -%>
+         <em><%= site["type"] %></em>
+       <%- end -%>
       </li>
       <% end %>
     </ul>
@@ -63,6 +67,15 @@
       <li><a href="/phpinfo.php">phpinfo()</a></li>
       <li><a href="/pimpmylogs">PimpMyLogs</a></li>
       <li><a href="/webgrind">Webgrind</a></li>
+    </ul>
+
+    <h2 id="ports">Ports and sockets</h2>
+    <ul>
+      <li><b>Port 443</b>: NGinX (HTTPS)</li>
+      <li><b>Port 80</b>: Varnish</li>
+      <li><b>Port 8081</b>: NGinX (HTTP)</li>
+      <li><b>Port 8082</b>: Apache (HTTP)</li>
+      <li><b>/var/run/php5-fpm.sock</b>: PHP5 FPM</li>
     </ul>
 
     <h2 id="faq">FAQ</h2>

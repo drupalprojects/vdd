@@ -23,6 +23,7 @@
         "account_mail": "box@example.com",
         "site_name": "[shortname]",
         "site_mail": "box@example.com",
+        "type": "drupal7",
         "vhost": {
           "document_root" : "[shortname].dev/docroot",
           "url": "[shortname].dev",
