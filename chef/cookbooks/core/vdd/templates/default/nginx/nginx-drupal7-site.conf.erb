@@ -1,7 +1,7 @@
 server {
         listen 443 ssl;
 
-        server_name <%= @shortcode %>.dev;
+        server_name <%= @shortcode %>.dev <%= @alias %>;
 
         # SSL Configuration.
         ssl_certificate /var/www/ssl/<%= @shortcode %>.crt;
@@ -26,11 +26,11 @@ server {
 server {
         listen 8081;
 
-        server_name <%= @shortcode %>.dev;
+        server_name <%= @shortcode %>.dev <%= @alias %>;
 
         root /var/www/vhosts/<%= @docroot %>;
 
-        # Enable compression, this will help if you have for instance advagg<200e> module
+        # Enable compression, this will help if you have for instance advagg module
         # by serving Gzip versions of the files.
         gzip_static on;
 
