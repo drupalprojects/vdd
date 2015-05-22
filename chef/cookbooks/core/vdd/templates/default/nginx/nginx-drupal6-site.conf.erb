@@ -1,0 +1,157 @@
+server {
+        listen 443 ssl;
+
+        server_name <%= @shortcode %>.dev;
+
+        # SSL Configuration.
+        ssl_certificate /var/www/ssl/<%= @shortcode %>.crt;
+        ssl_certificate_key /var/www/ssl/<%= @shortcode %>.key;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SH    A384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128    -SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:    HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4";
+        ssl_prefer_server_ciphers on;
+
+        location / {
+            proxy_pass http://127.0.0.1:80;
+            proxy_buffers 8 128k;
+            proxy_buffer_size 128k;
+            proxy_ignore_headers X-Accel-Redirect X-Accel-Expires X-Accel-Limit-Rate X-Accel-Buffering X-Accel-Charset Expires Cache-Control Set-Cookie;
+            proxy_set_header X-Real-IP  $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto https;
+            proxy_set_header X-Forwarded-Port 443;
+            proxy_set_header Host $host;
+        }
+}
+
+server {
+        listen 8081;
+
+        server_name <%= @shortcode %>.dev;
+
+        root /var/www/vhosts/<%= @docroot %>;
+
+        # Enable compression, this will help if you have for instance advagg<200e> module
+        # by serving Gzip versions of the files.
+        gzip_static on;
+
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+
+        # This matters if you use drush prior to 5.x
+        # After 5.x backups are stored outside the Drupal install.
+        #location = /backup {
+        #        deny all;
+        #}
+
+        # Very rarely should these ever be accessed outside of your lan
+        location ~* \.(txt|log)$ {
+                allow 192.168.0.0/16;
+                deny all;
+        }
+
+        location ~ \..*/.*\.php$ {
+                return 403;
+        }
+
+        # No no for private
+        location ~ ^/sites/.*/private/ {
+                return 403;
+        }
+
+        # Block access to "hidden" files and directories whose names begin with a
+        # period. This includes directories used by version control systems such
+        # as Subversion or Git to store control files.
+        location ~ (^|/)\. {
+                return 403;
+        }
+
+        # Caching into the far future with the CDN ...
+        location ^~ /cdn/farfuture/ {
+            tcp_nodelay off;
+            access_log off;
+            log_not_found off;
+            gzip_http_version 1.0;
+            if_modified_since exact;
+            set $nocache_details "Skip";
+
+            location ~* ^/cdn/farfuture/.+\.(?:css|js|jpe?g|gif|png|ico|bmp|svg|swf|pdf|docx?|xlsx?|pptx?|tiff?|txt|rtf|class|otf|ttf|woff|eot|less)$ {
+              expires max;
+              add_header Access-Control-Allow-Origin *;
+              add_header X-Header "CDN Far Future Generator 1.0";
+              add_header Cache-Control "no-transform, public";
+              add_header Last-Modified "Wed, 20 Jan 1988 04:20:42 GMT";
+              rewrite ^/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
+              try_files $uri @nobots;
+            }
+
+            location ~* ^/cdn/farfuture/ {
+              expires epoch;
+              add_header Access-Control-Allow-Origin *;
+              add_header X-Header "CDN Far Future Generator 1.1";
+              add_header Cache-Control "private, must-revalidate, proxy-revalidate";
+              rewrite ^/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
+              try_files $uri @nobots;
+            }
+
+            try_files $uri @nobots;
+        }
+
+        location / {
+                # This is cool because no php is touched for static content
+                try_files $uri @rewrite;
+        }
+
+        location @rewrite {
+                # You have 2 options here
+                # For D7 and above:
+                # Clean URLs are handled in drupal_environment_initialize().
+                #rewrite ^ /index.php;
+                # For Drupal 6 and below:
+                # Some modules enforce no slash (/) at the end of the URL
+                # Else this rewrite block wouldn't be needed (GlobalRedirect)
+                rewrite ^/(.*)$ /index.php?q=$1;
+        }
+
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $request_filename;
+                fastcgi_intercept_errors off;
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_buffers 16 1M;
+                fastcgi_buffer_size 1M;
+                fastcgi_read_timeout 3600s;
+        }
+
+        # Fighting with Styles? This little gem is amazing.
+        # This is for D6
+        location ~ ^/sites/.*/files/imagecache/ {
+        # This is for D7 and D8
+        #location ~ ^/sites/.*/files/styles/ {
+                try_files $uri @rewrite;
+        }
+
+        # All private files need to be handled by Drupal.
+        location ~ ^/system/files/.* {
+            try_files $uri @rewrite;
+        }
+
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+                add_header Access-Control-Allow-Origin *;
+                expires max;
+                log_not_found off;
+        }
+
+        location ~* \.(ttf|ttc|otf|eot|woff|font.css|css)$ {
+                add_header Access-Control-Allow-Origin *;
+        }
+}
