@@ -27,13 +27,3 @@ BOOM your site is now all set up and configured ready to start building.
 ** NOTES **
 Due to the additional Javascript files that are needed for the navbar module,
 these currently need to be manually downloaded into the relevant libraries directory.
-
-
-Due to the new ay of working, a git repo will probably have already been created
-which will already have a docroot and base install of Drupal (as UX/ frontend use
-Dev Desktop).
-In this case the easiest thing to do is to temporarily rename the project folder
-that has been created and install the new site. Once installed you can copy the
-docroot directory to the git repo and rename the project directory back to the
-original name.
-** @todo need to update the script to cater for this **

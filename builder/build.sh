@@ -57,7 +57,7 @@ MODULES_THEME=(
 make() {
   setSitePath $1
 
-  echo -n "This will install a new Drupal site in the following directory: $SITE_PATH. Do you want to continue (y/n): "
+  echo -n "This will install a new Drupal site in the following directory: $SITE_PATH. Do you want to continue? (y/n): "
   read CONTINUE_INSTALL
 
   if [ "$CONTINUE_INSTALL" != "y" ]; then
@@ -69,11 +69,30 @@ make() {
 
   # Check to see if the install directory already exists
   if [ -d $SITE_PATH ]; then
-    echo -e "The directory '$SITE_PATH' already exists, try running './build.sh -i $SITE_ID'. Installation cancelled."
-    exit 1
+    doing "The directory '$SITE_PATH' already exists."
+
+    echo -n "Would still like to create a new site at this location? (y/n): "
+    read CONTINUE_SITE_INSTALL
+
+    FORCE_SITE_INSTALL=false
+    if [ "$CONTINUE_SITE_INSTALL" == "y" ]; then
+      FORCE_SITE_INSTALL=true
+    fi
+
+    if [ "$FORCE_SITE_INSTALL" == false ]; then
+      doing "Drupal site install cancelled!
+You could try running './build.sh -i $SITE_ID' to run the site installation.";
+      exit 1
+    fi
   fi
 
-  mkdir -p $SITE_PATH
+  if [ "$FORCE_SITE_INSTALL" == true ]; then
+    if [ -d "$SITE_PATH/docroot" ]; then
+      mv "$SITE_PATH/docroot" "$SITE_PATH/docroot.old"
+    fi
+  else
+    mkdir -p $SITE_PATH
+  fi
 
   siteInstall
   createMasterFile
