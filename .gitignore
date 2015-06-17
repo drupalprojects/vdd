@@ -3,3 +3,4 @@ config.json
 .idea
 .DS_Store
 persistant-storage.vdi
+builder/config.sh
