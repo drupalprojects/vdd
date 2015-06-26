@@ -1,7 +1,7 @@
 server {
         listen 443 ssl;
 
-        server_name <%= @shortcode %>.dev;
+        server_name <%= @shortcode %>.dev <%= @alias %>;
 
         # SSL Configuration.
         ssl_certificate /var/www/ssl/<%= @shortcode %>.crt;
@@ -26,11 +26,11 @@ server {
 server {
         listen 8081;
 
-        server_name <%= @shortcode %>.dev;
+        server_name <%= @shortcode %>.dev <%= @alias %>;
 
         root /var/www/vhosts/<%= @docroot %>;
 
-        # Enable compression, this will help if you have for instance advagg<200e> module
+        # Enable compression, this will help if you have for instance advagg module
         # by serving Gzip versions of the files.
         gzip_static on;
 
@@ -44,12 +44,6 @@ server {
                 log_not_found off;
                 access_log off;
         }
-
-        # This matters if you use drush prior to 5.x
-        # After 5.x backups are stored outside the Drupal install.
-        #location = /backup {
-        #        deny all;
-        #}
 
         # Very rarely should these ever be accessed outside of your lan
         location ~* \.(txt|log)$ {
@@ -110,14 +104,7 @@ server {
         }
 
         location @rewrite {
-                # You have 2 options here
-                # For D7 and above:
-                # Clean URLs are handled in drupal_environment_initialize().
-                #rewrite ^ /index.php;
-                # For Drupal 6 and below:
-                # Some modules enforce no slash (/) at the end of the URL
-                # Else this rewrite block wouldn't be needed (GlobalRedirect)
-                rewrite ^/(.*)$ /index.php?q=$1;
+                rewrite ^ /index.php;
         }
 
         location ~ \.php$ {
@@ -132,7 +119,8 @@ server {
                 fastcgi_read_timeout 3600s;
         }
 
-        location ~ ^/sites/.*/files/imagecache/ {
+        # Fighting with Styles? This little gem is amazing.
+        location ~ ^/sites/.*/files/styles/ {
                 try_files $uri @rewrite;
         }
 

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Settings for <%= @shortcode %>.dev
+ * Drupal 8 settings for <%= @shortcode %>.dev
  */
 
 $databases = array(
@@ -43,17 +43,3 @@ $conf['reverse_proxy'] = TRUE;
 
 // Tell Drupal what addresses the proxy server(s) use.
 $conf['reverse_proxy_addresses'] = array('127.0.0.1');
-
-$conf['apachesolr_default_environment'] = 'solr';
-$conf['apachesolr_environments']['solr']['url'] = "http://localhost:8984/solr/<%= @shortcode %>";
-
-if (file_exists('sites/all/modules/contrib/memcache')) {
-  $conf['cache_backends'][] = './sites/all/modules/contrib/memcache/memcache.inc';
-  $conf['cache_default_class'] = 'MemCacheDrupal';
-  $conf['cache_class_form'] = 'DrupalDatabaseCache';
-  $conf['cache_class_cache_form'] = 'DrupalDatabaseCache';
-  $conf['lock_inc'] = 'sites/all/modules/contrib/memcache/memcache-lock.inc';
-  $conf['memcache_stampede_protection'] = TRUE;
-  $conf['memcache_servers'] = array('127.0.0.1:11211' => 'default');
-  $conf['memcache_key_prefix'] = '<%= @shortcode %>';
-}

@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Drupal 7 settings for <%= @shortcode %>.dev
+ */
+
+$databases = array(
+    'default' => array (
+      'default' => array (
+        'driver' => 'mysql',
+        'username' => 'root',
+        'password' => '<%= node["mysql"]["server_root_password"] %>',
+        'database' => '<%= @shortcode %>',
+        'host' => '127.0.0.1',
+      ),
+    ),
+);
+
+$https = TRUE;
+
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
+  $https = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+  $_SERVER['HTTPS'] = $https ? 'on' : 'off';
+}
+
+$base_protocol = $https ? 'https' : 'http';
+$base_url = $base_protocol . '://<%= @shortcode %>.dev';
+
+$port = $_SERVER['SERVER_PORT'];
+if ($port == '8080') {
+  $base_url .= ':8080';
+}
+
+$cookie_domain = '.<%= @shortcode %>.dev';
+
+// File paths...
+$conf['file_temporary_path'] = '/tmp';
+$conf['file_private_path'] = '/mnt/persistant/site-files/<%= @shortcode %>/private';
+
+// Tell Drupal it's behind a proxy.
+$conf['reverse_proxy'] = TRUE;
+
+// Tell Drupal what addresses the proxy server(s) use.
+$conf['reverse_proxy_addresses'] = array('127.0.0.1');
+
+$conf['apachesolr_default_environment'] = 'solr';
+$conf['apachesolr_environments']['solr']['url'] = "http://localhost:8984/solr/<%= @shortcode %>";
+
+if (file_exists('sites/all/modules/contrib/memcache')) {
+  $conf['cache_backends'][] = './sites/all/modules/contrib/memcache/memcache.inc';
+  $conf['cache_default_class'] = 'MemCacheDrupal';
+  $conf['cache_class_form'] = 'DrupalDatabaseCache';
+  $conf['cache_class_cache_form'] = 'DrupalDatabaseCache';
+  $conf['lock_inc'] = 'sites/all/modules/contrib/memcache/memcache-lock.inc';
+  $conf['memcache_stampede_protection'] = TRUE;
+  $conf['memcache_servers'] = array('127.0.0.1:11211' => 'default');
+  $conf['memcache_key_prefix'] = '<%= @shortcode %>';
+}

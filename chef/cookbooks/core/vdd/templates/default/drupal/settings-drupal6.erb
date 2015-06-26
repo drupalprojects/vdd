@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * @file
+ * Drupal 6 settings for <%= @shortcode %>.dev
+ */
+
+$db_url = 'mysql://root:<%= node["mysql"]["server_root_password"] %>@127.0.0.1/<%= @shortcode %>';
+
+$https = TRUE;
+
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
+  $https = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+  $_SERVER['HTTPS'] = $https ? 'on' : 'off';
+}
+
+$base_protocol = $https ? 'https' : 'http';
+$base_url = $base_protocol . '://<%= @shortcode %>.dev';
+
+$port = $_SERVER['SERVER_PORT'];
+if ($port == '8080') {
+  $base_url .= ':8080';
+}
+
+$cookie_domain = '.<%= @shortcode %>.dev';
+
+// File paths...
+$conf['file_directory_temp'] = '/tmp';
+$conf['file_directory_path'] = 'site/default/files';
+
+// Tell Drupal it's behind a proxy.
+$conf['reverse_proxy'] = TRUE;
+
+// Tell Drupal what addresses the proxy server(s) use.
+$conf['reverse_proxy_addresses'] = array('127.0.0.1');
+
+$conf['apachesolr_host'] = 'localhost';
+$conf['apachesolr_port'] = '8984';
+$conf['apachesolr_path'] = '/solr/<%= @shortcode %>';
+
+if (file_exists('sites/all/modules/contrib/memcache')) {
+  $conf['cache_backends'][] = './sites/all/modules/contrib/memcache/memcache.inc';
+  $conf['cache_default_class'] = 'MemCacheDrupal';
+  $conf['cache_class_form'] = 'DrupalDatabaseCache';
+  $conf['cache_class_cache_form'] = 'DrupalDatabaseCache';
+  $conf['lock_inc'] = 'sites/all/modules/contrib/memcache/memcache-lock.inc';
+  $conf['memcache_stampede_protection'] = TRUE;
+  $conf['memcache_servers'] = array('127.0.0.1:11211' => 'default');
+  $conf['memcache_key_prefix'] = '<%= @shortcode %>';
+}

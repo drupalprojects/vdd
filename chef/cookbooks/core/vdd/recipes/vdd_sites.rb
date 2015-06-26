@@ -8,6 +8,12 @@ if node["vdd"]["sites"]
   node["vdd"]["sites"].each do |index, site|
     htdocs = defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index
 
+    site_type = "drupal7"
+
+    if !site["type"].nil? then
+      site_type = site["type"]
+    end
+
     # Avoid potential duplicate slash in docroot path from config.json input.
     if htdocs.start_with?("/")
       htdocs = htdocs[1..-1]
@@ -32,7 +38,7 @@ if node["vdd"]["sites"]
     end
 
     template "/var/www/settings/#{index}/settings.inc" do
-      source "drupal/settings.erb"
+      source "drupal/settings-#{site_type}.erb"
       variables(
         shortcode: index,
         site: site
