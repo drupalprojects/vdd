@@ -28,7 +28,8 @@
       "server_root_password": "root",
       "mysqld": {
         "connect_timeout": 600,
-        "wait_timeout": 1800
+        "wait_timeout": 1800,
+        "open_files_limit": "24000"
       }
     },
     "php": {
@@ -75,11 +76,9 @@
     "recipe[vdd::uploadprogress]",
     "recipe[vdd::mailcatcher]",
     "recipe[vdd::phpmyadmin]",
-    "recipe[vdd::xdebug]",
     "recipe[vdd::git]",
     "recipe[vdd::webgrind]",
     "recipe[vdd::mc]",
-    "recipe[vdd::apc]",
     "recipe[vdd::rsync]",
     "recipe[vdd::curl]",
     "recipe[vdd::composer]",
@@ -104,7 +103,6 @@
     "recipe[vdd::nginx]",
     "recipe[vdd::bash]",
     "recipe[memcached]",
-    "recipe[vdd::memcache]",
     "recipe[vdd::pimpmylogs]"
   ],
   "description": "Installs Drupal development environment.",
