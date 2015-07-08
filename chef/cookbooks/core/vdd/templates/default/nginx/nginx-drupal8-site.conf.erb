@@ -112,6 +112,10 @@ server {
                 #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
                 include fastcgi_params;
                 fastcgi_param SCRIPT_FILENAME $request_filename;
+                fastcgi_param   SITE_ENV_TYPE  dev;
+                fastcgi_param   SITE_ENV_INSTANCE  vdd-<%= @shortcode %>;
+                fastcgi_param   SITE_ENV_PLATFORM  vdd;
+                fastcgi_param   VDD_SHORTCODE <%= @shortcode %>;
                 fastcgi_intercept_errors off;
                 fastcgi_pass unix:/var/run/php5-fpm.sock;
                 fastcgi_buffers 16 1M;
