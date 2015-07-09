@@ -1,4 +1,6 @@
-directory "/var/www/ssl" do
+certificate_path = node["ssl"]["certificate_path"]
+
+directory certificate_path do
   mode  00777
   action :create
   recursive true
@@ -6,9 +8,9 @@ end
 
 cert = ssl_certificate "ssl_nginx" do
   cert_source "self-signed"
-  cert_path "/var/www/ssl/nginx.crt"
+  cert_path "#{certificate_path}/nginx.crt"
   key_source "self-signed"
-  key_path  "/var/www/ssl/nginx.key"
+  key_path  "#{certificate_path}/nginx.key"
   common_name "*.dev"
   country "uk"
   city "canterbury"
@@ -35,9 +37,9 @@ if node["vdd"]["sites"]
 
     cert = ssl_certificate "ssl_#{index}" do
       cert_source "self-signed"
-      cert_path "/var/www/ssl/#{index}.crt"
+      cert_path "#{certificate_path}/#{index}.crt"
       key_source "self-signed"
-      key_path  "/var/www/ssl/#{index}.key"
+      key_path  "#{certificate_path}/#{index}.key"
       common_name "#{index}.dev"
       country "uk"
       city "canterbury"

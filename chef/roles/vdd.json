@@ -54,6 +54,9 @@
       "config": {
         "dbpath": "/mnt/persistant/mongodb"
       }
+    },
+    "ssl": {
+      "certificate_path": "/var/www/ssl"
     }
   },
   "override_attributes": {},
