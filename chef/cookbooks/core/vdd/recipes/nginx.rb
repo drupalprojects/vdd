@@ -67,6 +67,7 @@ if node["vdd"]["sites"]
           source "nginx/nginx-#{site_type}-site.conf.erb"
           variables(
             shortcode: index,
+            certificate_path: certificate_path,
             docroot: site['vhost']['document_root'],
             alias: defined?(site["vhost"]["alias"]) ? site["vhost"]["alias"].join(" ") : ""
           )
