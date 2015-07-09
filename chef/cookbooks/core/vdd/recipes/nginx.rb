@@ -23,6 +23,9 @@ end
 
 template "/etc/nginx/sites-enabled/default.conf" do
   source "nginx/default.conf.erb"
+  variables(
+    certificate_path: certificate_path,
+  )
 end
 
 if node["vdd"]["sites"]
