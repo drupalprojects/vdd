@@ -34,7 +34,8 @@ modules = [
   "setenvif",
   "authn_file",
   "authz_groupfile",
-  "ssl"
+  "ssl",
+  "setenvif"
 ]
 
 modules.each do |mod|
