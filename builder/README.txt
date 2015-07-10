@@ -6,17 +6,17 @@ e.g. ./builder/build.sh -m deeson
 
 This will create a new directory for the drupal installation in:
 
-  /Users/[username]/Sites/deeson.dev
+  /Users/[USERNAME]/Sites/deeson.dev
 
 The script will:
 
  1) Download the latest version of Drupal 7 to the docroot directory
- 2) Create the correct drush aliases files
- 3) Create the default settings.inc file
+ 2) Create a base drush aliases files
+ 3) Create the default settings.inc file in conf directory
  4) Create the vdd site directory and settings.php file
- 5) Create the master.inc file
+ 5) Create the master.inc file in the conf directory
  6) Generate the config needed to add to the VDD config.json file and display it to the user
- 7) Install the base minimal install profile of Drupal
+ 7) Install Drupal using the minimal install profile
  8) Download all the default modules that have been agreed should be present
  9) Download the bootstrap theme and move it to the themes directory
 10) Enable the master module

@@ -349,6 +349,19 @@ ini_set('session.cookie_lifetime', 2000000);
 \$conf['404_fast_paths'] = '/\.(?:txt|png|gif|jpe?g|css|js|ico|swf|flv|cgi|bat|pl|dll|exe|asp)$/i';
 \$conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL "@path" was not found on this server.</p></body></html>';
 
+drupal_fast_404();
+
+// Never run poormanscron.
+\$conf['cron_safe_threshold'] = '0';
+
+// Regional settings.
+\$conf['site_default_country'] = 'GB';
+\$conf['date_first_day'] = '1';
+\$conf['date_default_timezone'] = 'Europe/London';
+\$conf['configurable_timezones'] = '0';
+
+// File system.
+\$conf['file_public_path'] = 'sites/default/files';
 EOF
 
   mkdir $SITE_DOCROOT/sites/${SITE_ID}.dev
