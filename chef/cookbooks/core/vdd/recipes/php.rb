@@ -7,7 +7,9 @@ pkgs = [
   "php5-dev",
   "php5-sqlite",
   "php5-mongo",
-  "phpunit"
+  "phpunit",
+  "php5-xdebug",
+  "php5-memcache"
 ]
 
 pkgs.each do |pkg|
@@ -31,7 +33,6 @@ template "/etc/php5/mods-available/vdd_xdebug.ini" do
 end
 
 modules = [
-  "vdd_xdebug",
   "vdd_php",
   "uploadprogress",
   "pdo_mysql",
