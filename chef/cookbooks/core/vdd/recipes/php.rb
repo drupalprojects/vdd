@@ -8,7 +8,9 @@ pkgs = [
   "php5-sqlite",
   "php5-mongo",
   "php5-imagick",
-  "phpunit"
+  "phpunit",
+  "php5-xdebug",
+  "php5-memcache"
 ]
 
 pkgs.each do |pkg|
@@ -24,15 +26,7 @@ template "/etc/php5/mods-available/vdd_php.ini" do
   notifies :restart, "service[php5-fpm]", :delayed
 end
 
-template "/etc/php5/mods-available/vdd_xdebug.ini" do
-  source "vdd_xdebug.ini.erb"
-  mode "0644"
-  notifies :restart, "service[apache2]", :delayed
-  notifies :restart, "service[php5-fpm]", :delayed
-end
-
 modules = [
-  "vdd_xdebug",
   "vdd_php",
   "uploadprogress",
   "pdo_mysql",
