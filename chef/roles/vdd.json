@@ -105,7 +105,8 @@
     "recipe[vdd::bash]",
     "recipe[memcached]",
     "recipe[vdd::memcache]",
-    "recipe[vdd::pimpmylogs]"
+    "recipe[vdd::pimpmylogs]",
+    "recipe[imagemagick]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"

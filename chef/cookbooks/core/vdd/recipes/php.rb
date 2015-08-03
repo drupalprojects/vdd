@@ -7,6 +7,7 @@ pkgs = [
   "php5-dev",
   "php5-sqlite",
   "php5-mongo",
+  "php5-imagick",
   "phpunit"
 ]
 
@@ -37,7 +38,8 @@ modules = [
   "pdo_mysql",
   "mongo",
   "memcache",
-  "sqlite3"
+  "sqlite3",
+  "imagick"
 ]
 
 modules.each do |mod|
