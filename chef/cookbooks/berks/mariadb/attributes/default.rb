@@ -135,7 +135,7 @@ default['mariadb']['install']['version'] = '10.0'
 #
 default['mariadb']['use_default_repository'] = false
 default['mariadb']['apt_repository']['base_url'] = \
-  'ftp.igh.cnrs.fr/pub/mariadb/repo'
+  'lon1.mirrors.digitalocean.com/mariadb/repo'
 
 #
 # MariaDB Plugins enabling
