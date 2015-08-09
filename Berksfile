@@ -31,3 +31,4 @@ cookbook "vim_config", "~> 2.0.0"
 cookbook "memcached", "~> 1.7.2"
 cookbook "php5-fpm", "~> 0.4.4"
 cookbook 'imagemagick', '~> 0.2.3'
+cookbook 'phantomjs', '~> 1.0.3'
