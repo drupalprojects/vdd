@@ -1,0 +1,118 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          phantomjs
+# Required-Start:    $local_fs $remote_fs $network
+# Required-Stop:     $local_fs $remote_fs $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start phantomjs
+# Description:       This script provides a JS test server
+#                    should listen on port 4444 on a properly
+#                    configured system
+### END INIT INFO
+
+# Source function library
+. /lib/lsb/init-functions
+
+NAME=phantomsjs
+DESC="PhantomJS"
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
+DAEMON="/usr/local/bin/phantomjs"
+PIDFILE=/run/$NAME.pid
+
+test -x "${DAEMON:--version}" || exit 0
+
+# Provide options for the default port and any ssl protocol.
+DAEMON_OPTS="${DAEMON_OPTS} --webdriver=4444 --ssl-protocol=any"
+
+# Ensure we have a PATH
+export PATH="${PATH:+$PATH:}/usr/sbin:/usr/bin:/sbin:/bin"
+
+start_phantomjs() {
+    log_daemon_msg "Starting $DESC" "$NAME"
+    output=$(/bin/tempfile -s.phantomjs)
+    if start-stop-daemon --quiet --background --exec "${DAEMON}" \
+      --make-pidfile --pidfile ${PIDFILE} --start \
+      -- ${DAEMON_OPTS} > ${output} 2>&1; then
+        log_end_msg 0
+    else
+        log_end_msg 1
+        cat $output
+        exit 1
+    fi
+    rm $output
+}
+
+disabled_phantomjs() {
+    log_daemon_msg "Not starting $DESC" "$NAME"
+    log_progress_msg "disabled in ..."
+    log_end_msg 0
+}
+
+stop_phantomjs() {
+    log_daemon_msg "Stopping $DESC" "$NAME"
+    if start-stop-daemon \
+        --stop --quiet --pidfile $PIDFILE --retry 10 \
+        --exec $DAEMON; then
+        log_end_msg 0
+    else
+        log_end_msg 1
+    fi
+
+    if test -r $PIDFILE; then
+        read -r PID < $PIDFILE
+        if test ! -d /proc/$PID ; then
+            # stale pidfile
+            unset PID
+            rm -f $PIDFILE
+        fi
+    fi
+}
+
+reload_phantomjs() {
+    log_daemon_msg "Reloading $DESC" "$NAME"
+}
+
+status_phantomjs() {
+    start-stop-daemon \
+        --status --quiet --pidfile $PIDFILE \
+        --exec $DAEMON
+    exit $?
+}
+
+configtest() {
+    $DAEMON ${DAEMON_OPTS} -C -n /tmp > /dev/null
+}
+
+case "$1" in
+    start)
+      start_phantomjs
+      ;;
+    stop)
+      stop_phantomjs
+      ;;
+    reload)
+      reload_phantomjs
+      ;;
+    status)
+      status_phantomjs
+      ;;
+    restart|force-reload)
+      if status_of_proc -p "${PIDFILE}" "${DAEMON}" "${NAME}" 1>/dev/null; then
+        if ! configtest; then
+          log_failure_msg "Syntax check failed, not restarting"
+          exit 1
+        fi
+      fi
+      $0 stop
+      $0 start
+      ;;
+    configtest)
+      configtest && log_success_msg "Syntax ok"
+      ;;
+    *)
+      log_success_msg "Usage: $0 {start|stop|restart|reload|force-reload|configtest}"
+      exit 1
+      ;;
+  esac

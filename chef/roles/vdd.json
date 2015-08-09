@@ -57,7 +57,14 @@
       }
     },
     "ssl": {
-      "certificate_path": "/var/www/ssl"
+      "certificate_path": "/etc/self-signed-certificates"
+    },
+    "phantomjs": {
+      "version": "1.9.8",
+      "base_url": "https://bitbucket.org/ariya/phantomjs/downloads"
+    },
+    "drupalextension": {
+      "install_path": "/opt/drupalextension"
     }
   },
   "override_attributes": {},
@@ -105,7 +112,10 @@
     "recipe[vdd::bash]",
     "recipe[memcached]",
     "recipe[vdd::pimpmylogs]",
-    "recipe[imagemagick]"
+    "recipe[imagemagick]",
+    "recipe[phantomjs]",
+    "recipe[vdd::phantomjs]",
+    "recipe[vdd::drupalextension]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"
