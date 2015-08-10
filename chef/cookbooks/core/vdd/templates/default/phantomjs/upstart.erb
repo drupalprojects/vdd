@@ -24,7 +24,7 @@ PIDFILE=/run/$NAME.pid
 test -x "${DAEMON:--version}" || exit 0
 
 # Provide options for the default port and any ssl protocol.
-DAEMON_OPTS="${DAEMON_OPTS} --webdriver=4444 --ssl-protocol=any"
+DAEMON_OPTS="${DAEMON_OPTS} --webdriver=4444 --ssl-protocol=any --ignore-ssl-errors=true"
 
 # Ensure we have a PATH
 export PATH="${PATH:+$PATH:}/usr/sbin:/usr/bin:/sbin:/bin"
