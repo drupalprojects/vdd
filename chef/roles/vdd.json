@@ -40,7 +40,8 @@
     },
     "drush": {
       "version" : "6.6.0",
-      "version7": "7.0.0"
+      "version7": "7.0.0",
+      "version8": "8.0.0-beta14"
     },
     "solr" : {
       "version": "4.10.3"

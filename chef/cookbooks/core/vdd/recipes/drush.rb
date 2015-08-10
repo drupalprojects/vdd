@@ -1,3 +1,9 @@
+directory "/opt/drush" do
+  mode  00755
+  action :create
+  recursive true
+end
+
 php_pear "Console_Table" do
   action :install
 end
@@ -40,27 +46,56 @@ end
 #--- Drush 7 ---#
 
 if node["drush"]["version7"]
-  # Install drush7, required for drush with D8 sites.
-  git "/usr/local/bin/drush-7" do
+  # Install drush7.
+  git "/opt/drush/drush-7" do
     repository "https://github.com/drush-ops/drush.git"
     revision node["drush"]["version7"]
     action :sync
   end
 
   link "/usr/bin/drush7" do
-    to "/usr/local/bin/drush-7/drush"
+    to "/opt/drush/drush-7/drush"
   end
 
   bash "install-drush-7" do
-    cwd "/usr/local/bin/drush-7"
+    cwd "/opt/drush/drush-7"
     code <<-EOH
-    chmod u+x /usr/local/bin/drush-7/drush
+    chmod u+x /opt/drush/drush-7/drush
     composer install
     EOH
   end
 
   if node["vdd"]["sites"]
-    link "/usr/local/bin/drush-7/aliases.drushrc.php" do
+    link "/opt/drush/drush-7/aliases.drushrc.php" do
+      to "/usr/local/bin/drush-master/aliases.drushrc.php"
+    end
+  end
+end
+
+#--- Drush 8 ---#
+
+if node["drush"]["version8"]
+  # Install drush8, required for drush with D8 sites.
+  git "/opt/drush/drush-8" do
+    repository "https://github.com/drush-ops/drush.git"
+    revision node["drush"]["version8"]
+    action :sync
+  end
+
+  link "/usr/bin/drush8" do
+    to "/opt/drush/drush-8/drush"
+  end
+
+  bash "install-drush-8" do
+    cwd "/opt/drush/drush-8"
+    code <<-EOH
+    chmod u+x /opt/drush/drush-8/drush
+    composer install
+    EOH
+  end
+
+  if node["vdd"]["sites"]
+    link "/opt/drush/drush-8/aliases.drushrc.php" do
       to "/usr/local/bin/drush-master/aliases.drushrc.php"
     end
   end
