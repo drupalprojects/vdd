@@ -39,8 +39,8 @@
       "jdk_version": "7"
     },
     "drush": {
-      "version" : "6.5.0",
-      "version7": "7.0.0-alpha9"
+      "version" : "6.6.0",
+      "version7": "7.0.0"
     },
     "solr" : {
       "version": "4.10.3"
