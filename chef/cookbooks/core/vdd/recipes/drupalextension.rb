@@ -18,4 +18,5 @@ end
 
 execute 'make_behat_available_globally' do
   command 'ln -s /opt/drupalextension/bin/behat /usr/local/bin/behat'
+  only_if { !File.exists?("/usr/local/bin/behat") }
 end
