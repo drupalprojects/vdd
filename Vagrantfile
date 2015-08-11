@@ -5,6 +5,7 @@ Vagrant.configure("2") do |config|
   if 1 > 2
     config.vm.synced_folder "/Users/johnennew/Sites/dsdm.dev", "/var/www/vhosts/dsdm.dev"
     config.vm.synced_folder "/Users/johnennew/Sites/rctws.dev", "/var/www/vhosts/rctws.dev"
+    config.vm.synced_folder "/Users/johnennew/Sites/drupal7.dev", "/var/www/vhosts/drupal7.dev"
   end
 
   # Load config JSON.
