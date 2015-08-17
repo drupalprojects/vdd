@@ -1,33 +1,16 @@
-mysql2_chef_gem 'default' do
-  provider Chef::Provider::Mysql2ChefGem::Mariadb
-  action :install
+group 'www-data' do
+  action :modify
+  members 'vagrant'
+  append true
 end
 
 if node["vdd"]["sites"]
 
   node["vdd"]["sites"].each do |index, site|
-    htdocs = defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index
-
     site_type = "drupal7"
 
     if !site["type"].nil? then
       site_type = site["type"]
-    end
-
-    # Avoid potential duplicate slash in docroot path from config.json input.
-    if htdocs.start_with?("/")
-      htdocs = htdocs[1..-1]
-    end
-
-    mysql_connection_info = {
-      :host => "127.0.0.1",
-      :username => "root",
-      :password => node["mysql"]["server_root_password"]
-    }
-
-    mysql_database index do
-      connection mysql_connection_info
-      action :create
     end
 
     # Create a settings dir for each site.
@@ -53,7 +36,7 @@ if node["vdd"]["sites"]
       directory dir do
         owner 'www-data'
         group 'www-data'
-        mode  00755
+        mode  00775
         action :create
         recursive true
       end

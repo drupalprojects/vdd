@@ -19,7 +19,7 @@ template "/etc/apache2/ports.conf" do
 end
 
 web_app "localhost" do
-  template "localhost.conf.erb"
+  template "apache2/localhost.conf.erb"
 end
 
 node.default["apache"]["user"] = "vagrant"
@@ -49,7 +49,7 @@ modules.each do |mod|
 end
 
 template "/etc/apache2/conf-enabled/vdd_apache.conf" do
-  source "vdd_apache.conf.erb"
+  source "apache2/vdd_apache.conf.erb"
   mode "0644"
   notifies :restart, "service[apache2]", :delayed
 end

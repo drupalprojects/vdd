@@ -43,6 +43,9 @@
       "version7": "7.0.0",
       "version8": "8.0.0-beta14"
     },
+    "pimpmylogs": {
+      "version" : "v1.7.9"
+    },
     "solr" : {
       "version": "4.10.3"
     },
@@ -78,7 +81,8 @@
     "recipe[vdd::graphviz]",
     "recipe[vdd::mysql]",
     "recipe[mariadb::default]",
-    "recipe[vdd::vdd_sites]",
+    "recipe[vdd::sites]",
+    "recipe[vdd::databases]",
     "recipe[vdd::php]",
     "recipe[php5-fpm::install]",
     "recipe[vdd::uploadprogress]",
@@ -92,15 +96,15 @@
     "recipe[vdd::curl]",
     "recipe[vdd::composer]",
     "recipe[vdd::drush]",
-    "recipe[vdd::vdd_help]",
+    "recipe[vdd::help]",
     "recipe[vim_config]",
     "recipe[vdd::vim]",
     "recipe[vdd::patchutils]",
     "recipe[vdd::siege]",
     "recipe[solr]",
-    "recipe[vdd::vdd_solr]",
+    "recipe[vdd::solr]",
     "recipe[dnsmasq]",
-    "recipe[vdd::vdd_dnsmasq]",
+    "recipe[vdd::dnsmasq]",
     "recipe[nodejs]",
     "recipe[nodejs::npm]",
     "recipe[vdd::grunt]",
@@ -108,6 +112,7 @@
     "recipe[vdd::mongodb]",
     "recipe[varnish_ng]",
     "recipe[vdd::varnish]",
+    "recipe[vdd::ssl]",
     "recipe[nginx]",
     "recipe[vdd::nginx]",
     "recipe[vdd::bash]",

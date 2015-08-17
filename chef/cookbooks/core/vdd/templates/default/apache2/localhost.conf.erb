@@ -1,11 +1,16 @@
 <VirtualHost *:8082>
-  DocumentRoot /var/www
+  DocumentRoot /opt/www
   ServerName localhost
   RewriteEngine On
   ErrorLog /var/log/apache2/error.log
   LogLevel warn
   CustomLog /var/log/apache2/access.log combined
   ServerSignature On
+
+  <Directory /opt/www>
+      AllowOverride All
+      Require all granted
+  </Directory>
 </VirtualHost>
 
 <% @node["vdd"]["sites"].each do |index, site| %>
@@ -16,9 +21,9 @@
       ServerAlias <%= defined?(site["vhost"]["alias"]) ? site["vhost"]["alias"].join(" ") : index %>
       ServerAdmin <%= site["account_mail"] %>
       RewriteEngine On
-      ErrorLog /var/log/apache2/<%= index %>.error.log
+      ErrorLog /var/log/apache2/error.log
       LogLevel warn
-      CustomLog /var/log/apache2/<%= index %>.access.log combined
+      CustomLog /var/log/apache2/access.log combined
       ServerSignature On
       <Directory /var/www/vhosts/<%= defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index %>>
         AllowOverride All

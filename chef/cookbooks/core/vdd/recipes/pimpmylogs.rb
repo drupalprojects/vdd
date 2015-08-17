@@ -1,5 +1,98 @@
-git "/var/www/pimpmylogs" do
-  repository "https://github.com/potsky/PimpMyLog"
-  revision "v1.7.7"
-  action :sync
+directory "/var/www/pimpmylogs" do
+  mode  00777
+  action :delete
+  recursive true
+end
+
+git "/opt/pimpmylogs" do
+    repository "https://github.com/potsky/PimpMyLog"
+    revision node["pimpmylogs"]["version"]
+    action :sync
+end
+
+template "/opt/pimpmylogs/config.user.php" do
+  source "pimpmylogs/config.user.php"
+  mode 0644
+end
+
+execute "chown-data-www" do
+  command "chown -R www-data:www-data /opt/pimpmylogs"
+  user "root"
+  action :run
+end
+
+certificate_path = node["ssl"]["certificate_path"]
+
+cert = ssl_certificate "ssl_nginx_pimpmylogs" do
+  cert_source "self-signed"
+  cert_path "#{certificate_path}/crts/pimpmylogs.crt"
+  key_source "self-signed"
+  key_path  "#{certificate_path}/keys/pimpmylogs.key"
+  common_name "pimpmylogs.dev"
+  country "uk"
+  city "canterbury"
+  state "kent"
+  organization"deeson"
+  department "drupal"
+  email "drupal@drupal7.dev"
+  years 10
+end
+
+template "/etc/nginx/sites-enabled/pimpmylogs.conf" do
+  source "pimpmylogs/nginx.conf.erb"
+  variables(
+    certificate_path: certificate_path,
+  )
+end
+
+web_app "pimpmylogs" do
+  template "pimpmylogs/apache2.conf.erb"
+end
+
+directory "/var/log/apache2" do
+  mode  00777
+  action :create
+  recursive true
+end
+
+directory "/var/log/nginx" do
+  mode  00777
+  action :create
+  recursive true
+end
+
+file '/var/log/php5-fpm.log' do
+  mode '0664'
+  owner 'www-data'
+  group 'www-data'
+end
+
+file '/var/log/php5-apache2.log' do
+  mode '0664'
+  owner 'www-data'
+  group 'www-data'
+end
+
+file '/var/log/apache2/access.log' do
+  mode '0664'
+  owner 'www-data'
+  group 'www-data'
+end
+
+file '/var/log/apache2/error.log' do
+  mode '0664'
+  owner 'www-data'
+  group 'www-data'
+end
+
+file '/var/log/nginx/access.log' do
+  mode '0664'
+  owner 'www-data'
+  group 'www-data'
+end
+
+file '/var/log/nginx/error.log' do
+  mode '0664'
+  owner 'www-data'
+  group 'www-data'
 end
