@@ -46,6 +46,9 @@ $conf['reverse_proxy_addresses'] = array('127.0.0.1');
 
 $conf['apachesolr_default_environment'] = 'solr';
 $conf['apachesolr_environments']['solr']['url'] = "http://localhost:8984/solr/<%= @shortcode %>";
+$conf['apachesolr_attachments_extract_using'] = 'tika';
+$conf['apachesolr_attachments_tika_path'] = '/opt/apache-tika/';
+$conf['apachesolr_attachments_tika_jar'] = 'tika.jar';
 
 if (file_exists('sites/all/modules/contrib/memcache')) {
   $conf['cache_backends'][] = './sites/all/modules/contrib/memcache/memcache.inc';

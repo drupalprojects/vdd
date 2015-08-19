@@ -122,7 +122,8 @@
     "recipe[phantomjs]",
     "recipe[vdd::phantomjs]",
     "recipe[vdd::drupalextension]",
-    "recipe[vdd::rsyslog]"
+    "recipe[vdd::rsyslog]",
+    "recipe[vdd::tika]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"
