@@ -1,7 +1,7 @@
 server {
         listen 443 ssl;
 
-        server_name pimpmylogs.dev;
+        server_name pimpmylogs.dev logs.dev log.dev www.log.dev www.logs.dev;
 
         # SSL Configuration.
         ssl_certificate <%= @certificate_path %>/crts/pimpmylogs.crt;
@@ -26,7 +26,7 @@ server {
 server {
         listen 8081;
 
-        server_name pimpmylogs.dev;
+        server_name pimpmylogs.dev logs.dev log.dev www.log.dev www.logs.dev;
 
         root /opt/pimpmylogs;
 

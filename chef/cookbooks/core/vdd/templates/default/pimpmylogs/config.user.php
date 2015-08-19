@@ -170,7 +170,7 @@
 			}
 		},
 		"nginx_access_log": {
-			"display" : "NGINX: Access log",
+			"display" : "Nginx: Access log",
 			"path"    : "\/var\/log\/nginx\/access.log",
 			"refresh" : 0,
 			"max"     : 10,

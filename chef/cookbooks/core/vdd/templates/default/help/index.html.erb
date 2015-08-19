@@ -21,10 +21,31 @@
     <p>Hello, developer! On this page you can find links to your configured sites and development tools. Also there is a list of frequently asked questions.</p>
 
     <ul>
+      <li><a href="#dev">Development tools</a></li>
       <li><a href="#sites">Configured Sites</a></li>
-      <li><a href="#dev">Development</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
+
+    <h2 id="dev">Development Tools</h2>
+    <ul>
+      <li><a href="http://<%= node["vm"]["ip"] %>:1080/">MailCatcher</a></li>
+      <li><a href="http://192.168.44.44:8082/phpmyadmin/">phpMyAdmin</a></li>
+      <li><a href="/phpinfo.php">phpinfo()</a></li>
+      <li><a href="http://logs.dev">Real time logs</a></li>
+      <li><a href="/webgrind">Webgrind</a></li>
+    </ul>
+
+        <h2 id="ports">Ports and sockets</h2>
+        <ul>
+          <li><b>Port 443</b>: NGinX (HTTPS)</li>
+          <li><b>Port 80</b>: Varnish</li>
+          <li><b>Port 8081</b>: NGinX (HTTP)</li>
+          <li><b>Port 8082</b>: Apache (HTTP)</li>
+          <li><b>Port 8984</b>: Solr</li>
+          <li><b>Port 4444</b>: PhantomJS</li>
+          <li><b>/var/run/php5-fpm.sock</b>: PHP5 FPM</li>
+        </ul>
+
 
     <h2 id="sites">Configured Sites</h2>
 
@@ -58,26 +79,6 @@
        <%- end -%>
       </li>
       <% end %>
-    </ul>
-
-    <h2 id="dev">Development Tools</h2>
-    <ul>
-      <li><a href="http://<%= node["vm"]["ip"] %>:1080/">MailCatcher</a></li>
-      <li><a href="http://192.168.44.44:8082/phpmyadmin/">phpMyAdmin</a></li>
-      <li><a href="/phpinfo.php">phpinfo()</a></li>
-      <li><a href="http://pimpmylogs.dev">PimpMyLogs</a></li>
-      <li><a href="/webgrind">Webgrind</a></li>
-    </ul>
-
-    <h2 id="ports">Ports and sockets</h2>
-    <ul>
-      <li><b>Port 443</b>: NGinX (HTTPS)</li>
-      <li><b>Port 80</b>: Varnish</li>
-      <li><b>Port 8081</b>: NGinX (HTTP)</li>
-      <li><b>Port 8082</b>: Apache (HTTP)</li>
-      <li><b>Port 8984</b>: Solr</li>
-      <li><b>Port 4444</b>: PhantomJS</li>
-      <li><b>/var/run/php5-fpm.sock</b>: PHP5 FPM</li>
     </ul>
 
     <h2 id="faq">FAQ</h2>
