@@ -43,3 +43,7 @@ $conf['reverse_proxy'] = TRUE;
 
 // Tell Drupal what addresses the proxy server(s) use.
 $conf['reverse_proxy_addresses'] = array('127.0.0.1');
+
+// Syslog settings.
+$conf['syslog_identity'] = 'drupal_<%= @shortcode %>_dev';
+$conf['syslog_facility'] = '184';

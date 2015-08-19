@@ -34,7 +34,7 @@ if ($port == '8080') {
 
 $cookie_domain = '.<%= @shortcode %>.dev';
 
-// File paths...
+// File paths.
 $conf['file_temporary_path'] = '/tmp';
 $conf['file_private_path'] = '/mnt/persistant/site-files/<%= @shortcode %>/private';
 
@@ -57,3 +57,7 @@ if (file_exists('sites/all/modules/contrib/memcache')) {
   $conf['memcache_servers'] = array('127.0.0.1:11211' => 'default');
   $conf['memcache_key_prefix'] = '<%= @shortcode %>';
 }
+
+// Syslog settings.
+$conf['syslog_identity'] = 'drupal_<%= @shortcode %>_dev';
+$conf['syslog_facility'] = '184';

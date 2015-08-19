@@ -262,6 +262,64 @@
 					"Log": ["\\/PHP Stack trace:\\/", "\\/PHP *[0-9]*\\. \\/"]
 				}
 			}
+		},
+		"drupal_syslog": {
+			"display" : "Drupal Syslog",
+			"path"    : "/var/log/drupal.log",
+			"refresh" : 20,
+			"max"     : 20,
+			"notify"  : false,
+			"format"  : {
+				"regex": "@([^ ]* [^ ]* [^ ]*) ([^ ]*) ([^:]*): ([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)@",
+				"match": {
+          "Date" : 1,
+          "Base url" : 4,
+          "URL" : 4,
+          "type" : 6,
+          "ip" : 7,
+          "Request uri" : 8,
+          "Referer uri" : 9,
+          "uid" : 10,
+          "Message link" : 11,
+          "Message" : 12
+				},
+        "types": {
+          "Date"    : "date:M d H:i:s",
+          "Base url"    : "link",
+          "URL"    : "link",
+          "type"    : "txt",
+          "ip"    : "txt",
+          "Request uri"    : "link",
+          "Referer uri"    : "link",
+          "uid"    : "txt",
+					"Message link" : "link",
+					"Message" : "txt"
+				}
+			}
+		},
+		"syslog": {
+			"display" : "Syslog",
+			"path"    : "/var/log/syslog",
+			"refresh" : 20,
+			"max"     : 20,
+			"notify"  : false,
+			"format"  : {
+				"regex": "|<([0-9]{1,3})>([0-9]) ([0-9]{4,4}-[0-9]{1,2}-[0-9]{1,2}T[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}.[0-9]{1,6}.[0-9]{1,2}:[0-9]{1,2}) (.*?) (.*?) (.*?) (.*?) (.*?) (.*?)$|",
+				"match": {
+					"Date"    : 3,
+					"Time"    : 3,
+					"Source"  : 5,
+					"PID"     : 6,
+					"Message" : 9
+				},
+				"types": {
+					"Date"    : "date:d:M:Y",
+					"Time"    : "date:H:i:s",
+					"Source"  : "txt",
+					"PID"     : "numeral",
+					"Message" : "txt"
+				}
+			}
 		}
 	}
 }

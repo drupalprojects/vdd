@@ -121,7 +121,8 @@
     "recipe[imagemagick]",
     "recipe[phantomjs]",
     "recipe[vdd::phantomjs]",
-    "recipe[vdd::drupalextension]"
+    "recipe[vdd::drupalextension]",
+    "recipe[vdd::rsyslog]"
   ],
   "description": "Installs Drupal development environment.",
   "chef_type": "role"

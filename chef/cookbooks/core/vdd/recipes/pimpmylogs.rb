@@ -96,3 +96,15 @@ file '/var/log/nginx/error.log' do
   owner 'www-data'
   group 'www-data'
 end
+
+file '/var/log/syslog' do
+  mode '0664'
+  owner 'syslog'
+  group 'www-data'
+end
+
+file '/var/log/drupal.log' do
+  mode '0664'
+  owner 'syslog'
+  group 'www-data'
+end
