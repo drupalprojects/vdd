@@ -25,10 +25,10 @@ certificate_path = node["ssl"]["certificate_path"]
 
 cert = ssl_certificate "ssl_nginx_pimpmylogs" do
   cert_source "self-signed"
-  cert_path "#{certificate_path}/crts/pimpmylogs.crt"
+  cert_path "#{certificate_path}/crts/logs.crt"
   key_source "self-signed"
-  key_path  "#{certificate_path}/keys/pimpmylogs.key"
-  common_name "pimpmylogs.dev"
+  key_path  "#{certificate_path}/keys/logs.key"
+  common_name "logs.dev"
   country "uk"
   city "canterbury"
   state "kent"
