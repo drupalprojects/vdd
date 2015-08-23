@@ -17,13 +17,24 @@ if node["vdd"]["sites"]
         site_type = site["type"]
       end
 
+      drupal_sub_folder = ""
+
+      if !site["vhost"]["drupal_sub_folder"].nil? then
+        drupal_sub_folder = site["vhost"]["drupal_sub_folder"]
+        if drupal_sub_folder[0..0] != "/" then
+          drupal_sub_folder = "/" + drupal_sub_folder
+        end
+      end
+
       if File.exists?("/var/www/vhosts/#{index}.dev/.vdd/nginx.conf")
-        file "/etc/nginx/sites-enabled/#{index}.dev.conf" do
-          owner 'www-data'
-          group 'www-data'
-          mode 0755
-          content ::File.open("/var/www/vhosts/#{index}.dev/.vdd/nginx.conf").read
-          action :create
+        template "/etc/nginx/sites-enabled/#{index}.dev.conf" do
+          source "/var/www/vhosts/#{index}.dev/.vdd/nginx.conf"
+          variables(
+            shortcode: index,
+            certificate_path: certificate_path,
+            docroot: site['vhost']['document_root'],
+            alias: defined?(site["vhost"]["alias"]) ? site["vhost"]["alias"].join(" ") : ""
+          )
         end
       else
         template "/etc/nginx/sites-enabled/#{index}.dev.conf" do
@@ -32,6 +43,7 @@ if node["vdd"]["sites"]
             shortcode: index,
             certificate_path: certificate_path,
             docroot: site['vhost']['document_root'],
+            drupal_sub_folder: drupal_sub_folder,
             alias: defined?(site["vhost"]["alias"]) ? site["vhost"]["alias"].join(" ") : ""
           )
         end

@@ -62,7 +62,7 @@ server {
         }
 
         # No no for private
-        location ~ ^/sites/.*/private/ {
+        location ~ ^<%= @drupal_sub_folder %>/sites/.*/private/ {
                 return 403;
         }
 
@@ -74,7 +74,7 @@ server {
         }
 
         # Caching into the far future with the CDN ...
-        location ^~ /cdn/farfuture/ {
+        location ^~ <%= @drupal_sub_folder %>/cdn/farfuture/ {
             tcp_nodelay off;
             access_log off;
             log_not_found off;
@@ -82,22 +82,22 @@ server {
             if_modified_since exact;
             set $nocache_details "Skip";
 
-            location ~* ^/cdn/farfuture/.+\.(?:css|js|jpe?g|gif|png|ico|bmp|svg|swf|pdf|docx?|xlsx?|pptx?|tiff?|txt|rtf|class|otf|ttf|woff|eot|less)$ {
+            location ~* ^<%= @drupal_sub_folder %>/cdn/farfuture/.+\.(?:css|js|jpe?g|gif|png|ico|bmp|svg|swf|pdf|docx?|xlsx?|pptx?|tiff?|txt|rtf|class|otf|ttf|woff|eot|less)$ {
               expires max;
               add_header Access-Control-Allow-Origin *;
               add_header X-Header "CDN Far Future Generator 1.0";
               add_header Cache-Control "no-transform, public";
               add_header Last-Modified "Wed, 20 Jan 1988 04:20:42 GMT";
-              rewrite ^/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
+              rewrite ^<%= @drupal_sub_folder %>/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
               try_files $uri @nobots;
             }
 
-            location ~* ^/cdn/farfuture/ {
+            location ~* ^<%= @drupal_sub_folder %>/cdn/farfuture/ {
               expires epoch;
               add_header Access-Control-Allow-Origin *;
               add_header X-Header "CDN Far Future Generator 1.1";
               add_header Cache-Control "private, must-revalidate, proxy-revalidate";
-              rewrite ^/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
+              rewrite ^<%= @drupal_sub_folder %>/cdn/farfuture/[^/]+/[^/]+/(.+)$ /$1 break;
               try_files $uri @nobots;
             }
 
@@ -113,11 +113,7 @@ server {
                 # You have 2 options here
                 # For D7 and above:
                 # Clean URLs are handled in drupal_environment_initialize().
-                rewrite ^ /index.php;
-                # For Drupal 6 and below:
-                # Some modules enforce no slash (/) at the end of the URL
-                # Else this rewrite block wouldn't be needed (GlobalRedirect)
-                #rewrite ^/(.*)$ /index.php?q=$1;
+                rewrite ^ <%= @drupal_sub_folder %>/index.php;
         }
 
         location ~ \.php$ {
@@ -136,16 +132,13 @@ server {
                 fastcgi_read_timeout 3600s;
         }
 
-        # Fighting with Styles? This little gem is amazing.
-        # This is for D6
-        #location ~ ^/sites/.*/files/imagecache/ {
-        # This is for D7 and D8
-        location ~ ^/sites/.*/files/styles/ {
+        # Image styles.
+        location ~ ^<%= @drupal_sub_folder %>/sites/.*/files/styles/ {
                 try_files $uri @rewrite;
         }
 
         # All private files need to be handled by Drupal.
-        location ~ ^/system/files/.* {
+        location ~ ^<%= @drupal_sub_folder %>/system/files/.* {
             try_files $uri @rewrite;
         }
 
