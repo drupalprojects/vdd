@@ -13,6 +13,15 @@ if node["vdd"]["sites"]
       site_type = site["type"]
     end
 
+    drupal_sub_folder = ""
+
+    if !site["vhost"]["drupal_sub_folder"].nil? then
+      drupal_sub_folder = site["vhost"]["drupal_sub_folder"]
+      if drupal_sub_folder[0..0] != "/" then
+        drupal_sub_folder = "/" + drupal_sub_folder
+      end
+    end
+
     # Create a settings dir for each site.
     directory "/var/www/settings/#{index}" do
       mode  00777
@@ -24,6 +33,7 @@ if node["vdd"]["sites"]
       source "drupal/settings-#{site_type}.erb"
       variables(
         shortcode: index,
+        drupal_sub_folder: drupal_sub_folder,
         site: site
       )
       mode 0644

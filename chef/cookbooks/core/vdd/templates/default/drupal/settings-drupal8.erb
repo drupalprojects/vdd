@@ -32,6 +32,9 @@ if ($port == '8080') {
   $base_url .= ':8080';
 }
 
+// Add the sub folder path if it is set.
+$base_url .= '<%= @drupal_sub_folder %>';
+
 $cookie_domain = '.<%= @shortcode %>.dev';
 
 // File paths...
