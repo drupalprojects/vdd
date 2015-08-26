@@ -1,9 +1,7 @@
 Vagrant Drupal Development
 --------------------------
 
-This is a fork of VDD.
-
-Vagrant Drupal Development (VDD) is fully configured and ready to use
+This is a fork of Vagrant Drupal Development (VDD) is fully configured and ready to use
 development environment built with VirtualBox, Vagrant, Linux and Chef Solo
 provisioner.
 
@@ -26,9 +24,8 @@ the source code.
   2. Install Vagrant
      http://docs.vagrantup.com/v2/installation/index.html
 
-  3. Prepare VDD source code
-     Download and unpack VDD source code and place it inside your home
-     directory.
+  3. Prepare Teamdeeson's VDD source code
+     Download and unpack VDD source code and place it at
 
   4. Adjust configuration (optional)
      You can edit config.json file to adjust your settings. If you use VDD first
