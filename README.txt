@@ -57,11 +57,10 @@ This fork of VDD includes:
 
 * Ubuntu Trusty 64 bit image
 * Varnish HTTP accelerator (port 80)
-* nginx web server (port 8082)
+* nginx web server (port 8081)
 * SSL terminator using nginx - sites are available on https (port 443)
 * Apache web server for legacy projects (port 8082)
 * Mailcatcher
-* Pimp my logs
 * XDebug
 * Apache Solr automatically configured per environment (port 8984)
 * SSL certificate is created per environment
@@ -73,6 +72,10 @@ This fork of VDD includes:
 * APC
 * dnsmasq for automatic DNS with host machine (all *.dev domains can be made to route to the VM)
 * Support for Drupal7 and symfony PHP projects (use "type": "symfony" in config.json)
+* Pimp my logs available on http://logs.dev (enable syslog module to get watchdog in there)
+* have drupal in a sub folder
+* behat tests framework
+* phantomjs (headless browser)
 
 Basic Usage
 -----------
