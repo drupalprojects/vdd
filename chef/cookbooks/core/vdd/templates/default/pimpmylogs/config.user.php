@@ -67,7 +67,70 @@
 		}
 	},
 
-	"files": {
+  "files": {
+    "drupal_syslog": {
+			"display" : "Drupal Syslog",
+			"path"    : "/var/log/drupal.log",
+			"refresh" : 20,
+			"max"     : 20,
+			"notify"  : false,
+			"format"  : {
+				"regex": "@([^ ]* [^ ]* [^ ]*) ([^ ]*) ([^:]*): ([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)@",
+				"match": {
+          "Date" : 1,
+          "Base url" : 4,
+          "URL" : 4,
+          "type" : 6,
+          "ip" : 7,
+          "Request uri" : 8,
+          "Referer uri" : 9,
+          "uid" : 10,
+          "Message link" : 11,
+          "Message" : 12
+				},
+        "types": {
+          "Date"    : "date:M d H:i:s",
+          "Base url"    : "link",
+          "URL"    : "link",
+          "type"    : "txt",
+          "ip"    : "txt",
+          "Request uri"    : "link",
+          "Referer uri"    : "link",
+          "uid"    : "txt",
+					"Message link" : "link",
+					"Message" : "txt"
+				}
+			}
+    },
+		"php5": {
+			"display" : "PHP error log",
+			"path"    : "\/var\/log\/php5-apache2.log",
+			"refresh" : 5,
+			"max"     : 10,
+			"notify"  : true,
+			"format"  : {
+				"type"         : "PHP",
+				"regex"        : "@^\\[(.*)-(.*)-(.*) (.*):(.*):(.*)( (.*))*\\] ((PHP (.*):  (.*) in (.*) on line (.*))|(.*))$@U",
+				"export_title" : "Error",
+				"match"        : {
+					"Date"     : [ 2 , " " , 1 , " " , 4 , ":" , 5 , ":" , 6 , " " , 3 ],
+					"Severity" : 11,
+					"Error"    : [ 12 , 15 ],
+					"File"     : 13,
+					"Line"     : 14
+				},
+				"types"    : {
+					"Date"     : "date:H:i:s",
+					"Severity" : "badge:severity",
+					"File"     : "pre:\/-69",
+					"Line"     : "numeral",
+					"Error"    : "pre"
+				},
+				"exclude": {
+					"Log": ["\\/PHP Stack trace:\\/", "\\/PHP *[0-9]*\\. \\/"]
+				}
+			}
+		},
 		"apache_access": {
 			"display" : "Apache: Access",
 			"path"    : "\/var\/log\/apache2\/access.log",
@@ -205,35 +268,6 @@
 				}
 			}
     },
-		"php5": {
-			"display" : "PHP error log",
-			"path"    : "\/var\/log\/php5-apache2.log",
-			"refresh" : 5,
-			"max"     : 10,
-			"notify"  : true,
-			"format"  : {
-				"type"         : "PHP",
-				"regex"        : "@^\\[(.*)-(.*)-(.*) (.*):(.*):(.*)( (.*))*\\] ((PHP (.*):  (.*) in (.*) on line (.*))|(.*))$@U",
-				"export_title" : "Error",
-				"match"        : {
-					"Date"     : [ 2 , " " , 1 , " " , 4 , ":" , 5 , ":" , 6 , " " , 3 ],
-					"Severity" : 11,
-					"Error"    : [ 12 , 15 ],
-					"File"     : 13,
-					"Line"     : 14
-				},
-				"types"    : {
-					"Date"     : "date:H:i:s",
-					"Severity" : "badge:severity",
-					"File"     : "pre:\/-69",
-					"Line"     : "numeral",
-					"Error"    : "pre"
-				},
-				"exclude": {
-					"Log": ["\\/PHP Stack trace:\\/", "\\/PHP *[0-9]*\\. \\/"]
-				}
-			}
-		},
 		"php5fpm": {
 			"display" : "PHP FPM messages",
 			"path"    : "\/var\/log\/php5-fpm.log",
@@ -260,40 +294,6 @@
 				},
 				"exclude": {
 					"Log": ["\\/PHP Stack trace:\\/", "\\/PHP *[0-9]*\\. \\/"]
-				}
-			}
-		},
-		"drupal_syslog": {
-			"display" : "Drupal Syslog",
-			"path"    : "/var/log/drupal.log",
-			"refresh" : 20,
-			"max"     : 20,
-			"notify"  : false,
-			"format"  : {
-				"regex": "@([^ ]* [^ ]* [^ ]*) ([^ ]*) ([^:]*): ([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)@",
-				"match": {
-          "Date" : 1,
-          "Base url" : 4,
-          "URL" : 4,
-          "type" : 6,
-          "ip" : 7,
-          "Request uri" : 8,
-          "Referer uri" : 9,
-          "uid" : 10,
-          "Message link" : 11,
-          "Message" : 12
-				},
-        "types": {
-          "Date"    : "date:M d H:i:s",
-          "Base url"    : "link",
-          "URL"    : "link",
-          "type"    : "txt",
-          "ip"    : "txt",
-          "Request uri"    : "link",
-          "Referer uri"    : "link",
-          "uid"    : "txt",
-					"Message link" : "link",
-					"Message" : "txt"
 				}
 			}
 		},
