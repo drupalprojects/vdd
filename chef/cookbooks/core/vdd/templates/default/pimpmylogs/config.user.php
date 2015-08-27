@@ -204,10 +204,10 @@
 					"CMD": ["\/OPTIONS\/"]
 				}
 			}
-		},
-		"php5fpm": {
-			"display" : "PHP5 FPM Errors",
-			"path"    : "\/var\/log\/php5-fpm.log",
+    },
+		"php5": {
+			"display" : "PHP error log",
+			"path"    : "\/var\/log\/php5-apache2.log",
 			"refresh" : 5,
 			"max"     : 10,
 			"notify"  : true,
@@ -234,9 +234,9 @@
 				}
 			}
 		},
-		"php5apache2": {
-			"display" : "PHP5 Apache2 Errors",
-			"path"    : "\/var\/log\/php5-apache2.log",
+		"php5fpm": {
+			"display" : "PHP FPM messages",
+			"path"    : "\/var\/log\/php5-fpm.log",
 			"refresh" : 5,
 			"max"     : 10,
 			"notify"  : true,
