@@ -6,6 +6,8 @@ import directors;
 backend server1 { # Define one backend
   .host = "127.0.0.1"; # IP or Hostname of backend
   .port = "8081"; # Port Apache or whatever is listening
+  .first_byte_timeout = 600s;
+  .between_bytes_timeout = 600s;
 }
 
 acl purge {
