@@ -55,6 +55,9 @@
     "varnish": {
       "version": "4.0"
     },
+    "nginx": {
+      "client_max_body_size": "100m"
+    },
     "mongodb": {
       "config": {
         "dbpath": "/mnt/persistant/mongodb"
