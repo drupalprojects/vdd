@@ -8,8 +8,7 @@ node["vm"]["synced_folders"].each do |folder|
   end
 end
 
-
-template "/var/www/index.html" do
+template File.join(node['apache']['docroot_dir'], 'index.html') do
   source "vdd_help.html.erb"
   if nfs == 0
     owner "vagrant"
@@ -21,9 +20,11 @@ template "/var/www/index.html" do
   )
 end
 
+phpinfo_loc = File.join(node['apache']['docroot_dir'], 'phpinfo.php')
+
 bash "phpinfo" do
   code <<-EOH
-  echo "<?php phpinfo();" > /var/www/phpinfo.php
+  echo "<?php phpinfo();" > #{phpinfo_loc}
   EOH
-  not_if { File.exists?("/var/www/phpinfo.php") }
+  not_if { File.exists?(phpinfo_loc) }
 end

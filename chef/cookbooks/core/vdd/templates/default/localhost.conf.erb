@@ -1,11 +1,15 @@
 <VirtualHost *:80>
-  DocumentRoot /var/www
+  DocumentRoot /var/www/html
   ServerName localhost
   RewriteEngine On
   ErrorLog /var/log/apache2/error.log
   LogLevel warn
   CustomLog /var/log/apache2/access.log combined
   ServerSignature On
+  <Directory /var/www/html>
+    AllowOverride All
+    Require all granted
+  </Directory>
 </VirtualHost>
 
 <% @node["vdd"]["sites"].each do |index, site| %>
@@ -20,6 +24,10 @@
       LogLevel warn
       CustomLog /var/log/apache2/<%= index %>.access.log combined
       ServerSignature On
+      <Directory /var/www/<%= defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index %>>
+        AllowOverride All
+        Require all granted
+      </Directory>
     </VirtualHost>
-  <% end %>
-<%- end -%>
+  <%- end -%>
+<% end %>

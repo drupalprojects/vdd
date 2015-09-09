@@ -1,12 +1,8 @@
-apt_repository "php54" do
-  uri "http://ppa.launchpad.net/ondrej/php5-oldstable/ubuntu"
-  distribution node['lsb']['codename']
-  components ["main"]
-  keyserver "keyserver.ubuntu.com"
-  key "E5267A6C"
-end
-
+# @todo Hack until https://github.com/opscode-cookbooks/php/pull/111 is
+#   included.
+node.override['php']['ext_conf_dir'] = "/etc/php5/mods-available"
 include_recipe 'php'
+
 include_recipe "apache2::mod_php5"
 
 pkgs = [

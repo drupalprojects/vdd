@@ -1,5 +1,5 @@
 DEPENDENCIES
-  apache2 (= 1.10.4)
+  apache2 (= 3.0.1)
   apt (= 2.4.0)
   aws (= 2.2.0)
   build-essential (= 2.0.2)
@@ -12,7 +12,7 @@ DEPENDENCIES
   mysql-chef_gem (= 0.0.2)
   openssl (= 1.1.0)
   pacman (= 1.1.1)
-  php (= 1.4.6)
+  php (= 1.5.0)
   postgresql (= 3.4.0)
   windows (= 1.31.0)
   xfs (= 1.1.0)
@@ -21,10 +21,9 @@ DEPENDENCIES
   yum-epel (= 0.3.6)
 
 GRAPH
-  apache2 (1.10.4)
+  apache2 (3.0.1)
     iptables (>= 0.0.0)
     logrotate (>= 0.0.0)
-    pacman (>= 0.0.0)
   apt (2.4.0)
   aws (2.2.0)
   build-essential (2.0.2)
@@ -45,7 +44,7 @@ GRAPH
     mysql (>= 0.0.0)
   openssl (1.1.0)
   pacman (1.1.1)
-  php (1.4.6)
+  php (1.5.0)
     build-essential (>= 0.0.0)
     iis (>= 0.0.0)
     mysql (>= 0.0.0)

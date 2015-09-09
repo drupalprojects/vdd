@@ -53,7 +53,7 @@ when 'debian', 'ubuntu'
   default['apache']['user']        = 'www-data'
   default['apache']['group']       = 'www-data'
   default['apache']['binary']      = '/usr/sbin/apache2'
-  default['apache']['docroot_dir'] = '/var/www'
+  default['apache']['docroot_dir'] = '/var/www/html'
   default['apache']['cgibin_dir']  = '/usr/lib/cgi-bin'
   default['apache']['icondir']     = '/usr/share/apache2/icons'
   default['apache']['cache_dir']   = '/var/cache/apache2'
@@ -110,7 +110,7 @@ else
   default['apache']['user']        = 'www-data'
   default['apache']['group']       = 'www-data'
   default['apache']['binary']      = '/usr/sbin/apache2'
-  default['apache']['docroot_dir'] = '/var/www'
+  default['apache']['docroot_dir'] = '/var/www/html'
   default['apache']['cgibin_dir']  = '/usr/lib/cgi-bin'
   default['apache']['icondir']     = '/usr/share/apache2/icons'
   default['apache']['cache_dir']   = '/var/cache/apache2'
@@ -177,7 +177,7 @@ default['apache']['proxy']['allow_from'] = 'none'
 # Default modules to enable via include_recipe
 
 default['apache']['default_modules'] = %w[
-  status alias auth_basic authn_file authz_default authz_groupfile authz_host authz_user autoindex
+  status alias auth_basic authn_file authz_groupfile authz_host authz_user autoindex
   dir env mime negotiation setenvif
 ]
 

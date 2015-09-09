@@ -1,15 +1,13 @@
 Vagrant.configure("2") do |config|
-
   # Load config JSON.
   config_json = JSON.parse(File.read("config.json"))
 
   # Prepare base box.
-  config.vm.box = "precise32"
-  config.vm.box_url = "http://files.vagrantup.com/precise32.box"
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
 
   # Configure networking.
   config.vm.network :private_network, ip: config_json["vm"]["ip"]
-
   # Configure forwarded ports.
   config.vm.network "forwarded_port", guest: 35729, host: 35729, protocol: "tcp", auto_correct: true
   config.vm.network "forwarded_port", guest: 8983, host: 8983, protocol: "tcp", auto_correct: true
@@ -18,7 +16,6 @@ Vagrant.configure("2") do |config|
     config.vm.network "forwarded_port", guest: port["guest_port"],
       host: port["host_port"], protocol: port["protocol"], auto_correct: true
   end
-
   # Customize provider.
   config.vm.provider :virtualbox do |vb|
     # RAM.
@@ -56,7 +53,10 @@ Vagrant.configure("2") do |config|
 
   # Run initial shell script.
   config.vm.provision :shell, :path => "chef/shell/initial.sh"
+  config.ssh.forward_agent = true
+  config.vm.boot_timeout = 120
 
+  config.vm.box_download_insecure
   # Customize provisioner.
   config.vm.provision :chef_solo do |chef|
     chef.json = config_json
@@ -65,7 +65,6 @@ Vagrant.configure("2") do |config|
     chef.roles_path = "chef/roles"
     chef.add_role "vdd"
   end
-
   # Run final shell script.
   config.vm.provision :shell, :path => "chef/shell/final.sh", :args => config_json["vm"]["ip"]
 

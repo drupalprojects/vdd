@@ -1,4 +1,4 @@
-git "/var/www/webgrind" do
+git "/var/www/html/webgrind" do
   repository "https://github.com/jokkedk/webgrind.git"
   reference "master"
   action :sync
