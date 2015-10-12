@@ -67,3 +67,6 @@ if (file_exists('sites/all/modules/contrib/memcache')) {
 // Syslog settings.
 $conf['syslog_identity'] = 'drupal_<%= @shortcode %>_dev';
 $conf['syslog_facility'] = '184';
+
+// Set to show all errors by default - we dont want developers to ignore them!
+$conf['error_level'] = '2';
