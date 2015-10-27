@@ -5,7 +5,7 @@ directory "/opt/apache-tika" do
 end
 
 remote_file '/opt/apache-tika/tika.jar' do
-  source 'http://mirror.arcor-online.net/www.apache.org/tika/tika-app-1.10.jar'
+  source 'http://www.mirrorservice.org/sites/ftp.apache.org/tika/tika-1.11-src.zip'
   owner 'root'
   group 'root'
   mode '0644'
