@@ -33,6 +33,7 @@ modules = [
   "mongo",
   "memcache",
   "sqlite3",
+  "mcrypt",
   "imagick"
 ]
 

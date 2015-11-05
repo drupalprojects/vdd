@@ -27,11 +27,6 @@ if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
 $base_protocol = $https ? 'https' : 'http';
 $base_url = $base_protocol . '://<%= @shortcode %>.dev';
 
-$port = $_SERVER['SERVER_PORT'];
-if ($port == '8080') {
-  $base_url .= ':8080';
-}
-
 // Add the sub folder path if it is set.
 $base_url .= '<%= @drupal_sub_folder %>';
 
@@ -67,3 +62,7 @@ if (file_exists('sites/all/modules/contrib/memcache')) {
 // Syslog settings.
 $conf['syslog_identity'] = 'drupal_<%= @shortcode %>_dev';
 $conf['syslog_facility'] = '184';
+
+// Set to show all errors by default - we dont want developers to ignore them!
+error_reporting(E_ALL);
+$conf['error_level'] = '2';
