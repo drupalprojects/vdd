@@ -46,3 +46,7 @@ modules.each do |mod|
     only_if { File.exists?("/etc/php5/mods-available/#{mod}.ini") }
   end
 end
+
+file '/etc/php5/mods-available/vdd_xdebug.ini' do
+  action :delete
+end
