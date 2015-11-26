@@ -5,16 +5,15 @@
  * Drupal 8 settings for <%= @shortcode %>.dev
  */
 
-$databases = array(
-    'default' => array (
-      'default' => array (
-        'driver' => 'mysql',
-        'username' => 'root',
-        'password' => '<%= node["mysql"]["server_root_password"] %>',
-        'database' => '<%= @shortcode %>',
-        'host' => '127.0.0.1',
-      ),
-    ),
+$databases['default']['default'] = array(
+  'database' => '<%= @shortcode %>',
+  'username' => 'root',
+  'password' => '<%= node["mysql"]["server_root_password"] %>',
+  'prefix' => '',
+  'host' => '127.0.0.1',
+  'port' => '3306',
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'driver' => 'mysql',
 );
 
 $https = TRUE;

@@ -41,7 +41,7 @@
     "drush": {
       "version" : "6.6.0",
       "version7": "7.0.0",
-      "version8": "8.0.0-beta14"
+      "version8": "8.0.0-rc4"
     },
     "pimpmylogs": {
       "version" : "v1.7.9"
