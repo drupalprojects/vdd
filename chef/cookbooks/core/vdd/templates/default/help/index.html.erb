@@ -33,6 +33,7 @@
       <li><a href="/phpinfo.php">phpinfo()</a></li>
       <li><a href="http://logs.dev">Real time logs</a></li>
       <li><a href="/webgrind">Webgrind</a></li>
+      <li><a href="http://xhprof.dev">XHProf</a></li>
     </ul>
 
         <h2 id="ports">Ports and sockets</h2>
@@ -156,5 +157,11 @@
      <li>Type your password into the popup and click Update settings</li>
      </ol>
 
+          <h4 id="q7">How to use XHProf</h4>
+          <p>XHProf is a profilling tool which can help you find out what is causing a slow page load</p>
+          <p>To use, enable the devel module, go to the settings page for the devel module and tick the option <b>Enable profiling of all page views and drush requests.</b></p>
+          <p>Open a slow loading page, once its finished loading you will see a link at the very bottom for <b>XHProf output</b></p>
+          <p>Click this to see the XHProf report for that page</p>
+          <p>The View Callgraph button will show you a visual representation of the page load. Any red boxes are function calls which PHP speant a lot of time in</p>
   </body>
 </html>
