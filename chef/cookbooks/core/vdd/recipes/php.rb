@@ -10,7 +10,8 @@ pkgs = [
   "php5-imagick",
   "phpunit",
   "php5-xdebug",
-  "php5-memcache"
+  "php5-memcache",
+  "php5-xhprof"
 ]
 
 pkgs.each do |pkg|
@@ -34,7 +35,8 @@ modules = [
   "memcache",
   "sqlite3",
   "mcrypt",
-  "imagick"
+  "imagick",
+  "xhprof"
 ]
 
 modules.each do |mod|
