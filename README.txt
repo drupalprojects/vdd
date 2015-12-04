@@ -76,6 +76,7 @@ This fork of VDD includes:
 * have drupal in a sub folder
 * behat tests framework
 * phantomjs (headless browser)
+* XHProf (with automatic settings for the devel module)
 
 Basic Usage
 -----------
