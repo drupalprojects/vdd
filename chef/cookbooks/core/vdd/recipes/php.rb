@@ -21,7 +21,14 @@ pkgs.each do |pkg|
 end
 
 template "/etc/php5/mods-available/vdd_php.ini" do
-  source "vdd_php.ini.erb"
+  source "php/vdd_php.ini.erb"
+  mode "0644"
+  notifies :restart, "service[apache2]", :delayed
+  notifies :restart, "service[php5-fpm]", :delayed
+end
+
+template "/etc/php5/mods-available/xdebug.ini" do
+  source "php/xdebug.ini.erb"
   mode "0644"
   notifies :restart, "service[apache2]", :delayed
   notifies :restart, "service[php5-fpm]", :delayed
@@ -36,7 +43,8 @@ modules = [
   "sqlite3",
   "mcrypt",
   "imagick",
-  "xhprof"
+  "xhprof",
+  "xdebug"
 ]
 
 modules.each do |mod|
@@ -50,5 +58,9 @@ modules.each do |mod|
 end
 
 file '/etc/php5/mods-available/vdd_xdebug.ini' do
+  action :delete
+end
+
+file '/etc/php5/apache2/conf.d/vdd_apc.ini' do
   action :delete
 end
