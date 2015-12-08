@@ -31,3 +31,9 @@ end
 web_app "xhprof" do
   template "xhprof/apache2.conf.erb"
 end
+
+template "/etc/php5/mods-available/xhprof.ini" do
+  source "xhprof/xhprof.ini.erb"
+    notifies :restart, "service[apache2]", :delayed
+    notifies :restart, "service[php5-fpm]", :delayed
+end
