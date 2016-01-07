@@ -151,4 +151,8 @@ server {
         location ~* \.(ttf|ttc|otf|eot|woff|font.css|css)$ {
                 add_header Access-Control-Allow-Origin *;
         }
+
+        location ~* \.map$ {
+                expires 0;
+        }
 }
