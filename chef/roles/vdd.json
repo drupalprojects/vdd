@@ -56,7 +56,8 @@
       "version": "4.0"
     },
     "nginx": {
-      "client_max_body_size": "100m"
+      "client_max_body_size": "100m",
+      "error_log_options" : "info"
     },
     "mongodb": {
       "config": {
