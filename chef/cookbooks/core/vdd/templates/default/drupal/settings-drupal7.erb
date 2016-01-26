@@ -74,3 +74,13 @@ $conf['devel_xhprof_url'] = 'http://xhprof.dev';
 // Purge and expire settings.
 $conf['expire_include_base_url'] = '1';
 $conf['purge_proxy_urls'] = 'http://localhost:80';
+
+// Locally hosted warden settings.
+$conf['warden_server_host_path'] = 'https://warden.dev';
+$conf['warden_allow_requests'] = TRUE;
+$conf['warden_public_allow_ips'] = '127.0.0.1,192.168.44.1,192.168.44.44';
+$conf['warden_context_options'] = array(
+  'ssl' => array(
+    'verify_peer' => FALSE,
+  ),
+);
