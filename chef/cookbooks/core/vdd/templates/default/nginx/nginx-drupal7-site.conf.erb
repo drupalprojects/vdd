@@ -132,12 +132,12 @@ server {
                 fastcgi_read_timeout 3600s;
         }
 
-        # Image styles.
+        # Public files.
         location ~ ^<%= @drupal_sub_folder %>/sites/.*/files/styles/ {
                 try_files $uri @rewrite;
          }
 
-        # Image styles with language prefix.
+        # Public files with language prefix.
         location ~ ^<%= @drupal_sub_folder %>/[^/]*/sites/.*/files/styles/ {
                 try_files $uri @rewrite;
         }
