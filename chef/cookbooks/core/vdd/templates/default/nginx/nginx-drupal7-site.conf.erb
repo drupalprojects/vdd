@@ -135,6 +135,11 @@ server {
         # Image styles.
         location ~ ^<%= @drupal_sub_folder %>/sites/.*/files/styles/ {
                 try_files $uri @rewrite;
+         }
+
+        # Image styles with language prefix.
+        location ~ ^<%= @drupal_sub_folder %>/[^/]*/sites/.*/files/styles/ {
+                try_files $uri @rewrite;
         }
 
         # All private files need to be handled by Drupal.
