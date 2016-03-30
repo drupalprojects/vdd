@@ -6,11 +6,11 @@ VAGRANT_DIR="/vagrant"
 cat "$VAGRANT_DIR/chef/shell/vdd.txt"
 
 # Upgrade Chef.
-echo "Updating Chef to 11.12.4 version. This may take a few minutes..."
 apt-get update &> /dev/null
 echo "sources updated"
 echo "installing ruby and chef"
-apt-get install build-essential ruby1.9.1-dev --no-upgrade --yes
+apt-get install build-essential ruby2.0 ruby2.0-dev chef --yes
+ln -sf /usr/bin/ruby2.0 /usr/bin/ruby
+ln -sf /usr/bin/gem2.0 /usr/bin/gem
 update-ca-certificates
-gem install chef --version="11.12.4" --no-rdoc --no-ri --conservative
 echo "installed ruby and chef"
