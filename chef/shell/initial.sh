@@ -13,5 +13,5 @@ echo "sources updated"
 echo "installing ruby and chef"
 apt-get install build-essential ruby2.2 ruby2.2-dev --no-upgrade --yes
 update-ca-certificates
-gem install chef --version="11.12.4" --no-rdoc --no-ri --conservative
+curl -L https://www.opscode.com/chef/install.sh | sudo bash -s -- -v 12.18.31
 echo "installed ruby and chef"
