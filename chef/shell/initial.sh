@@ -6,7 +6,7 @@ VAGRANT_DIR="/vagrant"
 cat "$VAGRANT_DIR/chef/shell/vdd.txt"
 
 # Upgrade Chef.
-echo "Updating Chef to 11.12.4 version. This may take a few minutes..."
+echo "Updating Chef to 12.18.31 version. This may take a few minutes..."
 apt-add-repository -y ppa:brightbox/ruby-ng
 apt-get update &> /dev/null
 echo "sources updated"
