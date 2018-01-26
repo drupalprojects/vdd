@@ -188,16 +188,17 @@ module MysqlCookbook
     def init_records_script
       # Note: shell-escaping passwords in a SQL file may cause corruption - eg
       # mysql will read \& as &, but \% as \%. Just escape bare-minimum \ and '
-      #sql_escaped_password = root_password.gsub('\\') { '\\\\' }.gsub("'") { '\\\'' }
-      #Chef::Log.info("passxyz" + sql_escaped_password)
+      sql_escaped_password = root_password.gsub('\\') { '\\\\' }.gsub("'") { '\\\'' }
+
       <<-EOS
         set -e
         rm -rf /tmp/#{mysql_name}
         mkdir /tmp/#{mysql_name}
 
         cat > /tmp/#{mysql_name}/my.sql <<-'EOSQL'
-UPDATE mysql.user SET #{password_column_name}=PASSWORD('#{root_password}')#{password_expired} WHERE user = 'root';
+UPDATE mysql.user SET #{password_column_name}=PASSWORD('#{sql_escaped_password}')#{password_expired} WHERE user = 'root';
 DELETE FROM mysql.user WHERE USER LIKE '';
+DELETE FROM mysql.user WHERE user = 'root' and host NOT IN ('127.0.0.1', 'localhost');
 FLUSH PRIVILEGES;
 DELETE FROM mysql.db WHERE db LIKE 'test%';
 DROP DATABASE IF EXISTS test ;
@@ -209,7 +210,7 @@ EOSQL
        while [ ! -f #{pid_file} ] ; do sleep 1 ; done
        kill `cat #{pid_file}`
        while [ -f #{pid_file} ] ; do sleep 1 ; done
-       echo "ali we are here "
+       rm -rf /tmp/#{mysql_name}
        EOS
     end
 
