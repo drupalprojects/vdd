@@ -122,3 +122,10 @@ Remote cookbook using berkshelf
 If you find a problem, incorrect comment, obsolete or improper code or such,
 please let us know by creating a new issue at
 http://drupal.org/project/issues/vdd
+
+
+@TODO
+------
+- Remdiate patch applied for mysql cookbook: https://github.com/chef-cookbooks/mysql/pull/541/files
+- Remdiate patch applied for mysql cookbook: https://github.com/chef-cookbooks/mysql/pull/538
+

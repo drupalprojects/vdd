@@ -1,7 +1,7 @@
 mysql2_chef_gem 'default' do
-  gem_version '0.4.5'
   action :install
 end
+
 
 # Determine if the directory is NFS.
 nfs = 0
@@ -41,9 +41,8 @@ if node["vdd"]["sites"]
     end
 
     mysql_connection_info = {
-      :host => "localhost",
+      :host => "127.0.0.1",
       :username => "root",
-      :socket   => "/var/run/mysqld/mysqld.sock",
       :password => "root"
     }
     mysql_database index do
