@@ -1,6 +1,6 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Copyright:: 2011-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,8 +31,10 @@ class Chef
         @host = 'localhost'
         @privileges = [:all]
         @grant_option = false
+        @require_ssl = false
+        @require_x509 = false
 
-        @allowed_actions.push(:create, :drop, :grant)
+        @allowed_actions.push(:create, :drop, :grant, :revoke)
         @action = :create
       end
 
@@ -40,7 +42,7 @@ class Chef
         set_or_return(
           :database_name,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -48,7 +50,23 @@ class Chef
         set_or_return(
           :username,
           arg,
-          :kind_of => String
+          kind_of: String
+        )
+      end
+
+      def require_ssl(arg = nil)
+        set_or_return(
+          :require_ssl,
+          arg,
+          kind_of: [TrueClass, FalseClass]
+        )
+      end
+
+      def require_x509(arg = nil)
+        set_or_return(
+          :require_x509,
+          arg,
+          kind_of: [TrueClass, FalseClass]
         )
       end
 
@@ -56,7 +74,7 @@ class Chef
         set_or_return(
           :password,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -64,7 +82,7 @@ class Chef
         set_or_return(
           :table,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -72,7 +90,7 @@ class Chef
         set_or_return(
           :host,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -80,7 +98,7 @@ class Chef
         set_or_return(
           :privileges,
           arg,
-          :kind_of => Array
+          kind_of: Array
         )
       end
 
@@ -88,7 +106,7 @@ class Chef
         set_or_return(
           :grant_option,
           arg,
-          :kind_of => [TrueClass, FalseClass], :default => false
+          kind_of: [TrueClass, FalseClass], default: false
         )
       end
     end

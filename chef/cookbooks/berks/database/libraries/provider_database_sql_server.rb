@@ -1,6 +1,6 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Copyright:: 2011-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,12 @@ class Chef
 
         def load_current_resource
           Gem.clear_paths
-          require 'tiny_tds'
+          begin
+            require 'tiny_tds'
+          rescue LoadError
+            Chef::Log.fatal('Could not load the required tiny_tds gem. Make sure to install this in your wrapper cookbook')
+            raise
+          end
           @current_resource = Chef::Resource::Database.new(@new_resource.name)
           @current_resource.database_name(@new_resource.database_name)
           @current_resource
@@ -61,8 +66,8 @@ class Chef
         def action_query
           if exists?
             begin
-              # db.select_db(@new_resource.database_name) if @new_resource.database_name
               Chef::Log.debug("#{@new_resource}: Performing query [#{new_resource.sql_query}]")
+              db.execute("USE [#{@new_resource.database_name}]").do if @new_resource.database_name
               db.execute(@new_resource.sql_query).do
               @new_resource.updated_by_last_action(true)
             ensure
@@ -72,6 +77,7 @@ class Chef
         end
 
         private
+
         def exists?
           exists = false
           begin
@@ -91,17 +97,29 @@ class Chef
 
         def db
           @db ||= begin
-            ::TinyTds::Client.new(
-              :host => @new_resource.connection[:host],
-              :username => @new_resource.connection[:username],
-              :password => @new_resource.connection[:password],
-              :port => @new_resource.connection[:port] || 1433
+            connection = ::TinyTds::Client.new(
+              host: @new_resource.connection[:host],
+              username: @new_resource.connection[:username],
+              password: @new_resource.connection[:password],
+              port: @new_resource.connection[:port] || 1433,
+              timeout: @new_resource.connection[:timeout] || 120,
+              options: @new_resource.connection[:options] || {}
             )
+            if new_resource.connection.include?(:options)
+              @new_resource.connection[:options].each do |key, value|
+                connection.execute("SET #{key} #{value}").do
+              end
+            end
+            connection
           end
         end
 
         def close
-          @db.close rescue nil
+          begin
+            @db.close
+          rescue
+            nil
+          end
           @db = nil
         end
       end

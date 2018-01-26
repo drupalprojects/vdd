@@ -1,6 +1,7 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Author:: Sean OMeara (<sean@sean.io>)
+# Copyright:: 2011-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,88 +17,148 @@
 # limitations under the License.
 #
 
-require 'chef/provider'
-
 class Chef
   class Provider
     class Database
-      class Mysql < Chef::Provider
-        include Chef::Mixin::ShellOut
+      class Mysql < Chef::Provider::LWRPBase
+        use_inline_resources
 
-        def load_current_resource
-          Gem.clear_paths
-          require 'mysql'
-          @current_resource = Chef::Resource::Database.new(@new_resource.name)
-          @current_resource.database_name(@new_resource.database_name)
-          @current_resource
+        def whyrun_supported?
+          true
         end
 
-        def action_create
-          unless exists?
-            begin
-              Chef::Log.debug("#{@new_resource}: Creating database `#{new_resource.database_name}`")
-              create_sql = "CREATE DATABASE `#{new_resource.database_name}`"
-              create_sql += " CHARACTER SET = #{new_resource.encoding}" if new_resource.encoding
-              create_sql += " COLLATE = #{new_resource.collation}" if new_resource.collation
-              Chef::Log.debug("#{@new_resource}: Performing query [#{create_sql}]")
-              db.query(create_sql)
-              @new_resource.updated_by_last_action(true)
-            ensure
-              close
+        action :create do
+          # test
+          schema_present = nil
+
+          begin
+            test_sql = 'SHOW SCHEMAS;'
+            Chef::Log.debug("#{new_resource.name}: Performing query [#{test_sql}]")
+            test_sql_results = test_client.query(test_sql)
+            test_sql_results.each do |r|
+              schema_present = true if r['Database'] == new_resource.database_name
+            end
+          ensure
+            close_test_client
+          end
+
+          # repair
+          unless schema_present
+            converge_by "Creating schema '#{new_resource.database_name}'" do
+              begin
+                repair_sql = "CREATE SCHEMA IF NOT EXISTS `#{new_resource.database_name}`"
+                repair_sql += " CHARACTER SET = #{new_resource.encoding}" if new_resource.encoding
+                repair_sql += " COLLATE = #{new_resource.collation}" if new_resource.collation
+                Chef::Log.debug("#{new_resource.name}: Performing query [#{repair_sql}]")
+                repair_client.query(repair_sql)
+              ensure
+                close_repair_client
+              end
             end
           end
         end
 
-        def action_drop
-          if exists?
-            begin
-              Chef::Log.debug("#{@new_resource}: Dropping database #{new_resource.database_name}")
-              db.query("DROP DATABASE `#{new_resource.database_name}`")
-              @new_resource.updated_by_last_action(true)
-            ensure
-              close
+        action :drop do
+          # test
+          schema_present = nil
+
+          begin
+            test_sql = 'SHOW SCHEMAS;'
+            Chef::Log.debug("Performing query [#{test_sql}]")
+            test_sql_results = test_client.query(test_sql)
+            test_sql_results.each do |r|
+              schema_present = true if r['Database'] == new_resource.database_name
+            end
+          ensure
+            close_test_client
+          end
+
+          # repair
+          if schema_present
+            converge_by "Dropping schema '#{new_resource.database_name}'" do
+              begin
+                repair_sql = "DROP SCHEMA IF EXISTS `#{new_resource.database_name}`"
+                Chef::Log.debug("Performing query [#{repair_sql}]")
+                repair_client.query(repair_sql)
+              ensure
+                close_repair_client
+              end
             end
           end
         end
 
-        def action_query
-          if exists?
-            begin
-              db.select_db(@new_resource.database_name) if @new_resource.database_name
-              Chef::Log.debug("#{@new_resource}: Performing query [#{new_resource.sql_query}]")
-              db.query(@new_resource.sql_query)
-              db.next_result while db.next_result
-              @new_resource.updated_by_last_action(true)
-            ensure
-              close
-            end
+        action :query do
+          begin
+            query_sql = new_resource.sql_query
+            Chef::Log.debug("Performing query [#{query_sql}]")
+            query_client.query(query_sql)
+          ensure
+            close_query_client
           end
         end
 
         private
-        
-        def exists?
-          db.list_dbs.include?(@new_resource.database_name)
-        end
 
-        def db
-          @db ||= begin
-            connection = ::Mysql.new(
-              @new_resource.connection[:host],
-              @new_resource.connection[:username],
-              @new_resource.connection[:password],
-              nil,
-              @new_resource.connection[:port] || 3306,
-              @new_resource.connection[:socket] || nil
+        def test_client
+          require 'mysql2'
+          @test_client ||=
+            Mysql2::Client.new(
+              host: new_resource.connection[:host],
+              socket: new_resource.connection[:socket],
+              username: new_resource.connection[:username],
+              password: new_resource.connection[:password],
+              port: new_resource.connection[:port],
+              default_file: new_resource.connection[:default_file],
+              default_group: new_resource.connection[:default_group]
             )
-            connection.set_server_option ::Mysql::OPTION_MULTI_STATEMENTS_ON
-            connection
-          end
         end
 
-        def close
-          @db.close rescue nil
-          @db = nil
+        def close_test_client
+          @test_client.close if @test_client
+        rescue Mysql2::Error
+          @test_client = nil
+        end
+
+        def repair_client
+          require 'mysql2'
+          @repair_client ||=
+            Mysql2::Client.new(
+              host: new_resource.connection[:host],
+              socket: new_resource.connection[:socket],
+              username: new_resource.connection[:username],
+              password: new_resource.connection[:password],
+              port: new_resource.connection[:port],
+              default_file: new_resource.connection[:default_file],
+              default_group: new_resource.connection[:default_group]
+            )
+        end
+
+        def close_repair_client
+          @repair_client.close if @repair_client
+        rescue Mysql2::Error
+          @repair_client = nil
+        end
+
+        def query_client
+          require 'mysql2'
+          @query_client ||=
+            Mysql2::Client.new(
+              host: new_resource.connection[:host],
+              socket: new_resource.connection[:socket],
+              username: new_resource.connection[:username],
+              password: new_resource.connection[:password],
+              port: new_resource.connection[:port],
+              default_file: new_resource.connection[:default_file],
+              default_group: new_resource.connection[:default_group],
+              flags: new_resource.connection[:flags],
+              database: new_resource.database_name
+            )
+        end
+
+        def close_query_client
+          @query_client.close if @query_client
+        rescue Mysql2::Error
+          @query_client = nil
         end
       end
     end

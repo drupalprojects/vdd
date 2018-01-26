@@ -1,8 +1,8 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Author:: Lamont Granquist (<lamont@opscode.com>)
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Author:: Lamont Granquist (<lamont@chef.io>)
 # Author:: Marco Betti (<m.betti@gmail.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Copyright:: 2011-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,12 @@ class Chef
 
         def load_current_resource
           Gem.clear_paths
-          require 'pg'
+          begin
+            require 'pg'
+          rescue LoadError
+            Chef::Log.fatal('Could not load the required pg gem. Make sure to include the database::postgresql or postgresql::ruby recipes in your runlist')
+            raise
+          end
           @current_resource = Chef::Resource::DatabaseUser.new(@new_resource.name)
           @current_resource.username(@new_resource.name)
           @current_resource
@@ -37,8 +42,26 @@ class Chef
         def action_create
           unless exists?
             begin
+              options = ''
+              options += " PASSWORD '#{@new_resource.password}'" if @new_resource.password
+
+              # Options from Postgresql specific resource
+              options += " #{@new_resource.createdb ? 'CREATEDB' : 'NOCREATEDB'}" if @new_resource.respond_to?(:createdb)
+              options += " #{@new_resource.createrole ? 'CREATEROLE' : 'NOCREATEROLE'}" if @new_resource.respond_to?(:createrole)
+              options += " #{@new_resource.login ? 'LOGIN' : 'NOLOGIN'}" if @new_resource.respond_to?(:login)
+              options += " #{@new_resource.replication ? 'REPLICATION' : 'NOREPLICATION'}" if @new_resource.respond_to?(:replication) && version_greater_than?(90_100)
+              options += " #{@new_resource.superuser ? 'SUPERUSER' : 'NOSUPERUSER'}" if @new_resource.respond_to?(:superuser)
+
+              # Options from a non Postgresql specific resource
+              options += " #{Chef::Resource::PostgresqlDatabaseUser::CREATE_DB_DEFAULT ? 'CREATEDB' : 'NOCREATEDB'}" unless @new_resource.respond_to?(:createdb)
+              options += " #{Chef::Resource::PostgresqlDatabaseUser::CREATE_ROLE_DEFAULT ? 'CREATEROLE' : 'NOCREATEROLE'}" unless @new_resource.respond_to?(:createrole)
+              options += " #{Chef::Resource::PostgresqlDatabaseUser::LOGIN_DEFAULT ? 'LOGIN' : 'NOLOGIN'}" unless @new_resource.respond_to?(:login)
+              options += " #{Chef::Resource::PostgresqlDatabaseUser::REPLICATION_DEFAULT ? 'REPLICATION' : 'NOREPLICATION'}" unless @new_resource.respond_to?(:replication) || !version_greater_than?(90_100)
+              options += " #{Chef::Resource::PostgresqlDatabaseUser::SUPERUSER_DEFAULT ? 'SUPERUSER' : 'NOSUPERUSER'}" unless @new_resource.respond_to?(:superuser)
+
               statement = "CREATE USER \"#{@new_resource.username}\""
-              statement += " WITH PASSWORD '#{@new_resource.password}'" if @new_resource.password
+              statement += " WITH #{options}" unless options.empty?
+
               db('template1').query(statement)
               @new_resource.updated_by_last_action(true)
             ensure
@@ -59,29 +82,70 @@ class Chef
         end
 
         def action_grant
-          begin
-            # FIXME: grants on individual tables
-            grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON DATABASE \"#{@new_resource.database_name}\" TO \"#{@new_resource.username}\""
-            Chef::Log.info("#{@new_resource}: granting access with statement [#{grant_statement}]")
-            db(@new_resource.database_name).query(grant_statement)
-            @new_resource.updated_by_last_action(true)
-          ensure
-            close
-          end
+          grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON DATABASE \"#{@new_resource.database_name}\" TO \"#{@new_resource.username}\""
+          Chef::Log.info("#{@new_resource}: granting access with statement [#{grant_statement}]")
+          db(@new_resource.database_name).query(grant_statement)
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
         end
 
         def action_grant_schema
-          begin
-            grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON SCHEMA \"#{@new_resource.schema_name}\" TO \"#{@new_resource.username}\""
-            Chef::Log.info("#{@new_resource}: granting access with statement [#{grant_statement}]")
-            db(@new_resource.database_name).query(grant_statement)
-            @new_resource.updated_by_last_action(true)
-          ensure
-            close
-          end
+          grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON SCHEMA \"#{@new_resource.schema_name}\" TO \"#{@new_resource.username}\""
+          Chef::Log.info("#{@new_resource}: granting access with statement [#{grant_statement}]")
+          db(@new_resource.database_name).query(grant_statement)
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
+        end
+
+        def action_grant_table
+          grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON "
+          grant_statement << if @new_resource.tables.include?(:all)
+                               "ALL TABLES IN SCHEMA \"#{@new_resource.schema_name}\""
+                             else
+                               "TABLE #{@new_resource.tables.join(', ')}"
+                             end
+          grant_statement << " TO \"#{@new_resource.username}\""
+          Chef::Log.info("#{@new_resource}: granting access with statement [#{grant_statement}]")
+          db(@new_resource.database_name).query(grant_statement)
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
+        end
+
+        def action_grant_sequence
+          grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON "
+          grant_statement << if @new_resource.sequences.include?(:all)
+                               "ALL SEQUENCES IN SCHEMA \"#{@new_resource.schema_name}\""
+                             else
+                               "SEQUENCE #{@new_resource.sequences.join(', ')}"
+                             end
+          grant_statement << " TO \"#{@new_resource.username}\""
+          Chef::Log.info("#{@new_resource}: granting access with statement [#{grant_statement}]")
+          db(@new_resource.database_name).query(grant_statement)
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
+        end
+
+        def action_grant_function
+          grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON "
+          grant_statement << if @new_resource.functions.include?(:all)
+                               "ALL FUNCTIONS IN SCHEMA \"#{@new_resource.schema_name}\""
+                             else
+                               "FUNCTION #{@new_resource.functions.join(', ')}"
+                             end
+          grant_statement << " TO \"#{@new_resource.username}\""
+          Chef::Log.info("#{@new_resource}: granting access with statement [#{grant_statement}]")
+          db(@new_resource.database_name).query(grant_statement)
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
         end
 
         private
+
         def exists?
           begin
             exists = db('template1').query("SELECT * FROM pg_user WHERE usename='#{@new_resource.username}'").num_tuples != 0

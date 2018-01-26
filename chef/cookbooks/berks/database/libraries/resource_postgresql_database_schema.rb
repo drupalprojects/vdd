@@ -1,6 +1,6 @@
 #
 # Author:: Marco Betti (<m.betti@gmail.com>)
-# Copyright:: Copyright (c) 2013 Opscode, Inc.
+# Copyright:: 2013-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ class Chef
         set_or_return(
           :schema_name,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
     end

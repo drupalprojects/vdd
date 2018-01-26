@@ -1,3 +1,8 @@
+mysql2_chef_gem 'default' do
+  gem_version '0.4.5'
+  action :install
+end
+
 # Determine if the directory is NFS.
 nfs = 0
 node["vm"]["synced_folders"].each do |folder|
@@ -11,7 +16,7 @@ end
 if node["vdd"]["sites"]
 
   node["vdd"]["sites"].each do |index, site|
-    include_recipe "database::mysql"
+   # include_recipe "database"
 
     htdocs = defined?(site["vhost"]["document_root"]) ? site["vhost"]["document_root"] : index
 
@@ -38,7 +43,8 @@ if node["vdd"]["sites"]
     mysql_connection_info = {
       :host => "localhost",
       :username => "root",
-      :password => node["mysql"]["server_root_password"]
+      :socket   => "/var/run/mysqld/mysqld.sock",
+      :password => "root"
     }
     mysql_database index do
       connection mysql_connection_info

@@ -3,7 +3,7 @@
 # Cookbook Name:: database
 # Library:: matchers
 #
-# Copyright 2014, Chef Software, Inc.
+# Copyright:: 2014-2016 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@
 if defined?(ChefSpec)
   # database
   #
+  ChefSpec.define_matcher :database
+
   def create_database(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:database, :create, resource_name)
   end
@@ -35,6 +37,8 @@ if defined?(ChefSpec)
 
   # database user
   #
+  ChefSpec.define_matcher :database_user
+
   def create_database_user(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:database_user, :create, resource_name)
   end
@@ -49,6 +53,8 @@ if defined?(ChefSpec)
 
   # mysql database
   #
+  ChefSpec.define_matcher :mysql_database
+
   def create_mysql_database(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:mysql_database, :create, resource_name)
   end
@@ -63,6 +69,8 @@ if defined?(ChefSpec)
 
   # mysql database user
   #
+  ChefSpec.define_matcher :mysql_database_user
+
   def create_mysql_database_user(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:mysql_database_user, :create, resource_name)
   end
@@ -77,6 +85,8 @@ if defined?(ChefSpec)
 
   # postgresql database
   #
+  ChefSpec.define_matcher :postgresql_database
+
   def create_postgresql_database(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:postgresql_database, :create, resource_name)
   end
@@ -91,6 +101,8 @@ if defined?(ChefSpec)
 
   # postgresql database schema
   #
+  ChefSpec.define_matcher :postgresql_database_schema
+
   def create_postgresql_database_schema(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:postgresql_database_schema, :create, resource_name)
   end
@@ -101,6 +113,8 @@ if defined?(ChefSpec)
 
   # postgresql database user
   #
+  ChefSpec.define_matcher :postgresql_database_user
+
   def create_postgresql_database_user(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:postgresql_database_user, :create, resource_name)
   end
@@ -119,20 +133,24 @@ if defined?(ChefSpec)
 
   # sql server database
   #
+  ChefSpec.define_matcher :sql_server_database
+
   def create_sql_server_database(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database, :create, resource_name)
   end
 
-  def drop_database(resource_name)
+  def drop_sql_server_database(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database, :drop, resource_name)
   end
 
-  def query_database(resource_name)
+  def query_sql_server_database(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database, :query, resource_name)
   end
 
   # sql server database user
   #
+  ChefSpec.define_matcher :sql_server_database_user
+
   def create_sql_server_database_user(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database_user, :create, resource_name)
   end
@@ -148,4 +166,21 @@ if defined?(ChefSpec)
   def alter_roles_sql_server_database_user(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:sql_server_database_user, :alter_roles, resource_name)
   end
+
+  # sqlite server database
+  #
+  ChefSpec.define_matcher :sqlite_database
+
+  def create_sqlite_database(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:sqlite_database, :create, resource_name)
+  end
+
+  def query_sqlite_database(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:sqlite_database, :query, resource_name)
+  end
+
+  def drop_sqlite_database(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:sqlite_database, :drop, resource_name)
+  end
+
 end

@@ -1,6 +1,6 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Copyright:: 2011-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,28 +35,28 @@ class Chef
 
     def windows_user(arg = nil)
       set_or_return(
-          :windows_user,
+        :windows_user,
           arg,
-          :kind_of => [TrueClass, FalseClass],
-          :default => false
+          kind_of: [TrueClass, FalseClass],
+          default: false
       )
     end
 
     def sql_roles(arg = nil)
       Chef::Log.debug("Received roles: #{arg.inspect}")
       set_or_return(
-          :sql_roles,
+        :sql_roles,
           arg,
-          :kind_of => Hash
+          kind_of: Hash
       )
     end
 
     def sql_sys_roles(arg = nil)
       Chef::Log.debug("Received Server roles: #{arg.inspect}")
       set_or_return(
-          :sql_sys_roles,
+        :sql_sys_roles,
           arg,
-          :kind_of => Hash
+          kind_of: Hash
       )
     end
   end

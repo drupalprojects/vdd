@@ -39,6 +39,8 @@ node.default["apache"]["user"] = "vagrant"
 node.default["apache"]["group"] = "vagrant"
 
 modules = [
+  "mpm_event",
+  "mpm_worker",
   "cgi",
   "negotiation",
   "autoindex",
@@ -56,6 +58,20 @@ modules.each do |mod|
     user "root"
     code <<-EOH
     a2dismod #{mod}
+    EOH
+    not_if { File.exists?("/etc/apache2/mods-enabled/#{mod}") }
+  end
+end
+
+enmodules = [
+  "mpm_prefork",
+]
+
+enmodules.each do |mod|
+  bash "enable_apache_module_#{mod}" do
+    user "root"
+    code <<-EOH
+    a2enmod #{mod}
     EOH
     not_if { File.exists?("/etc/apache2/mods-enabled/#{mod}") }
   end

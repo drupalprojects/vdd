@@ -1,6 +1,6 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Copyright:: 2011-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,121 +26,106 @@ class Chef
 
         def load_current_resource
           Gem.clear_paths
-          require 'tiny_tds'
+          begin
+            require 'tiny_tds'
+          rescue LoadError
+            Chef::Log.fatal('Could not load the required tiny_tds gem. Make sure to install this in your wrapper cookbook')
+            raise
+          end
           @current_resource = Chef::Resource::DatabaseUser.new(@new_resource.name)
           @current_resource.username(@new_resource.name)
           @current_resource
         end
 
         def action_create
-          begin
-            unless exists?(:logins)
-              if @new_resource.windows_user
-                db.execute("CREATE LOGIN [#{@new_resource.username}] FROM WINDOWS").do
-              else
-                db.execute("CREATE LOGIN [#{@new_resource.username}] WITH PASSWORD = '#{@new_resource.password}', CHECK_POLICY = OFF").do
-              end
-              @new_resource.updated_by_last_action(true)
+          unless exists?(:logins)
+            if @new_resource.windows_user
+              db.execute("CREATE LOGIN [#{@new_resource.username}] FROM WINDOWS").do
+            else
+              db.execute("CREATE LOGIN [#{@new_resource.username}] WITH PASSWORD = '#{@new_resource.password}', CHECK_POLICY = OFF").do
             end
-            unless exists?(:users)
-              if @new_resource.database_name
-                Chef::Log.info("#{@new_resource} creating user in '#{@new_resource.database_name}' database context.")
-                db.execute("USE [#{@new_resource.database_name}]").do
-              else
-                Chef::Log.info("#{@new_resource} database_name not provided, creating user in global context.")
-              end
-              db.execute("CREATE USER [#{@new_resource.username}] FOR LOGIN [#{@new_resource.username}]").do
-              @new_resource.updated_by_last_action(true)
-            end
-          ensure
-            close
+            @new_resource.updated_by_last_action(true)
           end
+          unless exists?(:users)
+            if @new_resource.database_name
+              Chef::Log.info("#{@new_resource} creating user in '#{@new_resource.database_name}' database context.")
+              db.execute("USE [#{@new_resource.database_name}]").do
+            else
+              Chef::Log.info("#{@new_resource} database_name not provided, creating user in global context.")
+            end
+            db.execute("CREATE USER [#{@new_resource.username}] FOR LOGIN [#{@new_resource.username}]").do
+            @new_resource.updated_by_last_action(true)
+          end
+        ensure
+          close
         end
 
         def action_drop
-          begin
-            if exists?(:users)
-              db.execute("DROP USER [#{@new_resource.username}]").do
-              @new_resource.updated_by_last_action(true)
-            end
-            if exists?(:logins)
-              db.execute("DROP LOGIN [#{@new_resource.username}]").do
-              @new_resource.updated_by_last_action(true)
-            end
-          ensure
-            close
+          if exists?(:users)
+            db.execute("DROP USER [#{@new_resource.username}]").do
+            @new_resource.updated_by_last_action(true)
           end
+          if exists?(:logins)
+            db.execute("DROP LOGIN [#{@new_resource.username}]").do
+            @new_resource.updated_by_last_action(true)
+          end
+        ensure
+          close
         end
 
         def action_grant
-          begin
-            if @new_resource.password || (@new_resource.windows_user && !exists?(:logins))
-              action_create
-            end
-            Chef::Application.fatal!('Please provide a database_name, SQL Server does not support global GRANT statements.') unless @new_resource.database_name
-            grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON DATABASE::[#{@new_resource.database_name}] TO [#{@new_resource.username}]"
-            Chef::Log.info("#{@new_resource} granting access with statement [#{grant_statement}]")
-            db.execute("USE [#{@new_resource.database_name}]").do
-            db.execute(grant_statement).do
-            @new_resource.updated_by_last_action(true)
-          ensure
-            close
+          if @new_resource.password || (@new_resource.windows_user && !exists?(:logins))
+            action_create
           end
+          Chef::Application.fatal!('Please provide a database_name, SQL Server does not support global GRANT statements.') unless @new_resource.database_name
+          grant_statement = "GRANT #{@new_resource.privileges.join(', ')} ON DATABASE::[#{@new_resource.database_name}] TO [#{@new_resource.username}]"
+          Chef::Log.info("#{@new_resource} granting access with statement [#{grant_statement}]")
+          db.execute("USE [#{@new_resource.database_name}]").do
+          db.execute(grant_statement).do
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
         end
 
         def action_alter_roles
-          begin
-            if @new_resource.password || (@new_resource.windows_user && !exists?(:logins))
-              action_create
-            end
-            Chef::Application.fatal!('Please provide a database_name, SQL Server does not support global GRANT statements.') unless @new_resource.database_name
-            db.execute("USE [#{@new_resource.database_name}]").do
-            @new_resource.sql_roles.each do | sql_role, role_action |
-              alter_statement = "ALTER ROLE [#{sql_role}] #{role_action} MEMBER [#{@new_resource.username}]"
-              Chef::Log.info("#{@new_resource} granting access with statement [#{alter_statement}]")
-              db.execute(alter_statement).do
-            end
-            @new_resource.updated_by_last_action(true)
-          ensure
-            close
+          if @new_resource.password || (@new_resource.windows_user && !exists?(:logins))
+            action_create
           end
+          Chef::Application.fatal!('Please provide a database_name, SQL Server does not support global GRANT statements.') unless @new_resource.database_name
+          db.execute("USE [#{@new_resource.database_name}]").do
+          @new_resource.sql_roles.each do |sql_role, role_action|
+            alter_statement = "ALTER ROLE [#{sql_role}] #{role_action} MEMBER [#{@new_resource.username}]"
+            Chef::Log.info("#{@new_resource} granting access with statement [#{alter_statement}]")
+            db.execute(alter_statement).do
+          end
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
         end
 
         def action_alter_sys_roles
-          begin
-            if @new_resource.password || (@new_resource.windows_user && !exists?(:logins))
-              action_create
-            end
-            server_version = db.execute("SELECT SERVERPROPERTY('productversion')").each.first.values.first
-            Chef::Log.info("SQL Server Version: #{server_version.inspect}")
-
-            db.execute('USE [master]').do
-            @new_resource.sql_sys_roles.each do | sql_sys_role, role_action |
-              case role_action
-              when 'ADD'
-                if server_version < '11.00.0000.00'
-                  alter_statement = "EXEC sp_addsrvrolemember '#{@new_resource.username}', '#{sql_sys_role}'"
-                else
-                  alter_statement = "ALTER SERVER ROLE #{sql_role} #{role_action} MEMBER [#{@new_resource.username}]"
-                end
-                Chef::Log.info("#{@new_resource} granting server role membership with statement [#{alter_statement}]")
-              when 'DROP'
-                if server_version < '11.00.0000.00'
-                  alter_statement = "EXEC sp_dropsrvrolemember '#{@new_resource.username}', '#{sql_sys_role}'"
-                else
-                  alter_statement = "ALTER SERVER ROLE #{sql_role} #{role_action} MEMBER [#{@new_resource.username}]"
-                end
-                Chef::Log.info("#{@new_resource} revoking server role membership with statement [#{alter_statement}]")
-              end
-              db.execute(alter_statement).do
-            end
-            @new_resource.updated_by_last_action(true)
-          ensure
-            close
+          if @new_resource.password || (@new_resource.windows_user && !exists?(:logins))
+            action_create
           end
+          server_version = db.execute("SELECT SERVERPROPERTY('productversion')").each.first.values.first
+          Chef::Log.info("SQL Server Version: #{server_version.inspect}")
+          db.execute('USE [master]').do
+          @new_resource.sql_sys_roles.each do |sql_sys_role, role_action|
+            alter_statement = if server_version < '11.00.0000.00'
+                                "EXEC sp_#{role_action.downcase}srvrolemember '#{@new_resource.username}', '#{sql_sys_role}'"
+                              else
+                                "ALTER SERVER ROLE #{sql_sys_role} #{role_action} MEMBER [#{@new_resource.username}]"
+                              end
+            Chef::Log.info("#{@new_resource} granting server role membership with statement [#{alter_statement}]")
+            db.execute(alter_statement).do
+          end
+          @new_resource.updated_by_last_action(true)
+        ensure
+          close
         end
 
         private
+
         def exists?(type = :users)
           case type
           when :users

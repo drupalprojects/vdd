@@ -1,7 +1,7 @@
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
-# Author:: Lamont Granquist (<lamont@opscode.com>)
-# Copyright:: Copyright (c) 2011 Opscode, Inc.
+# Author:: Seth Chisamore (<schisamo@chef.io>)
+# Author:: Lamont Granquist (<lamont@chef.io>)
+# Copyright:: 2011-2016 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,24 +22,31 @@ require 'chef/provider'
 class Chef
   class Provider
     class Database
-      class Postgresql < Chef::Provider
-        include Chef::Mixin::ShellOut
+      class Postgresql < Chef::Provider::LWRPBase
+        use_inline_resources
+
+        def whyrun_supported?
+          true
+        end
 
         def load_current_resource
           Gem.clear_paths
-          require 'pg'
+          begin
+            require 'pg'
+          rescue LoadError
+            Chef::Log.fatal('Could not load the required pg gem. Make sure to include the database::postgresql or postgresql::ruby recipes in your runlist')
+            raise
+          end
           @current_resource = Chef::Resource::Database.new(@new_resource.name)
           @current_resource.database_name(@new_resource.database_name)
           @current_resource
         end
 
-        def action_create
+        action :create do
           unless exists?
             begin
               encoding = @new_resource.encoding
-              if encoding != 'DEFAULT'
-                encoding = "'#{@new_resource.encoding}'"
-              end
+              encoding = "'#{@new_resource.encoding}'" if encoding != 'DEFAULT'
               Chef::Log.debug("#{@new_resource}: Creating database #{new_resource.database_name}")
               create_sql = "CREATE DATABASE \"#{new_resource.database_name}\""
               create_sql += " TEMPLATE = #{new_resource.template}" if new_resource.template
@@ -57,7 +64,7 @@ class Chef
           end
         end
 
-        def action_drop
+        action :drop do
           if exists?
             begin
               Chef::Log.debug("#{@new_resource}: Dropping database #{new_resource.database_name}")
@@ -69,7 +76,7 @@ class Chef
           end
         end
 
-        def action_query
+        action :query do
           if exists?
             begin
               Chef::Log.debug("#{@new_resource}: Performing query [#{new_resource.sql_query}]")
@@ -96,6 +103,17 @@ class Chef
           ret
         end
 
+        # Verify the postgres server's version number is greater than the integer passed in
+        def version_greater_than?(desired_version_int)
+          begin
+            ret = db('template1').exec('SHOW server_version_num;')
+            server_version_int = ret.getvalue(0, 0).to_i
+          ensure
+            close
+          end
+          server_version_int > desired_version_int
+        end
+
         #
         # Specifying the database in the connection parameter for the postgres resource is not recommended.
         #
@@ -110,18 +128,22 @@ class Chef
           port = @new_resource.connection[:port] || 5432
           user = @new_resource.connection[:username] || 'postgres'
           Chef::Log.debug("#{@new_resource}: connecting to database #{dbname} on #{host}:#{port} as #{user}")
-          password = @new_resource.connection[:password] || node[:postgresql][:password][:postgres]
+          password = @new_resource.connection[:password] || node['postgresql']['password']['postgres']
           @db = ::PGconn.new(
-            :host => host,
-            :port => port,
-            :dbname => dbname,
-            :user => user,
-            :password => password
+            host: host,
+            port: port,
+            dbname: dbname,
+            user: user,
+            password: password
           )
         end
 
         def close
-          @db.close rescue nil
+          begin
+            @db.close
+          rescue
+            nil
+          end
           @db = nil
         end
       end
