@@ -1,0 +1,31 @@
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  deprecations_as_errors: true
+
+verifier:
+  name: inspec
+
+platforms:
+- name: centos-6.8
+- name: centos-7.3
+
+suites:
+- name: connectors
+  run_list:
+  - recipe[yum-mysql-community::connectors]
+  attributes: {}
+- name: mysql55
+  run_list:
+  - recipe[yum-mysql-community::mysql56]
+- name: mysql56
+  run_list:
+  - recipe[yum-mysql-community::mysql56]
+  attributes: {}
+
+- name: mysql57
+  run_list:
+  - recipe[yum-mysql-community::mysql57]
+  attributes: {}

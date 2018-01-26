@@ -1,0 +1,32 @@
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-6.8
+  - name: centos-7.2
+  - name: debian-7.11
+  - name: debian-8.5
+  - name: fedora-24
+    run_list: yum::dnf_yum_compat
+  - name: opensuse-13.2
+  - name: opensuse-leap-42.1
+  - name: ubuntu-12.04
+  - name: ubuntu-14.04
+  - name: ubuntu-16.04
+
+suites:
+  #
+  # database-test
+  #
+  - name: mysql
+    run_list:
+    - recipe[mysql_database_test]
+  - name: postgresql
+    run_list:
+    - recipe[postgresql_database_test]
+  - name: sqlite
+    run_list:
+    - recipe[sqlite_database_test]

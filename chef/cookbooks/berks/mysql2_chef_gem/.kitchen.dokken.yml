@@ -1,0 +1,88 @@
+driver:
+  name: dokken
+  privileged: true # because Docker and SystemD/Upstart
+  chef_version: current
+  volumes: [ '/mnt' ]
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  deprecations_as_errors: true
+
+verifier:
+  name: inspec
+
+platforms:
+- name: amazonlinux
+  driver:
+    privileged: true
+    image: dokken/amazonlinux
+    pid_one_command: /sbin/init
+
+- name: debian-7
+  driver:
+    privileged: true
+    image: dokken/debian-7
+    pid_one_command: /sbin/init
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: debian-8
+  driver:
+    privileged: true
+    image: dokken/debian-8
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: debian-9
+  driver:
+    privileged: true
+    image: dokken/debian-9
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: centos-6
+  driver:
+    privileged: true
+    image: dokken/centos-6
+    pid_one_command: /sbin/init
+
+- name: centos-7
+  driver:
+    privileged: true
+    image: dokken/centos-7
+    pid_one_command: /usr/lib/systemd/systemd
+
+- name: fedora-25
+  driver:
+    image: fedora:25
+    privileged: true
+    pid_one_command: /usr/lib/systemd/systemd
+    intermediate_instructions:
+      - RUN dnf -y install yum which systemd-sysv initscripts wget net-tools
+
+- name: ubuntu-14.04
+  driver:
+    privileged: true
+    image: dokken/ubuntu-14.04
+    pid_one_command: /sbin/init
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: ubuntu-16.04
+  driver:
+    privileged: true
+    image: dokken/ubuntu-16.04
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: opensuse-leap
+  driver:
+    privileged: true
+    image: dokken/opensuse-leap
+    pid_one_command: /bin/systemd
