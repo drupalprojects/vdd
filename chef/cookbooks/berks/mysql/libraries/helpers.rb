@@ -81,7 +81,7 @@ module MysqlCookbook
     end
 
     def mysql_name
-      if instance='default'
+      if instance == 'default'
       "mysql"
       else
       "mysql-#{instance}"
@@ -122,6 +122,7 @@ module MysqlCookbook
     def run_dir
       return "#{prefix_dir}/var/run/#{mysql_name}" if node['platform_family'] == 'rhel'
       return "/run/#{mysql_name}" if node['platform_family'] == 'debian'
+      return "/run/" if xenial? 
       "/var/run/#{mysql_name}"
     end
 
@@ -190,13 +191,16 @@ module MysqlCookbook
       # mysql will read \& as &, but \% as \%. Just escape bare-minimum \ and '
       sql_escaped_password = root_password.gsub('\\') { '\\\\' }.gsub("'") { '\\\'' }
 
+      cmd = "UPDATE mysql.user SET #{password_column_name}=PASSWORD('#{sql_escaped_password}')#{password_expired} WHERE user = 'root';"
+      cmd = "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '#{sql_escaped_password}';" if v57plus
+
       <<-EOS
         set -e
         rm -rf /tmp/#{mysql_name}
         mkdir /tmp/#{mysql_name}
 
         cat > /tmp/#{mysql_name}/my.sql <<-'EOSQL'
-UPDATE mysql.user SET #{password_column_name}=PASSWORD('#{sql_escaped_password}')#{password_expired} WHERE user = 'root';
+#{cmd}
 DELETE FROM mysql.user WHERE USER LIKE '';
 DELETE FROM mysql.user WHERE user = 'root' and host NOT IN ('127.0.0.1', 'localhost');
 FLUSH PRIVILEGES;
@@ -205,15 +209,19 @@ DROP DATABASE IF EXISTS test ;
 EOSQL
 
        #{db_init}
-       #{record_init}
+      #{record_init}
+       #{loopexit}
 
-       while [ ! -f #{pid_file} ] ; do sleep 1 ; done
-       kill `cat #{pid_file}`
-       while [ -f #{pid_file} ] ; do sleep 1 ; done
-       rm -rf /tmp/#{mysql_name}
        EOS
     end
 
+    def loopexit 
+      cmd = <<-EOS
+       while [ ! -f #{pid_file} ] ; do sleep 1 ; done
+       kill `cat #{pid_file}`
+       while [ -f #{pid_file} ] ; do sleep 1 ; done
+      EOS
+    end
     def password_column_name
       return 'authentication_string' if v57plus
       'password'
@@ -267,12 +275,18 @@ EOSQL
       "#{prefix_dir}/usr/sbin/mysqld"
     end
 
+    def mysql_systemd
+      return "/usr/share/mysql/mysql-systemd-start" if v57plus
+      "/usr/libexec/#{mysql_name}-wait-ready $MAINPID"
+    end
+
     def mysqld_initialize_cmd
       cmd = mysqld_bin
       cmd << " --defaults-file=#{etc_dir}/my.cnf"
       cmd << ' --initialize'
       cmd << ' --explicit_defaults_for_timestamp' if v56plus
-      return "scl enable #{scl_name} \"#{cmd}\"" if scl_package?
+      ret = "scl enable #{scl_name} \"#{cmd}\"" if scl_package?
+      return ret if scl_package? #"scl enable #{scl_name} \"#{cmd}\"" if scl_package?
       cmd
     end
 
@@ -286,9 +300,8 @@ EOSQL
     def record_init
       cmd = v56plus ? mysqld_bin : mysqld_safe_bin
       cmd << " --defaults-file=#{etc_dir}/my.cnf"
-      cmd << " --init-file=/tmp/#{mysql_name}/my.sql"
+      #cmd << " --init-file=/tmp/#{mysql_name}/my.sql"
       cmd << ' --explicit_defaults_for_timestamp' if v56plus
-      cmd << ' &'
       return "scl enable #{scl_name} \"#{cmd}\"" if scl_package?
       cmd
     end

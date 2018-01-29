@@ -3,7 +3,7 @@
 #node.override['php']['ext_conf_dir'] = "/etc/php5/mods-available"
 include_recipe 'php'
 
-include_recipe "apache2::mod_php5"
+include_recipe "apache2::mod_php"
 
 pkgs = [
   "php5-gd",

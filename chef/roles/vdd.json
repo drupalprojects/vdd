@@ -3,7 +3,6 @@
   "env_run_lists": {},
   "default_attributes": {
     "mysql": {
-      "version": "5.5", 
       "server_root_password": "root",
       "server_repl_password": "root",
       "server_debian_password": "root",
@@ -19,6 +18,7 @@
     "recipe[vdd::server]",
     "recipe[vdd::apache]",
     "recipe[vdd::graphviz]",
+    "recipe[vdd::mysql_config]",
     "recipe[vdd::vdd_sites]",
     "recipe[vdd::php]",
     "recipe[vdd::uploadprogress]",
