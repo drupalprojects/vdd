@@ -14,7 +14,7 @@ template File.join(node['php']['ext_conf_dir'], 'vdd_xdebug.ini') do
   notifies :restart, "service[apache2]", :delayed
 end
 
-execute '/usr/sbin/php5enmod vdd_xdebug' do
+execute '/usr/sbin/phpenmod vdd_xdebug' do
   action :run
   notifies :restart, "service[apache2]", :delayed
 end

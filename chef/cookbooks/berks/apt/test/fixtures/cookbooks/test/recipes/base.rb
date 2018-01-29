@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: apt
-# library:: network
+# Cookbook:: test
+# Recipe:: base
 #
-# Copyright 2013, Opscode, Inc.
+# Copyright:: 2016-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,15 +17,18 @@
 # limitations under the License.
 #
 
-module ::Apt
-  def interface_ipaddress(host, interface)
-    if interface
-      addresses = host['network']['interfaces'][interface]['addresses']
-      addresses.select do |ip, data|
-        return ip if data['family'].eql?('inet')
-      end
-    else
-      return host.ipaddress
-    end
+apt_update 'update'
+
+# without this dist data won't be populated by Ohai in docker
+if platform?('debian')
+  package 'lsb-release' do
+    action :install
+    notifies :reload, 'ohai[reload_ohai]', :immediately
+  end
+
+  ohai 'reload_ohai' do
+    action :nothing
   end
 end
+
+include_recipe 'apt::default'

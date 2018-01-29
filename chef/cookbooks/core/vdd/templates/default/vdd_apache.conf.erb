@@ -9,3 +9,6 @@ MaxRequestsPerChild   0
 MaxKeepAliveRequests 200
 KeepAliveTimeout 5
 EnableSendfile off
+<FilesMatch \.php$>
+  SetHandler application/x-httpd-php
+</FilesMatch>

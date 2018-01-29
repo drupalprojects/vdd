@@ -1,10 +1,20 @@
-php_pear "uploadprogress" do
-  action :install
-end
+# php_pear "uploadprogress" do
+#   action :install
+# end
 
 # @todo Hack until https://github.com/opscode-cookbooks/php/pull/111 is
 #   included.
-execute '/usr/sbin/php5enmod uploadprogress' do
-  action :run
-  notifies :restart, "service[apache2]", :delayed
-end
+# execute '/usr/sbin/php5enmod uploadprogress' do
+#   action :run
+#   notifies :restart, "service[apache2]", :delayed
+# end
+
+
+# apt_repository 'ondrej-php' do
+#   uri        'ppa:ondrej/php'
+# end
+
+ # apt_package 'php-uploadprogress' do
+ #   action :install
+ #   notifies :restart, "service[apache2]", :delayed
+ # end
