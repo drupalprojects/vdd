@@ -122,7 +122,6 @@ module MysqlCookbook
     def run_dir
       return "#{prefix_dir}/var/run/#{mysql_name}" if node['platform_family'] == 'rhel'
       return "/run/#{mysql_name}" if node['platform_family'] == 'debian'
-      return "/run/" if xenial? 
       "/var/run/#{mysql_name}"
     end
 
@@ -209,19 +208,22 @@ DROP DATABASE IF EXISTS test ;
 EOSQL
 
        #{db_init}
-      #{record_init}
-       #{loopexit}
+       #{record_init}
+       #{wait_for_init}
 
        EOS
     end
 
-    def loopexit 
+    def wait_for_init 
       cmd = <<-EOS
        while [ ! -f #{pid_file} ] ; do sleep 1 ; done
        kill `cat #{pid_file}`
        while [ -f #{pid_file} ] ; do sleep 1 ; done
-      EOS
+       rm -rf /tmp/#{mysql_name}
+       EOS
+       cmd = "" if v57plus
     end
+
     def password_column_name
       return 'authentication_string' if v57plus
       'password'
@@ -285,8 +287,7 @@ EOSQL
       cmd << " --defaults-file=#{etc_dir}/my.cnf"
       cmd << ' --initialize'
       cmd << ' --explicit_defaults_for_timestamp' if v56plus
-      ret = "scl enable #{scl_name} \"#{cmd}\"" if scl_package?
-      return ret if scl_package? #"scl enable #{scl_name} \"#{cmd}\"" if scl_package?
+      return "scl enable #{scl_name} \"#{cmd}\"" if scl_package?
       cmd
     end
 
@@ -300,8 +301,9 @@ EOSQL
     def record_init
       cmd = v56plus ? mysqld_bin : mysqld_safe_bin
       cmd << " --defaults-file=#{etc_dir}/my.cnf"
-      #cmd << " --init-file=/tmp/#{mysql_name}/my.sql"
+      cmd << " --init-file=/tmp/#{mysql_name}/my.sql"
       cmd << ' --explicit_defaults_for_timestamp' if v56plus
+      cmd << ' &'
       return "scl enable #{scl_name} \"#{cmd}\"" if scl_package?
       cmd
     end

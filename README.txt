@@ -128,4 +128,5 @@ http://drupal.org/project/issues/vdd
 ------
 - Remdiate patch applied for mysql cookbook: https://github.com/chef-cookbooks/mysql/pull/541/files
 - Remdiate patch applied for mysql cookbook: https://github.com/chef-cookbooks/mysql/pull/538
+- Uploadprogress is no longer compatiable with php7 
 

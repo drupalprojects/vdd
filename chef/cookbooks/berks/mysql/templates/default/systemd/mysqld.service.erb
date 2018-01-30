@@ -1,18 +1,16 @@
-# MySQL systemd service file
-
 [Unit]
-Description=MySQL Community Server
+Description=mysql_service[mysql-<%= @config.instance %>]
+After=syslog.target
 After=network.target
 
-[Install]
-WantedBy=multi-user.target
 
 [Service]
-User=mysql
-Group=mysql
+Type=simple
+User=<%= @config.run_user %>
+Group=<%= @config.run_group %>
 PermissionsStartOnly=true
 ExecStartPre=/usr/share/mysql/mysql-systemd-start pre
-#ExecStart=/usr/sbin/mysqld
+
 ExecStart=<%= @mysqld_bin %> --defaults-file=<%= @etc_dir %>/my.cnf --basedir=<%= @base_dir %>
 ExecStartPost=<%= @mysql_systemd %>
 TimeoutSec=300
@@ -20,20 +18,5 @@ Restart=on-failure
 RuntimeDirectory=mysqld
 RuntimeDirectoryMode=755
 
-
-# [Unit]
-# Description=mysql_service[mysql-<%= @config.instance %>]
-# After=syslog.target
-# After=network.target
-
-# [Service]
-# Type=simple
-# User=<%= @config.run_user %>
-# Group=<%= @config.run_group %>
-# ExecStart=<%= @mysqld_bin %> --defaults-file=<%= @etc_dir %>/my.cnf --basedir=<%= @base_dir %>
-# ExecStartPost=/usr/libexec/<%= @config.mysql_name %>-wait-ready $MAINPID
-# TimeoutSec=300
-# PrivateTmp=true
-
-# [Install]
-# WantedBy=multi-user.target
+[Install]
+WantedBy=multi-user.target
