@@ -13,6 +13,7 @@
   "json_class": "Chef::Role",
   "run_list": [
     "recipe[apt]",
+    "recipe[vdd::apt_update]",
     "recipe[apache2]",
     "recipe[vdd::client]",
     "recipe[vdd::server]",
@@ -21,8 +22,6 @@
     "recipe[vdd::mysql_config]",
     "recipe[vdd::vdd_sites]",
     "recipe[vdd::php]",
-    "recipe[vdd::apt_update]",
-    "recipe[vdd::uploadprogress]",
     "recipe[vdd::mailcatcher]",
     "recipe[vdd::phpmyadmin]",
     "recipe[vdd::adminer]",

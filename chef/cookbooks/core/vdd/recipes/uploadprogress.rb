@@ -10,9 +10,6 @@
 # end
 
 
-# apt_repository 'ondrej-php' do
-#   uri        'ppa:ondrej/php'
-# end
 
  # apt_package 'php-uploadprogress' do
  #   action :install
