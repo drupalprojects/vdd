@@ -1,4 +1,5 @@
 php_pear "xdebug" do
+  version "2.5.5"
   action :install
 end
 
