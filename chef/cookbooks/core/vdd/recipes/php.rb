@@ -1,4 +1,5 @@
-# @todo: make the version variable
+# @todo: make the version variable and update all referenced and conf'
+# to use the variable
 include_recipe 'php'
 
 include_recipe "apache2::mod_php"
@@ -25,5 +26,13 @@ end
 template "/etc/php/7.1/apache2/conf.d/vdd_php.ini" do
   source "vdd_php.ini.erb"
   mode "0644"
+  notifies :restart, "service[apache2]", :delayed
+end
+
+bash "enable  php7.1" do
+  user "root"
+  code <<-EOH
+  a2enmod php7.1
+  EOH
   notifies :restart, "service[apache2]", :delayed
 end
