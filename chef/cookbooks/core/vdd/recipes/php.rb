@@ -6,6 +6,7 @@ include_recipe "apache2::mod_php"
 
 pkgs = [
   "php7.1-gd",
+  "php7.1-cli",
   "php7.1-mysql",
   "php7.1-mcrypt",
   "php7.1-curl",
@@ -36,3 +37,8 @@ bash "enable  php7.1" do
   EOH
   notifies :restart, "service[apache2]", :delayed
 end
+# make php-cli same version
+link '/usr/bin/php' do
+  to '/usr/bin/php7.1'
+end
+
