@@ -2,6 +2,9 @@
   "name": "vdd",
   "env_run_lists": {},
   "default_attributes": {
+    "apache":{
+      "mpm" : "prefork"
+    },
     "mysql": {
       "server_root_password": "root",
       "server_repl_password": "root",
