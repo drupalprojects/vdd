@@ -3,113 +3,81 @@ driver:
 
 provisioner:
   name: chef_zero
-  deprecations_as_errors: true
-
-verifier:
-  name: inspec
 
 platforms:
-  - name: centos-6
-    driver:
-      box: bento/centos-6.8
-
-  - name: centos-7
-    driver:
-      box: bento/centos-7.3
-
-  - name: debian-7
-    driver:
-      box: bento/debian-7.11
-
-  - name: debian-8
-    driver:
-      box: bento/debian-8.8
-
-  - name: fedora-25
-    driver:
-      box: bento/fedora-25
-
-  - name: opensuse-leap
-    driver:
-      box: bento/opensuse-leap-42.2
-
-  - name: ubuntu-14.04
-    driver:
-      box: bento/ubuntu-14.04
-
-  - name: ubuntu-16.04
-    driver:
-      box: bento/ubuntu-16.04
+  - name: centos-5.10
+  - name: centos-6.5
+  - name: fedora-20
+  - name: ubuntu-12.04
+  - name: ubuntu-14.10
 
 suites:
   #
   # mysql2_chef_gem
   #
+  - name: client50-mysql
+    run_list:
+    - recipe[mysql2_chef_gem_test::default]
+    attributes:
+      mysql2_chef_gem:
+       client_version: '5.0'
+       provider: 'mysql'
+    includes: [
+      'centos-5.10'
+    ]
+
   - name: client51-mysql
     run_list:
     - recipe[mysql2_chef_gem_test::default]
     attributes:
       mysql2_chef_gem:
-       package_version: '5.1'
+       client_version: '5.1'
        provider: 'mysql'
     includes: [
-      'centos-6',
-     ]
+      'centos-6.5',
+      'ubuntu-10.04'
+    ]
 
   - name: client55-mysql
     run_list:
     - recipe[mysql2_chef_gem_test::default]
     attributes:
       mysql2_chef_gem:
-       package_version: '5.5'
+       client_version: '5.5'
        provider: 'mysql'
     includes: [
-      'ubuntu-14.04',
-      'debian-7',
-      'debian-8',
-      'centos-6',
-      'centos-7'
-     ]
+      'centos-6.5',
+      'debian-7.0',
+      'ubuntu-12.04',
+      'ubuntu-14.04'
+    ]
 
   - name: client56-mysql
     run_list:
     - recipe[mysql2_chef_gem_test::default]
     attributes:
       mysql2_chef_gem:
-       package_version: '5.6'
+       client_version: '5.6'
        provider: 'mysql'
     includes: [
-      'centos-6',
-      'centos-7',
-      'fedora-25',
+      'centos-5.10',
+      'centos-6.5',
+      'centos-7.0',
       'ubuntu-14.04'
-      ]
+    ]
 
   - name: client57-mysql
     run_list:
     - recipe[mysql2_chef_gem_test::default]
     attributes:
       mysql2_chef_gem:
-       package_version: '5.7'
+       client_version: '5.7'
        provider: 'mysql'
     includes: [
-      'centos-6',
-      'centos-7',
-      'ubuntu-16.04'
-     ]
-
-  - name: client57-mariadb
-    run_list:
-    - recipe[mysql2_chef_gem_test::default]
-    attributes:
-      mysql2_chef_gem:
-       provider: 'mariadb'
-      mariadb:
-        install:
-          version: '5.5.52'
-    includes: [
-      'centos-7'
-     ]
+      'centos-5.10',
+      'centos-6.5',
+      'centos-7.0'
+    ]
 
 ## MariaDB
   - name: client55-mariadb
@@ -122,5 +90,10 @@ suites:
        install:
         version: '5.5'
     includes: [
+      #'debian-7.0',
+      #'centos-6.5',
+      #'centos-7.0',
+      'fedora-20',
+      #'ubuntu-12.04',
       'ubuntu-14.04'
-     ]
+    ]

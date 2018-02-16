@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'mysql2_chef_gem_test::default' do
   let(:chef_run) do
-    ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '16.04') do |node|
-      node.default['mysql2_chef_gem']['provider'] = 'mysql'
+    ChefSpec::Runner.new do |node|
+      node.set['mysql2_chef_gem']['resource_name'] = 'default'
     end.converge('mysql2_chef_gem_test::default')
   end
 
